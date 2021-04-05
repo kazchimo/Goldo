@@ -47,6 +47,9 @@
                   console.log(authResult);
                   if (authResult && !authResult.error) {
                     window.alert('Auth was successful!');
+                    window.localStorage.setItem("authToken", authResult.access_token)
+                    window.localStorage.setItem("login", "true")
+                    window.location.reload();
                   } else {
                     window.alert('Auth was not successful');
                   }
