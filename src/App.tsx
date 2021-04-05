@@ -1,25 +1,20 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
-import { useSelectors } from "./lib/hooks/useSelectors";
+import { useGapiClient } from "./lib/hooks/useGapiClient";
 import { actions } from "./modules/reducers";
-import { selectors } from "./modules/selectors";
 
 function App() {
   const { loadGapiClient } = useBoundActions(actions);
-  const { clientLoaded } = useSelectors(selectors, "clientLoaded");
+  const client = useGapiClient();
 
   useEffect(() => {
     loadGapiClient();
   });
 
   useEffect(() => {
-    if (clientLoaded) {
-      window.gapi.client.setToken({
-        access_token: window.localStorage.getItem("authToken")!,
-      });
-
-      window.gapi.client
+    if (client) {
+      client
         .request({
           path: "https://tasks.googleapis.com/tasks/v1/users/@me/lists",
         })
