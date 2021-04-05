@@ -1,26 +1,20 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
-import { useGapiClient } from "./lib/hooks/useGapiClient";
+import { useTaskApi } from "./lib/hooks/useTaskApi";
 import { actions } from "./modules/reducers";
 
 function App() {
   const { loadGapiClient } = useBoundActions(actions);
-  const client = useGapiClient();
+  const { getTasks } = useTaskApi();
 
   useEffect(() => {
     loadGapiClient();
   });
 
   useEffect(() => {
-    if (client) {
-      client
-        .request({
-          path: "https://tasks.googleapis.com/tasks/v1/users/@me/lists",
-        })
-        .execute((r) => console.log(r));
-    }
-  });
+    getTasks()?.execute((a) => console.log(a.items.map((b) => b.title)));
+  }, [getTasks]);
 
   return <div className="App">hello</div>;
 }
