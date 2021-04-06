@@ -9,7 +9,7 @@ import {
 import { Action } from "typescript-fsa";
 import { db } from "../db/db";
 import { getTaskLists, GResponse, TaskLists } from "../lib/gapi";
-import { actions } from "./reducers";
+import { actions, Auth } from "./reducers";
 
 function* loadGapi() {
   let clientFinish = false;
@@ -31,37 +31,56 @@ function* loadGapi() {
 
 function* fetchTaskLists() {
   const res: GResponse<TaskLists> = yield call(getTaskLists);
-  console.log(res);
 
   yield put(actions.successFetchTaskLists(res.result.items));
 }
 
-function* restoreLogin() {
+function* restoreAuth() {
   const login: ReturnType<typeof db.getItem> = yield call(db.getItem, "login");
+  const accessToken: ReturnType<typeof db.getItem> = yield call(
+    db.getItem,
+    "accessToken"
+  );
+  const expiresAt: ReturnType<typeof db.getItem> = yield call(
+    db.getItem,
+    "expiresAt"
+  );
 
-  yield put(actions.setLogin(!!login));
+  yield put(
+    actions.setAuth({
+      login: !!login,
+      accessToken: accessToken!,
+      expiresAt: Number(expiresAt!),
+    })
+  );
 }
 
-function* syncLoginState(login: Action<boolean>) {
-  yield call(db.setItem, "login", login.payload ? "true" : "false");
+function* syncAuth({
+  payload: { login, accessToken, expiresAt },
+}: Action<Auth>) {
+  yield call(db.setItem, "login", login ? "true" : "false");
+  yield call(db.setItem, "expiresAt", expiresAt.toString());
+  yield call(db.setItem, "accessToken", accessToken);
 }
 
 function* successLogin({ payload }: Action<GoogleApiOAuth2TokenObject>) {
-  console.log(payload);
-  yield call(db.setItem, "authToken", payload.access_token);
-  const expiresAt = (
-    Math.floor(new Date().getTime() / 1000) + Number(payload.expires_in)
-  ).toString();
-  yield call(db.setItem, "expiresAt", expiresAt);
-  yield put(actions.setLogin(true));
+  const expiresAt =
+    Math.floor(new Date().getTime() / 1000) + Number(payload.expires_in);
+  yield put(
+    actions.setAuth({
+      login: true,
+      expiresAt: expiresAt,
+      accessToken: payload.access_token,
+    })
+  );
 }
 
 function* allSagas() {
   yield all([
     takeLatest(actions.loadGapi, loadGapi),
     takeLatest(actions.fetchTaskLists, fetchTaskLists),
-    takeLatest(actions.restoreLogin, restoreLogin),
-    takeEvery(actions.setLogin, syncLoginState),
+    takeLatest(actions.restoreLogin, restoreAuth),
+    takeEvery(actions.setAuth, syncAuth),
     takeLatest(actions.successLogin, successLogin),
   ]);
 }

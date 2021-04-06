@@ -24,7 +24,7 @@ export type TaskList = {
 } & Resource;
 
 export const getClient = () => {
-  const token = db.getItem("authToken");
+  const token = db.getItem("accessToken");
   if (gapi.client && token) {
     gapi.client.setToken({
       access_token: token,

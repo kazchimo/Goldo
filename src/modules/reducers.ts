@@ -1,15 +1,20 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TaskList } from "../lib/gapi";
 
+export type Auth = {
+  login: boolean;
+  accessToken: string;
+  expiresAt: number;
+};
+
 export type State = {
   gapiLoaded: boolean;
-  login?: boolean;
   taskLists: TaskList[];
+  auth?: Auth;
 };
 
 const initialState: State = {
   gapiLoaded: false,
-  login: undefined,
   taskLists: [],
 };
 
@@ -17,7 +22,7 @@ const slice = createSlice({
   name: "appSlice",
   reducers: {
     successLoadGapi: (s) => ({ ...s, gapiLoaded: true }),
-    setLogin: (s, a: PayloadAction<boolean>) => ({ ...s, login: a.payload }),
+    setAuth: (s, a: PayloadAction<Auth>) => ({ ...s, auth: a.payload }),
     successFetchTaskLists: (s, a: PayloadAction<TaskList[]>) => ({
       ...s,
       taskLists: a.payload,

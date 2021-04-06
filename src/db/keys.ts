@@ -1,5 +1,5 @@
 export const DBKeys = {
-  authToken: "authToken",
+  accessToken: "authToken",
   login: "login",
   refreshToken: "refreshToken",
   expiresAt: "expiresAt",

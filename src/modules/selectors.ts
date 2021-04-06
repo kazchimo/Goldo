@@ -7,7 +7,7 @@ const gapiLoaded = createSelector(selectSelf, (s) => s.gapiLoaded);
 
 const taskLists = createSelector(selectSelf, (s) => s.taskLists);
 
-const login = createSelector(selectSelf, (s) => s.login);
+const login = createSelector(selectSelf, (s) => s.auth?.login);
 
 const selectors = {
   gapiLoaded,
