@@ -1,5 +1,5 @@
 import { all, call, delay, put, takeLatest } from "redux-saga/effects";
-import { getTaskLists, TaskLists } from "../lib/gapi";
+import { getTaskLists, GResponse, TaskLists } from "../lib/gapi";
 import { actions } from "./reducers";
 
 function* loadGapiClient() {
@@ -16,9 +16,9 @@ function* loadGapiClient() {
 }
 
 function* fetchTaskLists() {
-  const res: TaskLists = yield call(getTaskLists);
+  const res: GResponse<TaskLists> = yield call(getTaskLists);
 
-  yield put(actions.successFetchTaskLists(res.items));
+  yield put(actions.successFetchTaskLists(res.result.items));
 }
 
 function* allSagas() {
