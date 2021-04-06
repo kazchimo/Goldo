@@ -3,13 +3,16 @@ import { State } from "./reducers";
 
 const selectSelf = (s: State) => s;
 
-const clientLoaded = createSelector(selectSelf, (s) => s.gapiLoaded);
+const gapiLoaded = createSelector(selectSelf, (s) => s.gapiLoaded);
 
 const taskLists = createSelector(selectSelf, (s) => s.taskLists);
 
+const login = createSelector(selectSelf, (s) => s.login);
+
 const selectors = {
-  clientLoaded,
+  gapiLoaded,
   taskLists,
+  login,
 };
 
 export { selectors };

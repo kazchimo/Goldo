@@ -1,4 +1,13 @@
-import { all, call, delay, put, takeLatest } from "redux-saga/effects";
+import {
+  all,
+  call,
+  delay,
+  put,
+  takeEvery,
+  takeLatest,
+} from "redux-saga/effects";
+import { Action } from "typescript-fsa";
+import { db } from "../db/db";
 import { getTaskLists, GResponse, TaskLists } from "../lib/gapi";
 import { actions } from "./reducers";
 
@@ -26,10 +35,22 @@ function* fetchTaskLists() {
   yield put(actions.successFetchTaskLists(res.result.items));
 }
 
+function* restoreLogin() {
+  const login: ReturnType<typeof db.getItem> = yield call(db.getItem, "login");
+
+  yield put(actions.setLogin(!!login));
+}
+
+function* syncLoginState(login: Action<boolean>) {
+  yield call(db.setItem, "login", login ? "true" : "false");
+}
+
 function* allSagas() {
   yield all([
-    takeLatest(actions.loadGapiClient, loadGapi),
+    takeLatest(actions.loadGapi, loadGapi),
     takeLatest(actions.fetchTaskLists, fetchTaskLists),
+    takeLatest(actions.restoreLogin, restoreLogin),
+    takeEvery(actions.setLogin, syncLoginState),
   ]);
 }
 
