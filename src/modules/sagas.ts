@@ -9,7 +9,7 @@ function* loadGapiClient() {
   });
 
   while (!finish) {
-    yield delay(500);
+    yield delay(100);
   }
 
   yield put(actions.successLoadClient());
