@@ -14,7 +14,7 @@ const initialState: State = {
 const slice = createSlice({
   name: "appSlice",
   reducers: {
-    successLoadClient: (s) => ({ ...s, clientLoaded: true }),
+    successLoadGapi: (s) => ({ ...s, clientLoaded: true }),
     successFetchTaskLists: (s, a: PayloadAction<TaskList[]>) => ({
       ...s,
       taskLists: a.payload,

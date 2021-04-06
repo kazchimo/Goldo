@@ -3,16 +3,21 @@ import { getTaskLists, GResponse, TaskLists } from "../lib/gapi";
 import { actions } from "./reducers";
 
 function* loadGapi() {
-  let finish = false;
+  let clientFinish = false;
+  let authFinish = false;
+
   gapi.load("client", () => {
-    finish = true;
+    clientFinish = true;
+  });
+  gapi.load("auth", () => {
+    authFinish = true;
   });
 
-  while (!finish) {
+  while (!clientFinish || !authFinish) {
     yield delay(100);
   }
 
-  yield put(actions.successLoadClient());
+  yield put(actions.successLoadGapi());
 }
 
 function* fetchTaskLists() {
