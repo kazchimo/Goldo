@@ -5,8 +5,11 @@ const selectSelf = (s: State) => s;
 
 const clientLoaded = createSelector(selectSelf, (s) => s.clientLoaded);
 
+const taskLists = createSelector(selectSelf, (s) => s.taskLists);
+
 const selectors = {
   clientLoaded,
+  taskLists,
 };
 
 export { selectors };
