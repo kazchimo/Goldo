@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
+import logger from "redux-logger";
 import App from "./App";
 import { reducer } from "./modules/reducers";
 import { allSagas } from "./modules/sagas";
@@ -11,7 +12,7 @@ import createSagaMiddleware from "redux-saga";
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(reducer, applyMiddleware(sagaMiddleware));
+const store = createStore(reducer, applyMiddleware(sagaMiddleware, logger));
 
 sagaMiddleware.run(allSagas);
 
