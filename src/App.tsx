@@ -8,17 +8,31 @@ import { actions } from "./modules/reducers";
 import { selectors } from "./modules/selectors";
 
 function App() {
-  const { loadGapiClient } = useBoundActions(actions);
-  const { clientLoaded } = useSelectors(selectors, "clientLoaded");
+  const { loadGapi, restoreLogin, successLogin } = useBoundActions(actions);
+  const { gapiLoaded, login } = useSelectors(selectors, "gapiLoaded", "login");
 
   useEffect(() => {
-    loadGapiClient();
-  });
+    if (gapiLoaded && !login) {
+      gapi.auth.authorize(
+        {
+          client_id: process.env["REACT_APP_CLIENT_ID"],
+          scope: "https://www.googleapis.com/auth/tasks",
+          immediate: false,
+        },
+        (res) => {
+          successLogin(res);
+        }
+      );
+    }
+  }, [gapiLoaded]);
+
+  useEffect(() => {
+    loadGapi();
+    restoreLogin();
+  }, []);
 
   return (
-    <div className="App">
-      {clientLoaded ? <TaskBoard /> : <CircularProgress />}
-    </div>
+    <div className="App">{login ? <TaskBoard /> : <CircularProgress />}</div>
   );
 }
 

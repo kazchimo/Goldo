@@ -29,8 +29,15 @@ const slice = createSlice({
 const loadGapi = createAction("loadGapi");
 const fetchTaskLists = createAction("fetchTaskLists");
 const restoreLogin = createAction("restoreLogin");
+const successLogin = createAction<GoogleApiOAuth2TokenObject>("successLogin");
 
-const actions = { ...slice.actions, loadGapi, fetchTaskLists, restoreLogin };
+const actions = {
+  ...slice.actions,
+  loadGapi,
+  fetchTaskLists,
+  restoreLogin,
+  successLogin,
+};
 const reducer = slice.reducer;
 
 export { actions, reducer };

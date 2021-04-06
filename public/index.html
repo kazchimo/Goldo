@@ -27,44 +27,6 @@
     <title>React App</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="https://apis.google.com/js/client.js"></script>
-    <script type="text/javascript">
-      var CLIENT_ID = "%REACT_APP_CLIENT_ID%";
-      var API_KEY = "%REACT_APP_API_KEY%";
-      var SCOPES = 'https://www.googleapis.com/auth/tasks.readonly';
-
-      /**
-       * Authorize Google Compute Engine API.
-       */
-      function authorization() {
-        if (window.localStorage.getItem("login") !== "true") {
-          gapi.client.setApiKey(API_KEY);
-          gapi.auth.authorize({
-              client_id: CLIENT_ID,
-              scope: SCOPES,
-              immediate: false
-            }, function (authResult) {
-              console.log(authResult);
-              if (authResult && !authResult.error) {
-                window.alert('Auth was successful!');
-                console.log(authResult);
-                window.localStorage.setItem("authToken", authResult.access_token)
-                const expiresAt = (Math.floor(new Date().getTime() / 1000) + Number(authResult.expires_in)).toString()
-                window.localStorage.setItem("expiresAt", expiresAt);
-                window.localStorage.setItem("login", "true")
-                window.location.reload();
-              } else {
-                window.alert('Auth was not successful');
-              }
-            }
-          );
-        }
-      }
-
-      /**
-       * Driver for sample application.
-       */
-      $(window).load(authorization);
-    </script>
 </head>
 <body>
 <noscript>You need to enable JavaScript to run this app.</noscript>

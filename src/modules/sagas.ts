@@ -31,6 +31,7 @@ function* loadGapi() {
 
 function* fetchTaskLists() {
   const res: GResponse<TaskLists> = yield call(getTaskLists);
+  console.log(res);
 
   yield put(actions.successFetchTaskLists(res.result.items));
 }
@@ -42,7 +43,17 @@ function* restoreLogin() {
 }
 
 function* syncLoginState(login: Action<boolean>) {
-  yield call(db.setItem, "login", login ? "true" : "false");
+  yield call(db.setItem, "login", login.payload ? "true" : "false");
+}
+
+function* successLogin({ payload }: Action<GoogleApiOAuth2TokenObject>) {
+  console.log(payload);
+  yield call(db.setItem, "authToken", payload.access_token);
+  const expiresAt = (
+    Math.floor(new Date().getTime() / 1000) + Number(payload.expires_in)
+  ).toString();
+  yield call(db.setItem, "expiresAt", expiresAt);
+  yield put(actions.setLogin(true));
 }
 
 function* allSagas() {
@@ -51,6 +62,7 @@ function* allSagas() {
     takeLatest(actions.fetchTaskLists, fetchTaskLists),
     takeLatest(actions.restoreLogin, restoreLogin),
     takeEvery(actions.setLogin, syncLoginState),
+    takeLatest(actions.successLogin, successLogin),
   ]);
 }
 
