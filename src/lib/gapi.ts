@@ -1,3 +1,5 @@
+import { db } from "../db/db";
+
 type Request<T> = gapi.client.HttpRequest<T>;
 
 export type GResponse<T extends Resource> = {
@@ -22,9 +24,10 @@ export type TaskList = {
 } & Resource;
 
 export const getClient = () => {
-  if (gapi.client) {
+  const token = db.getItem("authToken");
+  if (gapi.client && token) {
     gapi.client.setToken({
-      access_token: localStorage.getItem("authToken")!,
+      access_token: token,
     });
     return gapi.client;
   }

@@ -3,3 +3,5 @@ export const DBKeys = {
   login: "login",
   refreshToken: "refreshToken",
 };
+
+export type DBKeys = keyof typeof DBKeys;
