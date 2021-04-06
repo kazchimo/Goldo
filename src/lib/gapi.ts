@@ -37,3 +37,15 @@ export const getTaskLists = () =>
   getClient()?.request({
     path: "https://tasks.googleapis.com/tasks/v1/users/@me/lists",
   }) as Request<TaskLists>;
+
+export const authorize = (
+  callback: (token: GoogleApiOAuth2TokenObject) => any
+) =>
+  gapi.auth.authorize(
+    {
+      client_id: process.env["REACT_APP_CLIENT_ID"],
+      scope: "https://www.googleapis.com/auth/tasks",
+      immediate: false,
+    },
+    callback
+  );

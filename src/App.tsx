@@ -2,6 +2,7 @@ import { CircularProgress } from "@material-ui/core";
 import React, { useEffect } from "react";
 import "./App.css";
 import { TaskBoard } from "./components/page/TaskBoard";
+import { authorize } from "./lib/gapi";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
 import { useSelectors } from "./lib/hooks/useSelectors";
 import { actions } from "./modules/reducers";
@@ -13,16 +14,9 @@ function App() {
 
   useEffect(() => {
     if (gapiLoaded && !login) {
-      gapi.auth.authorize(
-        {
-          client_id: process.env["REACT_APP_CLIENT_ID"],
-          scope: "https://www.googleapis.com/auth/tasks",
-          immediate: false,
-        },
-        (res) => {
-          successLogin(res);
-        }
-      );
+      authorize((res) => {
+        successLogin(res);
+      });
     }
   }, [gapiLoaded]);
 
