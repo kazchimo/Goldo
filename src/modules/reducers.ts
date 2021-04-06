@@ -2,12 +2,12 @@ import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TaskList } from "../lib/gapi";
 
 export type State = {
-  clientLoaded: boolean;
+  gapiLoaded: boolean;
   taskLists: TaskList[];
 };
 
 const initialState: State = {
-  clientLoaded: false,
+  gapiLoaded: false,
   taskLists: [],
 };
 
@@ -23,10 +23,10 @@ const slice = createSlice({
   initialState,
 });
 
-const loadGapiClient = createAction("loadGapiClient");
+const loadGapi = createAction("loadGapi");
 const fetchTaskLists = createAction("fetchTaskLists");
 
-const actions = { ...slice.actions, loadGapiClient, fetchTaskLists };
+const actions = { ...slice.actions, loadGapiClient: loadGapi, fetchTaskLists };
 const reducer = slice.reducer;
 
 export { actions, reducer };

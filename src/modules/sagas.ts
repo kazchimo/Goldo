@@ -2,7 +2,7 @@ import { all, call, delay, put, takeLatest } from "redux-saga/effects";
 import { getTaskLists, GResponse, TaskLists } from "../lib/gapi";
 import { actions } from "./reducers";
 
-function* loadGapiClient() {
+function* loadGapi() {
   let finish = false;
   gapi.load("client", () => {
     finish = true;
@@ -23,7 +23,7 @@ function* fetchTaskLists() {
 
 function* allSagas() {
   yield all([
-    takeLatest(actions.loadGapiClient, loadGapiClient),
+    takeLatest(actions.loadGapiClient, loadGapi),
     takeLatest(actions.fetchTaskLists, fetchTaskLists),
   ]);
 }
