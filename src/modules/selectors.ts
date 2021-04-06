@@ -9,10 +9,13 @@ const taskLists = createSelector(selectSelf, (s) => s.taskLists);
 
 const login = createSelector(selectSelf, (s) => s.auth?.login);
 
+const expiresAt = createSelector(selectSelf, (s) => s.auth?.expiresAt);
+
 const selectors = {
   gapiLoaded,
   taskLists,
   login,
+  expiresAt,
 };
 
 export { selectors };

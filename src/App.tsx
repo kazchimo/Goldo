@@ -26,7 +26,9 @@ function App() {
   }, []);
 
   return (
-    <div className="App">{login ? <TaskBoard /> : <CircularProgress />}</div>
+    <div className="App">
+      {login && gapiLoaded ? <TaskBoard /> : <CircularProgress />}
+    </div>
   );
 }
 

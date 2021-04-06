@@ -1,5 +1,8 @@
 import { db } from "../db/db";
 
+const CLIENT_ID = process.env["REACT_APP_CLIENT_ID"];
+const SCOPE = "https://www.googleapis.com/auth/tasks";
+
 type Request<T> = gapi.client.HttpRequest<T>;
 
 export type GResponse<T extends Resource> = {
@@ -39,13 +42,17 @@ export const getTaskLists = () =>
   }) as Request<TaskLists>;
 
 export const authorize = (
-  callback: (token: GoogleApiOAuth2TokenObject) => any
+  callback: (token: GoogleApiOAuth2TokenObject) => any,
+  immediate: boolean = false
 ) =>
   gapi.auth.authorize(
     {
-      client_id: process.env["REACT_APP_CLIENT_ID"],
-      scope: "https://www.googleapis.com/auth/tasks",
-      immediate: false,
+      client_id: CLIENT_ID,
+      scope: SCOPE,
+      immediate,
     },
     callback
   );
+
+export const calcExpiresAt = (expiresIn: string) =>
+  Math.floor(new Date().getTime() / 1000) + Number(expiresIn);

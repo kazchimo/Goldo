@@ -5,11 +5,20 @@ import {
   put,
   takeEvery,
   takeLatest,
+  select,
+  fork,
 } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
 import { db } from "../db/db";
-import { getTaskLists, GResponse, TaskLists } from "../lib/gapi";
+import {
+  authorize,
+  calcExpiresAt,
+  getTaskLists,
+  GResponse,
+  TaskLists,
+} from "../lib/gapi";
 import { actions, Auth } from "./reducers";
+import { selectors } from "./selectors";
 
 function* loadGapi() {
   let clientFinish = false;
@@ -32,6 +41,8 @@ function* loadGapi() {
 function* fetchTaskLists() {
   const res: GResponse<TaskLists> = yield call(getTaskLists);
 
+  console.log(res);
+
   yield put(actions.successFetchTaskLists(res.result.items));
 }
 
@@ -46,13 +57,15 @@ function* restoreAuth() {
     "expiresAt"
   );
 
-  yield put(
-    actions.setAuth({
-      login: !!login,
-      accessToken: accessToken!,
-      expiresAt: Number(expiresAt!),
-    })
-  );
+  if (login !== null && accessToken && expiresAt) {
+    yield put(
+      actions.setAuth({
+        login: !!login,
+        accessToken: accessToken,
+        expiresAt: Number(expiresAt),
+      })
+    );
+  }
 }
 
 function* syncAuth({
@@ -64,15 +77,44 @@ function* syncAuth({
 }
 
 function* successLogin({ payload }: Action<GoogleApiOAuth2TokenObject>) {
-  const expiresAt =
-    Math.floor(new Date().getTime() / 1000) + Number(payload.expires_in);
+  console.log(payload);
   yield put(
     actions.setAuth({
       login: true,
-      expiresAt: expiresAt,
+      expiresAt: calcExpiresAt(payload.expires_in),
       accessToken: payload.access_token,
     })
   );
+}
+
+function* refreshToken() {
+  while (true) {
+    const expiresAt: ReturnType<typeof selectors.expiresAt> = yield select(
+      selectors.expiresAt
+    );
+
+    let token: GoogleApiOAuth2TokenObject | undefined;
+
+    if (expiresAt && expiresAt - new Date().getTime() / 1000 < 60 * 10) {
+      authorize((t) => {
+        token = t;
+      });
+
+      while (true) {
+        if (token) {
+          yield put(
+            actions.setAuth({
+              login: true,
+              expiresAt: calcExpiresAt(token.expires_in),
+              accessToken: token.access_token,
+            })
+          );
+        }
+      }
+    }
+
+    yield delay(60000);
+  }
 }
 
 function* allSagas() {
@@ -82,6 +124,7 @@ function* allSagas() {
     takeLatest(actions.restoreLogin, restoreAuth),
     takeEvery(actions.setAuth, syncAuth),
     takeLatest(actions.successLogin, successLogin),
+    fork(refreshToken),
   ]);
 }
 
