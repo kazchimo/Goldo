@@ -46,7 +46,10 @@
               console.log(authResult);
               if (authResult && !authResult.error) {
                 window.alert('Auth was successful!');
+                console.log(authResult);
                 window.localStorage.setItem("authToken", authResult.access_token)
+                const expiresAt = (Math.floor(new Date().getTime() / 1000) + Number(authResult.expires_in)).toString()
+                window.localStorage.setItem("expiresAt", expiresAt);
                 window.localStorage.setItem("login", "true")
                 window.location.reload();
               } else {
