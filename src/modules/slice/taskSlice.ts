@@ -6,7 +6,13 @@ import {
 import { Task } from "../../lib/gapi";
 
 const taskAdapter = createEntityAdapter<Task>({
-  selectId: (t) => t.id,
+  selectId: (t) => {
+    if (t.id) {
+      return t.id;
+    } else {
+      throw new Error("Task id is not defined.");
+    }
+  },
 });
 
 const taskSlice = createSlice({

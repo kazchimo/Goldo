@@ -4,7 +4,7 @@ import { taskListActions } from "../slice/taskListSlice";
 
 function* fetchTaskLists() {
   const res: GResponse<TaskLists> = yield call(getTaskLists);
-  yield put(taskListActions.successFetchTaskLists(res.result.items));
+  yield put(taskListActions.successFetchTaskLists(res.result.items || []));
 }
 
 export const taskListsSaga = [

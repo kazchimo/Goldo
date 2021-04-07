@@ -3,9 +3,9 @@ import { selectSelf } from "../selectors";
 
 const gapi = createSelector(selectSelf, (s) => s.gapi);
 
-const gapiLoaded = createSelector(gapi, (s) => s.gapiLoaded);
+const gapiIsInit = createSelector(gapi, (s) => s.gapiIsInit);
 
 export const gapiSelector = {
   gapi,
-  gapiLoaded,
+  gapiIsInit,
 };

@@ -1,26 +1,29 @@
-import { delay, put, takeLatest } from "redux-saga/effects";
+import { call, delay, put, takeLatest } from "redux-saga/effects";
 import { gapiActions } from "../slice/gapiSlice";
 
-function* loadGapi() {
-  let clientFinish = false;
-  let authFinish = false;
-  const auth2Finish = false;
+function* initGapi() {
+  let auth2Finish = false;
 
-  gapi.load("client", () => {
-    clientFinish = true;
-  });
-  gapi.load("auth", () => {
-    authFinish = true;
-  });
   gapi.load("client:auth2", () => {
-    authFinish = true;
+    auth2Finish = true;
   });
 
-  while (!clientFinish || !authFinish || !auth2Finish) {
+  while (!auth2Finish) {
     yield delay(100);
   }
 
-  yield put(gapiActions.successLoadGapi());
+  const CLIENT_ID = process.env["REACT_APP_CLIENT_ID"];
+  const SCOPE = "https://www.googleapis.com/auth/tasks";
+  yield call(gapi.client.init, {
+    clientId: CLIENT_ID,
+    scope: SCOPE,
+    discoveryDocs: [
+      "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+    ],
+    apiKey: process.env["REACT_APP_API_KEY"],
+  });
+
+  yield put(gapiActions.successInitGapi());
 }
 
-export const gapiSaga = [takeLatest(gapiActions.loadGapi, loadGapi)];
+export const gapiSaga = [takeLatest(gapiActions.initGapi, initGapi)];

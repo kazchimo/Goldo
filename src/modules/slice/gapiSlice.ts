@@ -3,15 +3,15 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 const slice = createSlice({
   name: "gapi",
   initialState: {
-    gapiLoaded: false,
+    gapiIsInit: false,
   },
   reducers: {
-    successLoadGapi: (s) => ({ ...s, gapiLoaded: true }),
+    successInitGapi: (s) => ({ ...s, gapiIsInit: true }),
   },
 });
 
-const loadGapi = createAction("loadGapi");
+const initGapi = createAction("initGapi");
 
-export const gapiActions = { ...slice.actions, loadGapi };
+export const gapiActions = { ...slice.actions, initGapi };
 
 export const gapiReducers = slice.reducer;

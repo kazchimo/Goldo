@@ -2,8 +2,6 @@ import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type Auth = {
   login: boolean;
-  accessToken?: string;
-  expiresAt?: number;
 };
 
 const initialState: Auth = { login: false };
@@ -13,12 +11,15 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth: (s, a: PayloadAction<Auth>) => a.payload,
+    successLogin: (s) => ({ ...s, login: true }),
   },
 });
 
-const restoreLogin = createAction("restoreLogin");
-const successLogin = createAction<GoogleApiOAuth2TokenObject>("successLogin");
+const signIn = createAction("signIn");
 
 export const authReducer = authSlice.reducer;
 
-export const authActions = { ...authSlice.actions, restoreLogin, successLogin };
+export const authActions = {
+  ...authSlice.actions,
+  signIn,
+};

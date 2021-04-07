@@ -18,7 +18,9 @@ export const TaskBoard: React.FC = () => {
 
   useEffect(() => {
     taskLists.forEach((t) => {
-      fetchTasks(t.id);
+      if (t.id) {
+        fetchTasks(t.id);
+      }
     });
   }, [taskLists]);
 

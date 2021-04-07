@@ -2,7 +2,6 @@ import { CircularProgress } from "@material-ui/core";
 import React, { useEffect } from "react";
 import "./App.css";
 import { TaskBoard } from "./components/page/TaskBoard";
-import { authorize } from "./lib/gapi";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
 import { useSelectors } from "./lib/hooks/useSelectors";
 import { authSelector } from "./modules/selector/authSelector";
@@ -11,32 +10,29 @@ import { authActions } from "./modules/slice/authSlice";
 import { gapiActions } from "./modules/slice/gapiSlice";
 
 function App() {
-  const { loadGapi, restoreLogin, successLogin } = useBoundActions({
+  const { initGapi, signIn } = useBoundActions({
     ...authActions,
     ...gapiActions,
   });
-  const { gapiLoaded, login } = useSelectors(
+  const { gapiIsInit, login } = useSelectors(
     { ...gapiSelector, ...authSelector },
-    "gapiLoaded",
+    "gapiIsInit",
     "login"
   );
 
   useEffect(() => {
-    if (gapiLoaded && !login) {
-      authorize((res) => {
-        successLogin(res);
-      });
+    if (gapiIsInit && !login) {
+      signIn();
     }
-  }, [gapiLoaded]);
+  }, [gapiIsInit]);
 
   useEffect(() => {
-    loadGapi();
-    restoreLogin();
+    initGapi();
   }, []);
 
   return (
     <div className="App">
-      {login && gapiLoaded ? <TaskBoard /> : <CircularProgress />}
+      {login && gapiIsInit ? <TaskBoard /> : <CircularProgress />}
     </div>
   );
 }
