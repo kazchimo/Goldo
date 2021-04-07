@@ -1,7 +1,7 @@
 import { CircularProgress } from "@material-ui/core";
 import React, { useEffect } from "react";
 import "./App.css";
-import { TaskBoard } from "./components/page/TaskBoard";
+import { TaskBoardPage } from "./components/page/TaskBoardPage";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
 import { useSelectors } from "./lib/hooks/useSelectors";
 import { authSelector } from "./modules/selector/authSelector";
@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div className="App">
-      {login && gapiIsInit ? <TaskBoard /> : <CircularProgress />}
+      {login && gapiIsInit ? <TaskBoardPage /> : <CircularProgress />}
     </div>
   );
 }

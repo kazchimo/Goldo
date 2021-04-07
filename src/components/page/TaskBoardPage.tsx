@@ -5,7 +5,7 @@ import { taskListsSelector } from "../../modules/selector/taskListsSelector";
 import { taskListActions } from "../../modules/slice/taskListSlice";
 import { tasksActions } from "../../modules/slice/taskSlice";
 
-export const TaskBoard: React.FC = () => {
+export const TaskBoardPage: React.FC = () => {
   const { fetchTaskLists, fetchTasks } = useBoundActions({
     ...tasksActions,
     ...taskListActions,
