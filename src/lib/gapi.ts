@@ -15,12 +15,38 @@ type Resource = {
   etag: string;
 };
 
-export type TaskLists = {
+type ListResource<T> = Resource & {
   nextPageToken: string;
-  items: TaskList[];
+  items: T[];
+};
+
+export type Link = {
+  type: string;
+  description: string;
+  link: string;
+};
+
+export type Tasks = ListResource<Task>;
+
+export type Task = {
+  id: string;
+  title: string;
+  updated: string;
+  selfLink: string;
+  parent: string;
+  position: string;
+  notes: string;
+  due: string;
+  completed: string;
+  deleted: boolean;
+  hidden: boolean;
+  links: Link[];
 } & Resource;
 
+export type TaskLists = ListResource<TaskList>;
+
 export type TaskList = {
+  id: string;
   title: string;
   updated: string;
   selfLink: string;
@@ -40,6 +66,11 @@ export const getTaskLists = () =>
   getClient()?.request({
     path: "https://tasks.googleapis.com/tasks/v1/users/@me/lists",
   }) as Request<TaskLists>;
+
+export const getTasks = (listId: string) =>
+  getClient()?.request({
+    path: `https://tasks.googleapis.com/tasks/v1/lists/${listId}/tasks`,
+  }) as Request<Tasks>;
 
 export const authorize = (
   callback: (token: GoogleApiOAuth2TokenObject) => any,

@@ -5,12 +5,21 @@ import { TaskBoard } from "./components/page/TaskBoard";
 import { authorize } from "./lib/gapi";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
 import { useSelectors } from "./lib/hooks/useSelectors";
-import { actions } from "./modules/reducers";
-import { selectors } from "./modules/selectors";
+import { authSelector } from "./modules/selector/authSelector";
+import { gapiSelector } from "./modules/selector/gapiSelector";
+import { authActions } from "./modules/slice/authSlice";
+import { gapiActions } from "./modules/slice/gapiSlice";
 
 function App() {
-  const { loadGapi, restoreLogin, successLogin } = useBoundActions(actions);
-  const { gapiLoaded, login } = useSelectors(selectors, "gapiLoaded", "login");
+  const { loadGapi, restoreLogin, successLogin } = useBoundActions({
+    ...authActions,
+    ...gapiActions,
+  });
+  const { gapiLoaded, login } = useSelectors(
+    { ...gapiSelector, ...authSelector },
+    "gapiLoaded",
+    "login"
+  );
 
   useEffect(() => {
     if (gapiLoaded && !login) {

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { OutputSelector } from "reselect";
-import { State } from "../../modules/reducers";
+import { RootState } from "../../modules/reducers";
 
 export const useSelectors = <
   T extends { [key: string]: OutputSelector<any, any, any> },
@@ -13,11 +13,11 @@ export const useSelectors = <
   const s = Object.keys(selectors)
     .filter((k) => memoizer.includes(k))
     .reduce(
-      (prev, key) => (s: State) => ({
+      (prev, key) => (s: RootState) => ({
         ...prev(s),
         [key]: selectors[key](s),
       }),
-      (_: State) => ({} as { [key in M[number]]: ReturnType<T[key]> })
+      (_: RootState) => ({} as { [key in M[number]]: ReturnType<T[key]> })
     );
 
   return useSelector(s, (a, b) =>

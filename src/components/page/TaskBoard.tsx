@@ -1,16 +1,26 @@
 import React, { useEffect } from "react";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSelectors } from "../../lib/hooks/useSelectors";
-import { actions } from "../../modules/reducers";
-import { selectors } from "../../modules/selectors";
+import { taskListsSelector } from "../../modules/selector/taskListsSelector";
+import { taskListActions } from "../../modules/slice/taskListSlice";
+import { tasksActions } from "../../modules/slice/taskSlice";
 
 export const TaskBoard: React.FC = () => {
-  const { fetchTaskLists } = useBoundActions(actions);
-  const { taskLists } = useSelectors(selectors, "taskLists");
+  const { fetchTaskLists, fetchTasks } = useBoundActions({
+    ...tasksActions,
+    ...taskListActions,
+  });
+  const { taskLists } = useSelectors(taskListsSelector, "taskLists");
 
   useEffect(() => {
     fetchTaskLists();
   }, []);
+
+  useEffect(() => {
+    taskLists.forEach((t) => {
+      fetchTasks(t.id);
+    });
+  }, [taskLists]);
 
   return (
     <div>
