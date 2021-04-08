@@ -2,10 +2,12 @@ import {
   createAction,
   createEntityAdapter,
   createSlice,
+  EntityState,
+  PayloadAction,
 } from "@reduxjs/toolkit";
 import { Task } from "../../lib/gapi";
 
-const taskAdapter = createEntityAdapter<Task>({
+export const taskAdapter = createEntityAdapter<Task>({
   selectId: (t) => {
     if (t.id) {
       return t.id;
@@ -15,11 +17,32 @@ const taskAdapter = createEntityAdapter<Task>({
   },
 });
 
+type State = {
+  tasksByListId: {
+    [key: string]: Task[];
+  };
+} & EntityState<Task>;
+
+const initialState: State = {
+  tasksByListId: {},
+  ...taskAdapter.getInitialState(),
+};
+
 const taskSlice = createSlice({
   name: "tasks",
-  initialState: taskAdapter.getInitialState(),
+  initialState,
   reducers: {
     addMany: taskAdapter.addMany,
+    addTasksOnListId: (
+      s: State,
+      p: PayloadAction<{ tasks: Task[]; listId: string }>
+    ) => ({
+      ...s,
+      tasksByListId: {
+        ...s.tasksByListId,
+        [p.payload.listId]: p.payload.tasks,
+      },
+    }),
   },
 });
 

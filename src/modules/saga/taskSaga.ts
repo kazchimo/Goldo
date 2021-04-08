@@ -6,6 +6,12 @@ import { tasksActions } from "../slice/taskSlice";
 function* fetchTasks(p: Action<string>) {
   const res: GResponse<Tasks> = yield call(getTasks, p.payload);
   yield put(tasksActions.addMany(res.result.items || []));
+  yield put(
+    tasksActions.addTasksOnListId({
+      tasks: res.result.items || [],
+      listId: p.payload,
+    })
+  );
 }
 
 export const taskSaga = [takeEvery(tasksActions.fetchTasks, fetchTasks)];
