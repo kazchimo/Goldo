@@ -1,4 +1,5 @@
 import React from "react";
+import { DragDropContext } from "react-beautiful-dnd";
 import ReactDOM from "react-dom";
 import "./index.css";
 import { Provider } from "react-redux";
@@ -18,9 +19,11 @@ sagaMiddleware.run(allSagas);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <DragDropContext onDragEnd={console.log}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </DragDropContext>
   </React.StrictMode>,
   document.getElementById("root")
 );
