@@ -23,7 +23,7 @@ export const TaskListItem: React.FC<Props> = ({ task, index }) => {
           {...provided.dragHandleProps}
         >
           <ListItemIcon>
-            <Checkbox />
+            <Checkbox size={"small"} />
           </ListItemIcon>
           <ListItemText primary={task.title} />
         </ListItem>
