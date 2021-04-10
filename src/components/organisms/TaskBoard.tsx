@@ -1,7 +1,10 @@
 import {
+  Checkbox,
   Divider,
   List,
   ListItem,
+  ListItemIcon,
+  ListItemText,
   ListSubheader,
   makeStyles,
   Paper,
@@ -55,7 +58,10 @@ export const TaskBoard: React.FC<Props> = ({ taskList }) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    {t.title}
+                    <ListItemIcon>
+                      <Checkbox />
+                    </ListItemIcon>
+                    <ListItemText primary={t.title} />
                   </ListItem>
                 )}
               </Draggable>
