@@ -23,8 +23,12 @@ export const getClient = () => {
 export const getTaskLists = () =>
   gapi.client.tasks.tasklists.list({ maxResults: 100 });
 
-export const getTasks = (listId: string) =>
-  gapi.client.tasks.tasks.list({ tasklist: listId, maxResults: 100 });
+export const getTasks = (listId: string, showCompleted: boolean = false) =>
+  gapi.client.tasks.tasks.list({
+    tasklist: listId,
+    maxResults: 100,
+    showCompleted,
+  });
 
 export const calcExpiresAt = (expiresIn: string) =>
   Math.floor(new Date().getTime() / 1000) + Number(expiresIn);
