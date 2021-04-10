@@ -1,19 +1,10 @@
-import {
-  Checkbox,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-  makeStyles,
-  Paper,
-} from "@material-ui/core";
+import { List, ListSubheader, makeStyles, Paper } from "@material-ui/core";
 import React from "react";
-import { Draggable, Droppable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import { TaskList } from "../../lib/gapi";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { tasksSelector } from "../../modules/selector/taskSelector";
+import { TaskListItem } from "../molecules/TaskListItem";
 
 type Props = {
   taskList: TaskList;
@@ -51,20 +42,7 @@ export const TaskBoard: React.FC<Props> = ({ taskList }) => {
           >
             {provided.placeholder}
             {tasks.map((t, idx) => (
-              <Draggable draggableId={"draggable-" + t.id} index={idx}>
-                {(provided) => (
-                  <ListItem
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <ListItemIcon>
-                      <Checkbox />
-                    </ListItemIcon>
-                    <ListItemText primary={t.title} />
-                  </ListItem>
-                )}
-              </Draggable>
+              <TaskListItem task={t} index={idx} />
             ))}
           </List>
         </Paper>
