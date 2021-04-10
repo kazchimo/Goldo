@@ -1,12 +1,7 @@
-import { Grid, IconButton, ListSubheader, makeStyles } from "@material-ui/core";
-import { TextField } from "formik-material-ui";
+import { Grid, ListSubheader, makeStyles } from "@material-ui/core";
 import React from "react";
 import { TaskList } from "../../lib/gapi";
-import { FieldAttributes, Form, Formik } from "formik";
-import { Field } from "formik";
-import AddIcon from "@material-ui/icons/Add";
-import { useBoundActions } from "../../lib/hooks/useBoundActions";
-import { tasksActions } from "../../modules/slice/taskSlice";
+import { TaskAddForm } from "./TaskAddForm";
 
 type Props = {
   taskList: TaskList;
@@ -24,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
   const classes = useStyles();
-  const { createTask } = useBoundActions(tasksActions);
 
   return (
     <ListSubheader className={classes.subHeader}>
@@ -33,40 +27,7 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
           {taskList.title}
         </Grid>
         <Grid item xs={12}>
-          <Formik
-            initialValues={{ newTaskTitle: "" }}
-            onSubmit={(v, { setSubmitting }) => {
-              if (taskList.id) {
-                createTask({
-                  taskListId: taskList.id,
-                  task: { title: v.newTaskTitle },
-                });
-              } else {
-                console.error("doesn't have a taskList id");
-              }
-
-              setSubmitting(false);
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <Field
-                  component={(p: FieldAttributes<any>) => (
-                    <TextField {...p} label={"New Task"} />
-                  )}
-                  name={"newTaskTitle"}
-                  className={classes.addForm}
-                />
-                <IconButton
-                  type={"submit"}
-                  size={"small"}
-                  disabled={isSubmitting}
-                >
-                  <AddIcon />
-                </IconButton>
-              </Form>
-            )}
-          </Formik>
+          <TaskAddForm taskList={taskList} />
         </Grid>
       </Grid>
     </ListSubheader>
