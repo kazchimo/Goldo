@@ -1,9 +1,16 @@
-import { List, ListSubheader, makeStyles, Paper } from "@material-ui/core";
+import {
+  List,
+  ListSubheader,
+  makeStyles,
+  Paper,
+  TextField,
+} from "@material-ui/core";
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { TaskList } from "../../lib/gapi";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { tasksSelector } from "../../modules/selector/taskSelector";
+import { TaskListHeader } from "../molecules/TaskListHeader";
 import { TaskListItem } from "../molecules/TaskListItem";
 
 type Props = {
@@ -15,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 800,
     width: 300,
     overflow: "auto",
-  },
-  subHeader: {
-    backgroundColor: theme.palette.background.paper,
   },
 }));
 
@@ -34,11 +38,7 @@ export const TaskBoard: React.FC<Props> = ({ taskList }) => {
           <List
             ref={provided.innerRef}
             {...provided.droppableProps}
-            subheader={
-              <ListSubheader className={classes.subHeader}>
-                {taskList.title}
-              </ListSubheader>
-            }
+            subheader={<TaskListHeader taskList={taskList} />}
           >
             {provided.placeholder}
             {tasks.map((t, idx) => (
