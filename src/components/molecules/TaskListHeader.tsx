@@ -48,14 +48,18 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
               setSubmitting(false);
             }}
           >
-            {({ submitForm }) => (
+            {({ isSubmitting }) => (
               <Form>
                 <Field
                   component={TextField}
                   name={"newTaskTitle"}
                   className={classes.addForm}
                 />
-                <IconButton type={"submit"} onClick={submitForm} size={"small"}>
+                <IconButton
+                  type={"submit"}
+                  size={"small"}
+                  disabled={isSubmitting}
+                >
                   <AddIcon />
                 </IconButton>
               </Form>
