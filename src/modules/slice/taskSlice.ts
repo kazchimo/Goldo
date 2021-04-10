@@ -6,11 +6,14 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import _ from "lodash";
+import { Lens } from "monocle-ts";
 import { Task } from "../../lib/gapi";
 
 export type TaskView = {
   children: TaskView[];
 } & Task;
+
+const taskViewChildrenLens = Lens.fromPath<TaskView>()(["children"]);
 
 export const taskAdapter = createEntityAdapter<Task>({
   selectId: (t) => {
@@ -42,10 +45,7 @@ const mergeTask = (
 ): { result: TaskView; changed: boolean } => {
   if (parent.id === child.parent) {
     return {
-      result: {
-        ...parent,
-        children: [child, ...parent.children],
-      },
+      result: taskViewChildrenLens.modify((c) => [child, ...c])(parent),
       changed: true,
     };
   } else {
@@ -53,13 +53,10 @@ const mergeTask = (
       const { result, changed } = mergeTask(child, t);
       if (changed) {
         return {
-          result: {
-            ...parent,
-            children: [
-              result,
-              ...parent.children.filter((tt) => tt.id !== result.id),
-            ],
-          },
+          result: taskViewChildrenLens.modify((c) => [
+            result,
+            ...c.filter((tt) => tt.id !== result.id),
+          ])(parent),
           changed: true,
         };
       }
