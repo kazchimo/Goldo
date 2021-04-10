@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
-import { GResponse, Tasks } from "../../lib/gapi";
+import { GResponse, Task, Tasks } from "../../lib/gapi";
 import { tasksActions } from "../slice/taskSlice";
 
 function* fetchTasks(p: Action<string>) {
@@ -18,4 +18,21 @@ function* fetchTasks(p: Action<string>) {
   );
 }
 
-export const taskSaga = [takeEvery(tasksActions.fetchTasks, fetchTasks)];
+function* createTask({
+  payload: { taskListId, task },
+}: Action<{ taskListId: string; task: Task }>) {
+  const res: GResponse<Task> = yield call(
+    gapi.client.tasks.tasks.insert,
+    {
+      tasklist: taskListId,
+    },
+    task
+  );
+
+  yield put(tasksActions.add(res.result));
+}
+
+export const taskSaga = [
+  takeEvery(tasksActions.fetchTasks, fetchTasks),
+  takeEvery(tasksActions.createTask, createTask),
+];

@@ -5,6 +5,8 @@ import { TaskList } from "../../lib/gapi";
 import { Form, Formik } from "formik";
 import { Field } from "formik";
 import AddIcon from "@material-ui/icons/Add";
+import { useBoundActions } from "../../lib/hooks/useBoundActions";
+import { tasksActions } from "../../modules/slice/taskSlice";
 
 type Props = {
   taskList: TaskList;
@@ -22,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
   const classes = useStyles();
+  const { createTask } = useBoundActions(tasksActions);
 
   return (
     <ListSubheader className={classes.subHeader}>
@@ -32,7 +35,14 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
         <Grid item xs={12}>
           <Formik
             initialValues={{ newTaskTitle: "" }}
-            onSubmit={(v) => console.log(v)}
+            onSubmit={(v) => {
+              if (taskList.id) {
+                createTask({
+                  taskListId: taskList.id,
+                  task: { title: v.newTaskTitle },
+                });
+              }
+            }}
           >
             {({ submitForm }) => (
               <Form>
