@@ -1,6 +1,10 @@
-import { Grid, ListSubheader, makeStyles, TextField } from "@material-ui/core";
+import { Grid, IconButton, ListSubheader, makeStyles } from "@material-ui/core";
+import { TextField } from "formik-material-ui";
 import React from "react";
 import { TaskList } from "../../lib/gapi";
+import { Form, Formik } from "formik";
+import { Field } from "formik";
+import AddIcon from "@material-ui/icons/Add";
 
 type Props = {
   taskList: TaskList;
@@ -10,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
   subHeader: {
     backgroundColor: theme.palette.background.paper,
     paddingBottom: 8,
+  },
+  addForm: {
+    marginRight: 8,
   },
 }));
 
@@ -23,7 +30,23 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
           {taskList.title}
         </Grid>
         <Grid item xs={12}>
-          <TextField label={"New Task"} />
+          <Formik
+            initialValues={{ newTaskTitle: "" }}
+            onSubmit={(v) => console.log(v)}
+          >
+            {({ submitForm }) => (
+              <Form>
+                <Field
+                  component={TextField}
+                  name={"newTaskTitle"}
+                  className={classes.addForm}
+                />
+                <IconButton type={"submit"} onClick={submitForm} size={"small"}>
+                  <AddIcon />
+                </IconButton>
+              </Form>
+            )}
+          </Formik>
         </Grid>
       </Grid>
     </ListSubheader>
