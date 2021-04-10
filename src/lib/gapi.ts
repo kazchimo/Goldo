@@ -19,3 +19,7 @@ export const getClient = () => {
     return gapi.client;
   }
 };
+
+export const taskListHasId = (
+  taskList: TaskList
+): taskList is TaskList & { id: string } => !!taskList.id;

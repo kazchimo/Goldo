@@ -50,7 +50,32 @@ function* createTask({
   );
 }
 
+function* completeTask({
+  payload: { task, taskListId },
+}: Action<{ taskListId: string; task: Task }>) {
+  if (task.id) {
+    const res: GResponse<Task> = yield call(
+      gapi.client.tasks.tasks.update,
+      {
+        tasklist: taskListId,
+        task: task.id,
+      },
+      { ...task, status: "completed" }
+    );
+
+    yield put(
+      tasksActions.successCompleteTask({
+        taskId: res.result.id!,
+        taskListId: taskListId,
+      })
+    );
+  } else {
+    console.log("Has no id");
+  }
+}
+
 export const taskSaga = [
   takeEvery(tasksActions.fetchTasks, fetchTasks),
   takeEvery(tasksActions.createTask, createTask),
+  takeEvery(tasksActions.completeTask, completeTask),
 ];

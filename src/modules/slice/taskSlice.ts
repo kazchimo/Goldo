@@ -115,6 +115,20 @@ const taskSlice = createSlice({
   reducers: {
     addMany: taskAdapter.addMany,
     add: taskAdapter.addOne,
+    successCompleteTask: (
+      s,
+      a: PayloadAction<{ taskId: string; taskListId: string }>
+    ) => ({
+      ...s,
+      tasksByListId: {
+        ...s.tasksByListId,
+        [a.payload.taskListId]: _.get(
+          s.tasksByListId,
+          a.payload.taskListId,
+          []
+        ).filter((t) => t.id !== a.payload.taskId),
+      },
+    }),
     addTaskOnListId: (
       s: State,
       p: PayloadAction<{ task: Task; listId: string }>
@@ -154,8 +168,16 @@ const fetchTasks = createAction<string>("fetchTasks");
 const createTask = createAction<{ taskListId: string; task: Task }>(
   "createTask"
 );
+const completeTask = createAction<{ taskListId: string; task: Task }>(
+  "completeTask"
+);
 
-const tasksActions = { ...taskSlice.actions, fetchTasks, createTask };
+const tasksActions = {
+  ...taskSlice.actions,
+  fetchTasks,
+  createTask,
+  completeTask,
+};
 
 const tasksReducer = taskSlice.reducer;
 
