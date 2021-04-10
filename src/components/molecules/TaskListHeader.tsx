@@ -2,7 +2,7 @@ import { Grid, IconButton, ListSubheader, makeStyles } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import React from "react";
 import { TaskList } from "../../lib/gapi";
-import { Form, Formik } from "formik";
+import { FieldAttributes, Form, Formik } from "formik";
 import { Field } from "formik";
 import AddIcon from "@material-ui/icons/Add";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
@@ -42,7 +42,7 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
                   task: { title: v.newTaskTitle },
                 });
               } else {
-                console.error("not has taskList id");
+                console.error("doesn't have a taskList id");
               }
 
               setSubmitting(false);
@@ -51,7 +51,9 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
             {({ isSubmitting }) => (
               <Form>
                 <Field
-                  component={TextField}
+                  component={(p: FieldAttributes<any>) => (
+                    <TextField {...p} label={"New Task"} />
+                  )}
                   name={"newTaskTitle"}
                   className={classes.addForm}
                 />
