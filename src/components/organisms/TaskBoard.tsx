@@ -1,10 +1,4 @@
-import {
-  List,
-  ListSubheader,
-  makeStyles,
-  Paper,
-  TextField,
-} from "@material-ui/core";
+import { List, makeStyles, Paper } from "@material-ui/core";
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { TaskList } from "../../lib/gapi";
@@ -43,7 +37,7 @@ export const TaskBoard: React.FC<Props> = ({ taskList }) => {
           >
             {provided.placeholder}
             {tasks.map((t, idx) => (
-              <TaskListItem task={t} index={idx} />
+              <TaskListItem key={t.id} task={t} index={idx} />
             ))}
           </List>
         </Paper>

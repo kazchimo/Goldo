@@ -4,15 +4,30 @@ import { GResponse, Task, Tasks } from "../../lib/gapi";
 import { tasksActions } from "../slice/taskSlice";
 
 function* fetchTasks(p: Action<string>) {
-  const res: GResponse<Tasks> = yield call(gapi.client.tasks.tasks.list, {
-    tasklist: p.payload,
-    maxResults: 100,
-    showCompleted: false,
-  });
-  yield put(tasksActions.addMany(res.result.items || []));
+  let tasks: Task[] = [];
+  let nextToken: string | undefined = undefined;
+
+  while (true) {
+    const res: GResponse<Tasks> = yield call(gapi.client.tasks.tasks.list, {
+      tasklist: p.payload,
+      maxResults: 100,
+      showCompleted: false,
+      pageToken: nextToken,
+    });
+
+    tasks = [...tasks, ...(res.result.items || [])];
+
+    if (!res.result.nextPageToken) {
+      break;
+    } else {
+      nextToken = res.result.nextPageToken;
+    }
+  }
+
+  yield put(tasksActions.addMany(tasks));
   yield put(
     tasksActions.addTasksOnListId({
-      tasks: res.result.items || [],
+      tasks,
       listId: p.payload,
     })
   );

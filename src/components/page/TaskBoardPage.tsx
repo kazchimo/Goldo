@@ -1,4 +1,4 @@
-import { Grid, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSelectors } from "../../lib/hooks/useSelectors";
@@ -40,8 +40,8 @@ export const TaskBoardPage: React.FC = () => {
   return (
     <div className={classes.container}>
       {taskLists.map((t) => (
-        <div className={classes.boardContainer}>
-          <TaskBoard key={t.id} taskList={t} />
+        <div key={t.id} className={classes.boardContainer}>
+          <TaskBoard taskList={t} />
         </div>
       ))}
     </div>
