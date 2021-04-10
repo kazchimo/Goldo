@@ -41,6 +41,8 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
                   taskListId: taskList.id,
                   task: { title: v.newTaskTitle },
                 });
+              } else {
+                console.error("not has taskList id");
               }
             }}
           >
