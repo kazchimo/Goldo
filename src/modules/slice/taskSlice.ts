@@ -5,6 +5,7 @@ import {
   EntityState,
   PayloadAction,
 } from "@reduxjs/toolkit";
+import _ from "lodash";
 import { Task } from "../../lib/gapi";
 
 export const taskAdapter = createEntityAdapter<Task>({
@@ -34,6 +35,19 @@ const taskSlice = createSlice({
   reducers: {
     addMany: taskAdapter.addMany,
     add: taskAdapter.addOne,
+    addTaskOnListId: (
+      s: State,
+      p: PayloadAction<{ task: Task; listId: string }>
+    ) => ({
+      ...s,
+      tasksByListId: {
+        ...s.tasksByListId,
+        [p.payload.listId]: [
+          p.payload.task,
+          ..._.get(s.tasksByListId, p.payload.listId, []),
+        ],
+      },
+    }),
     addTasksOnListId: (
       s: State,
       p: PayloadAction<{ tasks: Task[]; listId: string }>

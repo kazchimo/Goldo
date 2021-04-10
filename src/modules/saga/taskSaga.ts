@@ -30,6 +30,9 @@ function* createTask({
   );
 
   yield put(tasksActions.add(res.result));
+  yield put(
+    tasksActions.addTaskOnListId({ task: res.result, listId: taskListId })
+  );
 }
 
 export const taskSaga = [
