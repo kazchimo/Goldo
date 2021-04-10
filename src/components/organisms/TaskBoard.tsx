@@ -39,6 +39,7 @@ export const TaskBoard: React.FC<Props> = ({ taskList }) => {
             ref={provided.innerRef}
             {...provided.droppableProps}
             subheader={<TaskListHeader taskList={taskList} />}
+            dense
           >
             {provided.placeholder}
             {tasks.map((t, idx) => (
