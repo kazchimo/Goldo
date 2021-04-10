@@ -98,6 +98,17 @@ const insertTask = (children: TaskView[], tasks: TaskView[]): TaskView[] => {
   }
 };
 
+const deepTaskSort = (tasks: TaskView[]): TaskView[] => {
+  if (tasks.length === 0) {
+    return [];
+  } else {
+    return _.sortBy(
+      tasks.map(taskViewChildrenLens.modify(deepTaskSort)),
+      (t) => t.position
+    );
+  }
+};
+
 const taskSlice = createSlice({
   name: "tasks",
   initialState,
@@ -112,9 +123,11 @@ const taskSlice = createSlice({
         ...s,
         tasksByListId: {
           ...s.tasksByListId,
-          [p.payload.listId]: insertTask(
-            [{ ...p.payload.task, children: [] }],
-            _.get(s.tasksByListId, p.payload.listId, [])
+          [p.payload.listId]: deepTaskSort(
+            insertTask(
+              [{ ...p.payload.task, children: [] }],
+              _.get(s.tasksByListId, p.payload.listId, [])
+            )
           ),
         },
       };
@@ -126,9 +139,11 @@ const taskSlice = createSlice({
       ...s,
       tasksByListId: {
         ...s.tasksByListId,
-        [p.payload.listId]: insertTask(
-          p.payload.tasks.map((t) => ({ ...t, children: [] })),
-          _.get(s.tasksByListId, p.payload.listId, [])
+        [p.payload.listId]: deepTaskSort(
+          insertTask(
+            p.payload.tasks.map((t) => ({ ...t, children: [] })),
+            _.get(s.tasksByListId, p.payload.listId, [])
+          )
         ),
       },
     }),
