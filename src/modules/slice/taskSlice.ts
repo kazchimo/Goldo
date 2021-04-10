@@ -77,8 +77,6 @@ const insertTask = (children: TaskView[], tasks: TaskView[]): TaskView[] => {
   let updated = _.cloneDeep([...tasks, ...children].filter((t) => !t.parent));
 
   while (true) {
-    console.log(remains);
-    console.log(updated);
     if (remains.length === 0) {
       return updated;
     } else {
@@ -97,8 +95,6 @@ const insertTask = (children: TaskView[], tasks: TaskView[]): TaskView[] => {
 
         if (!merged) {
           remains = [child, ...remains];
-        } else {
-          return updated;
         }
       }
     }
