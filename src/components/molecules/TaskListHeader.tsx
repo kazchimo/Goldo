@@ -35,7 +35,7 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
         <Grid item xs={12}>
           <Formik
             initialValues={{ newTaskTitle: "" }}
-            onSubmit={(v) => {
+            onSubmit={(v, { setSubmitting }) => {
               if (taskList.id) {
                 createTask({
                   taskListId: taskList.id,
@@ -44,6 +44,8 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
               } else {
                 console.error("not has taskList id");
               }
+
+              setSubmitting(false);
             }}
           >
             {({ submitForm }) => (
