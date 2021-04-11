@@ -1,3 +1,4 @@
+import { ConfirmProvider } from "material-ui-confirm";
 import { SnackbarProvider } from "notistack";
 import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -23,10 +24,12 @@ ReactDOM.render(
   <React.StrictMode>
     <DragDropContext onDragEnd={console.log}>
       <SnackbarProvider maxSnack={3}>
-        <Provider store={store}>
-          <Notifier />
-          <App />
-        </Provider>
+        <ConfirmProvider>
+          <Provider store={store}>
+            <Notifier />
+            <App />
+          </Provider>
+        </ConfirmProvider>
       </SnackbarProvider>
     </DragDropContext>
   </React.StrictMode>,

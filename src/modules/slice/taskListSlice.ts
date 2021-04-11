@@ -8,11 +8,16 @@ const taskListSlice = createSlice({
   initialState,
   reducers: {
     successFetchTaskLists: (s, a: PayloadAction<TaskList[]>) => a.payload,
+    deleteTaskList: (s, a: PayloadAction<string>) =>
+      s.filter((t) => t.id !== a.payload),
   },
 });
 
 const fetchTaskLists = createAction("fetchTaskLists");
 
-export const taskListActions = { ...taskListSlice.actions, fetchTaskLists };
+export const taskListActions = {
+  ...taskListSlice.actions,
+  fetchTaskLists,
+};
 
 export const taskListReducer = taskListSlice.reducer;
