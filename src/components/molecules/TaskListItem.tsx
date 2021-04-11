@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   Collapse,
   IconButton,
   List,
@@ -8,13 +7,14 @@ import {
   ListItemText,
   makeStyles,
 } from "@material-ui/core";
+import DoneIcon from "@material-ui/icons/Done";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
+import { useSnack } from "../../lib/hooks/useSnack";
 import { tasksActions, TaskView } from "../../modules/slice/taskSlice";
-import DoneIcon from "@material-ui/icons/Done";
 
 type Props = {
   task: TaskView;
@@ -32,8 +32,14 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
   const { completeTask } = useBoundActions(tasksActions);
+  const { successSnack } = useSnack();
 
   const hasChildren = task.children.length > 0;
+
+  const finishTask = useCallback(() => {
+    successSnack("Complete Task");
+    completeTask({ task, taskListId });
+  }, [successSnack]);
 
   return (
     <Draggable draggableId={"draggable-" + task.id} index={index}>
@@ -46,15 +52,7 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
             onClick={hasChildren ? () => setOpen((a) => !a) : () => {}}
           >
             <ListItemIcon>
-              <IconButton
-                size={"small"}
-                onClick={() =>
-                  completeTask({
-                    task,
-                    taskListId,
-                  })
-                }
-              >
+              <IconButton size={"small"} onClick={finishTask}>
                 <DoneIcon />
               </IconButton>
             </ListItemIcon>

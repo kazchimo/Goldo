@@ -69,7 +69,6 @@ function* completeTask({
       { ...task, status: "completed" }
     );
 
-    yield put(snackbarActions.success({ message: "Complete task" }));
     yield put(
       tasksActions.successCompleteTask({
         taskId: res.result.id!,

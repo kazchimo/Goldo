@@ -10,7 +10,6 @@ export const Notifier: React.FC = () => {
   const { removeSnackbar } = useBoundActions(snackbarActions);
   const notifications = useSelector(snackbarSelectors.notifications);
   const [displayed, setDisplayed] = useState<SnackbarKey[]>([]);
-  console.log(displayed);
 
   const storeDisplayed = (key: SnackbarKey) => {
     setDisplayed([...displayed, key]);
