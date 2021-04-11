@@ -31,8 +31,9 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
   const classes = useStyles();
 
   const submit = useCallback(
-    (v: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    (v: Values, { setSubmitting, resetForm }: FormikHelpers<Values>) => {
       if (taskList.id) {
+        resetForm();
         createTask({
           taskListId: taskList.id,
           task: { title: v.title },
