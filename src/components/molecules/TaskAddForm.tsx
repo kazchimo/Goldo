@@ -1,8 +1,8 @@
 import { IconButton, makeStyles } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import { Field, FieldProps, Form, Formik } from "formik";
+import { Field, FieldProps, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
-import React from "react";
+import React, { useCallback } from "react";
 import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { tasksActions } from "../../modules/slice/taskSlice";
@@ -22,26 +22,35 @@ const schema = Yup.object().shape({
   title: Yup.string().required(),
 });
 
+type Values = {
+  title: string;
+};
+
 export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
   const { createTask } = useBoundActions(tasksActions);
   const classes = useStyles();
 
+  const submit = useCallback(
+    (v: Values, { setSubmitting }: FormikHelpers<Values>) => {
+      if (taskList.id) {
+        createTask({
+          taskListId: taskList.id,
+          task: { title: v.title },
+        });
+      } else {
+        console.error("doesn't have a taskList id");
+      }
+
+      setSubmitting(false);
+    },
+    [taskList, createTask]
+  );
+
   return (
     <Formik
-      initialValues={{ newTaskTitle: "" }}
+      initialValues={{ title: "" }}
       validationSchema={schema}
-      onSubmit={(v, { setSubmitting }) => {
-        if (taskList.id) {
-          createTask({
-            taskListId: taskList.id,
-            task: { title: v.newTaskTitle },
-          });
-        } else {
-          console.error("doesn't have a taskList id");
-        }
-
-        setSubmitting(false);
-      }}
+      onSubmit={submit}
     >
       {({ isSubmitting }) => (
         <Form>
