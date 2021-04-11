@@ -1,6 +1,5 @@
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, makeStyles } from "@material-ui/core";
 import React, { useEffect } from "react";
-import "./App.css";
 import { TaskBoardPage } from "./components/page/TaskBoardPage";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
 import { useSelectors } from "./lib/hooks/useSelectors";
@@ -8,6 +7,15 @@ import { authSelector } from "./modules/selector/authSelector";
 import { gapiSelector } from "./modules/selector/gapiSelector";
 import { authActions } from "./modules/slice/authSlice";
 import { gapiActions } from "./modules/slice/gapiSlice";
+
+const useStyles = makeStyles((theme) => ({
+  app: {
+    backgroundColor: theme.palette.background.default,
+    height: "100%",
+    width: "fit-content",
+    minWidth: "100%",
+  },
+}));
 
 function App() {
   const { initGapi, signIn } = useBoundActions({
@@ -19,6 +27,7 @@ function App() {
     "gapiIsInit",
     "login"
   );
+  const classes = useStyles();
 
   useEffect(() => {
     if (gapiIsInit && !login) {
@@ -31,7 +40,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className={classes.app}>
       {login && gapiIsInit ? <TaskBoardPage /> : <CircularProgress />}
     </div>
   );
