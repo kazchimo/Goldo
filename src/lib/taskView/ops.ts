@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { notUndef } from "../typeGuards";
 import { taskViewChildrenLens } from "./lens";
 import { ChildTaskView, TaskView } from "./TaskView";
 
@@ -74,5 +75,21 @@ export const insertTask = (
         }
       }
     }
+  }
+};
+
+export const deepRemove = (
+  removeId: string,
+  task: TaskView
+): TaskView | undefined => {
+  if (removeId === task.id) {
+    return undefined;
+  } else {
+    return {
+      ...task,
+      children: task.children
+        .map((t) => deepRemove(removeId, t))
+        .filter(notUndef),
+    };
   }
 };

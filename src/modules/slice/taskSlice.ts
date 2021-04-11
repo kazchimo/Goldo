@@ -7,8 +7,9 @@ import {
 } from "@reduxjs/toolkit";
 import _ from "lodash";
 import { Task } from "../../lib/gapi";
-import { deepTaskSort, insertTask } from "../../lib/taskView/ops";
+import { deepRemove, deepTaskSort, insertTask } from "../../lib/taskView/ops";
 import { TaskView } from "../../lib/taskView/TaskView";
+import { notUndef } from "../../lib/typeGuards";
 
 export const taskAdapter = createEntityAdapter<Task>({
   selectId: (t) => {
@@ -44,11 +45,9 @@ const taskSlice = createSlice({
       ...s,
       tasksByListId: {
         ...s.tasksByListId,
-        [a.payload.taskListId]: _.get(
-          s.tasksByListId,
-          a.payload.taskListId,
-          []
-        ).filter((t) => t.id !== a.payload.taskId),
+        [a.payload.taskListId]: _.get(s.tasksByListId, a.payload.taskListId, [])
+          .map((t: TaskView) => deepRemove(a.payload.taskId, t))
+          .filter(notUndef),
       },
     }),
     addTaskOnListId: (
