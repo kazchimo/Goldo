@@ -10,7 +10,7 @@ export type TaskList = HasId<gapi.client.tasks.TaskList>;
 
 export type Tasks = gapi.client.tasks.Tasks;
 
-export type Task = HasId<gapi.client.tasks.Task>;
+export type Task = HasId<gapi.client.tasks.Task> & { listId: string };
 
 export type UninitTask = gapi.client.tasks.Task;
 

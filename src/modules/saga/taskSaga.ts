@@ -16,7 +16,12 @@ function* fetchTasks(p: Action<string>) {
       pageToken: nextToken,
     });
 
-    tasks = [...tasks, ...(res.result.items?.filter(hasId) || [])];
+    tasks = [
+      ...tasks,
+      ...(res.result.items
+        ?.filter(hasId)
+        .map((t) => ({ ...t, listId: p.payload })) || []),
+    ];
 
     if (!res.result.nextPageToken) {
       break;
