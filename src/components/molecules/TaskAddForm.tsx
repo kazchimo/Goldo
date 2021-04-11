@@ -1,5 +1,4 @@
 import { IconButton, makeStyles } from "@material-ui/core";
-import { InsertEmoticonTwoTone } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
@@ -7,6 +6,7 @@ import React from "react";
 import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { tasksActions } from "../../modules/slice/taskSlice";
+import * as Yup from "yup";
 
 type Props = {
   taskList: TaskList;
@@ -18,6 +18,10 @@ const useStyles = makeStyles({
   },
 });
 
+const schema = Yup.object().shape({
+  title: Yup.string().required(),
+});
+
 export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
   const { createTask } = useBoundActions(tasksActions);
   const classes = useStyles();
@@ -25,6 +29,7 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
   return (
     <Formik
       initialValues={{ newTaskTitle: "" }}
+      validationSchema={schema}
       onSubmit={(v, { setSubmitting }) => {
         if (taskList.id) {
           createTask({
@@ -59,7 +64,7 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
                 }}
               />
             )}
-            name={"newTaskTitle"}
+            name={"title"}
             className={classes.addForm}
           />
         </Form>
