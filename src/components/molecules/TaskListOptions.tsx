@@ -15,9 +15,9 @@ export const TaskListOptions: React.FC<Props> = ({ taskList }) => {
   const confirm = useConfirm();
 
   const deleteList = () =>
-    confirm({ title: "Really want to delete ?" }).then(
-      () => taskList.id && deleteTaskList(taskList.id)
-    );
+    confirm({ title: "Really want to delete ?" })
+      .then(() => taskList.id && deleteTaskList(taskList.id))
+      .catch(() => {});
 
   return (
     <List dense>
