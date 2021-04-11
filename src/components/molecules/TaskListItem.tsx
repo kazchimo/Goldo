@@ -67,7 +67,11 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
                 <EditIcon fontSize={"small"} />
               </IconButton>
             )}
-            {hasChildren && (open ? <ExpandLess /> : <ExpandMore />)}
+            {hasChildren && (
+              <IconButton size={"small"}>
+                {open ? <ExpandLess /> : <ExpandMore />}
+              </IconButton>
+            )}
           </ListItem>
           {hasChildren && (
             <Collapse in={open}>
