@@ -14,7 +14,8 @@ import React, { useCallback, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSnack } from "../../lib/hooks/useSnack";
-import { tasksActions, TaskView } from "../../modules/slice/taskSlice";
+import { TaskView } from "../../lib/taskView/TaskView";
+import { tasksActions } from "../../modules/slice/taskSlice";
 
 type Props = {
   task: TaskView;
