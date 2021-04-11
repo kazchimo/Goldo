@@ -35,7 +35,6 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
       if (taskList.id) {
         resetForm();
         createTask({
-          taskListId: taskList.id,
           task: { title: v.title, listId: taskList.id },
         });
       } else {
