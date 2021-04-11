@@ -16,6 +16,7 @@ import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSnack } from "../../lib/hooks/useSnack";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
+import EditIcon from "@material-ui/icons/Edit";
 
 type Props = {
   task: TaskView;
@@ -34,6 +35,7 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
   const classes = useStyles();
   const { completeTask } = useBoundActions(tasksActions);
   const { successSnack } = useSnack();
+  const [mouseEnter, setMouseEnter] = useState(false);
 
   const hasChildren = task.children.length > 0;
 
@@ -47,6 +49,8 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
       {(provided) => (
         <>
           <ListItem
+            onMouseEnter={() => setMouseEnter(true)}
+            onMouseLeave={() => setMouseEnter(false)}
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
@@ -54,10 +58,15 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
           >
             <ListItemIcon>
               <IconButton size={"small"} onClick={finishTask}>
-                <DoneIcon />
+                <DoneIcon fontSize={"small"} />
               </IconButton>
             </ListItemIcon>
             <ListItemText primary={task.title} />
+            {mouseEnter && (
+              <IconButton size={"small"}>
+                <EditIcon fontSize={"small"} />
+              </IconButton>
+            )}
             {hasChildren && (open ? <ExpandLess /> : <ExpandMore />)}
           </ListItem>
           {hasChildren && (
