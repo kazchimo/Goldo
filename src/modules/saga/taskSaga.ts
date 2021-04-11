@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
 import { GResponse, Task, Tasks } from "../../lib/gapi";
+import { snackbarActions } from "../slice/snackBarSlice";
 import { tasksActions } from "../slice/taskSlice";
 
 function* fetchTasks(p: Action<string>) {
@@ -44,6 +45,11 @@ function* createTask({
     task
   );
 
+  yield put(
+    snackbarActions.success({
+      message: "Create task",
+    })
+  );
   yield put(tasksActions.add(res.result));
   yield put(
     tasksActions.addTaskOnListId({ task: res.result, listId: taskListId })
@@ -63,6 +69,7 @@ function* completeTask({
       { ...task, status: "completed" }
     );
 
+    yield put(snackbarActions.success({ message: "Complete task" }));
     yield put(
       tasksActions.successCompleteTask({
         taskId: res.result.id!,
