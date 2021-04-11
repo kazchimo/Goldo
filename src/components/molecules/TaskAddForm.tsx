@@ -1,6 +1,7 @@
 import { IconButton, makeStyles } from "@material-ui/core";
+import { InsertEmoticonTwoTone } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
-import { Field, Form, Formik } from "formik";
+import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import React from "react";
 import { TaskList } from "../../lib/gapi";
@@ -40,13 +41,27 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
       {({ isSubmitting }) => (
         <Form>
           <Field
-            component={TextField}
+            render={(props: FieldProps) => (
+              <TextField
+                {...props}
+                label={"New Task"}
+                fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <IconButton
+                      type={"submit"}
+                      size={"small"}
+                      disabled={isSubmitting}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  ),
+                }}
+              />
+            )}
             name={"newTaskTitle"}
             className={classes.addForm}
           />
-          <IconButton type={"submit"} size={"small"} disabled={isSubmitting}>
-            <AddIcon />
-          </IconButton>
         </Form>
       )}
     </Formik>
