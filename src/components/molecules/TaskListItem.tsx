@@ -17,6 +17,7 @@ import { useSnack } from "../../lib/hooks/useSnack";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import EditIcon from "@material-ui/icons/Edit";
+import { TaskEditModal } from "../organisms/TaskEditModal";
 
 type Props = {
   task: TaskView;
@@ -31,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
-  const [open, setOpen] = useState(false);
+  const [openSubtask, setOpenSubtask] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
   const classes = useStyles();
   const { completeTask } = useBoundActions(tasksActions);
   const { successSnack } = useSnack();
@@ -48,13 +50,18 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
     <Draggable draggableId={"draggable-" + task.id} index={index}>
       {(provided) => (
         <>
+          <TaskEditModal
+            open={openEditModal}
+            task={task}
+            onBackdropClick={() => setOpenEditModal(false)}
+          />
           <ListItem
             onMouseEnter={() => setMouseEnter(true)}
             onMouseLeave={() => setMouseEnter(false)}
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            onClick={hasChildren ? () => setOpen((a) => !a) : () => {}}
+            onClick={hasChildren ? () => setOpenSubtask((a) => !a) : () => {}}
           >
             <ListItemIcon>
               <IconButton size={"small"} onClick={finishTask}>
@@ -63,18 +70,18 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
             </ListItemIcon>
             <ListItemText primary={task.title} />
             {mouseEnter && (
-              <IconButton size={"small"}>
+              <IconButton size={"small"} onClick={() => setOpenEditModal(true)}>
                 <EditIcon fontSize={"small"} />
               </IconButton>
             )}
             {hasChildren && (
               <IconButton size={"small"}>
-                {open ? <ExpandLess /> : <ExpandMore />}
+                {openSubtask ? <ExpandLess /> : <ExpandMore />}
               </IconButton>
             )}
           </ListItem>
           {hasChildren && (
-            <Collapse in={open}>
+            <Collapse in={openSubtask}>
               <List dense className={classes.nested}>
                 {task.children.map((child, idx) => (
                   <TaskListItem
