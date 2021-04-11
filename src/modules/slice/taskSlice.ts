@@ -6,7 +6,7 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import _ from "lodash";
-import { Task } from "../../lib/gapi";
+import { Task, UninitTask } from "../../lib/gapi";
 import { deepRemove, deepTaskSort, insertTask } from "../../lib/taskView/ops";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { notUndef } from "../../lib/typeGuards";
@@ -86,7 +86,7 @@ const taskSlice = createSlice({
 });
 
 const fetchTasks = createAction<string>("fetchTasks");
-const createTask = createAction<{ taskListId: string; task: Task }>(
+const createTask = createAction<{ taskListId: string; task: UninitTask }>(
   "createTask"
 );
 

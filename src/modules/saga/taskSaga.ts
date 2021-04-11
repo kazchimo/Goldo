@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
-import { GResponse, Task, Tasks } from "../../lib/gapi";
+import { GResponse, hasId, Task, Tasks, UninitTask } from "../../lib/gapi";
 import { snackbarActions } from "../slice/snackBarSlice";
 import { tasksActions } from "../slice/taskSlice";
 
@@ -16,7 +16,7 @@ function* fetchTasks(p: Action<string>) {
       pageToken: nextToken,
     });
 
-    tasks = [...tasks, ...(res.result.items || [])];
+    tasks = [...tasks, ...(res.result.items?.filter(hasId) || [])];
 
     if (!res.result.nextPageToken) {
       break;
@@ -36,7 +36,7 @@ function* fetchTasks(p: Action<string>) {
 
 function* createTask({
   payload: { taskListId, task },
-}: Action<{ taskListId: string; task: Task }>) {
+}: Action<{ taskListId: string; task: UninitTask }>) {
   const res: GResponse<Task> = yield call(
     gapi.client.tasks.tasks.insert,
     {

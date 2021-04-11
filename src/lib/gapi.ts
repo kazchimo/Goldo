@@ -8,7 +8,11 @@ export type TaskList = gapi.client.tasks.TaskList;
 
 export type Tasks = gapi.client.tasks.Tasks;
 
-export type Task = gapi.client.tasks.Task;
+export type Task = gapi.client.tasks.Task & { id: string };
+
+export type UninitTask = gapi.client.tasks.Task;
+
+export const hasId = (task: gapi.client.tasks.Task): task is Task => !!task.id;
 
 export const getClient = () => {
   const token = db.getItem("accessToken");
