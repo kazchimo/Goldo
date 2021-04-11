@@ -12,7 +12,7 @@ export type Tasks = gapi.client.tasks.Tasks;
 
 export type Task = HasId<gapi.client.tasks.Task> & { listId: string };
 
-export type UninitTask = gapi.client.tasks.Task;
+export type UninitTask = gapi.client.tasks.Task & { listId: string };
 
 export const hasId = <T extends { id?: string }>(task: T): task is HasId<T> =>
   !!task.id;

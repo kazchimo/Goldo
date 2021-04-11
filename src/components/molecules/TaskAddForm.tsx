@@ -36,7 +36,7 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
         resetForm();
         createTask({
           taskListId: taskList.id,
-          task: { title: v.title },
+          task: { title: v.title, listId: taskList.id },
         });
       } else {
         console.error("doesn't have a taskList id");
