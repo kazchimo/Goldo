@@ -38,7 +38,7 @@ const taskSlice = createSlice({
   reducers: {
     addMany: taskAdapter.addMany,
     add: taskAdapter.addOne,
-    successCompleteTask: (
+    completeTask: (
       s,
       a: PayloadAction<{ taskId: string; taskListId: string }>
     ) => ({
@@ -89,15 +89,11 @@ const fetchTasks = createAction<string>("fetchTasks");
 const createTask = createAction<{ taskListId: string; task: Task }>(
   "createTask"
 );
-const completeTask = createAction<{ taskListId: string; task: Task }>(
-  "completeTask"
-);
 
 const tasksActions = {
   ...taskSlice.actions,
   fetchTasks,
   createTask,
-  completeTask,
 };
 
 const tasksReducer = taskSlice.reducer;

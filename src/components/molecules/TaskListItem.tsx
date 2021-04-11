@@ -39,7 +39,7 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
 
   const finishTask = useCallback(() => {
     successSnack("Complete Task");
-    completeTask({ task, taskListId });
+    task.id && completeTask({ taskId: task.id, taskListId });
   }, [successSnack]);
 
   return (
