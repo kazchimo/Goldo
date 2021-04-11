@@ -1,6 +1,6 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
-import { GResponse, TaskLists } from "../../lib/gapi";
+import { GResponse, hasId, TaskLists } from "../../lib/gapi";
 import { taskListActions } from "../slice/taskListSlice";
 
 function* fetchTaskLists() {
@@ -8,7 +8,9 @@ function* fetchTaskLists() {
     gapi.client.tasks.tasklists.list,
     { maxResults: 100 }
   );
-  yield put(taskListActions.successFetchTaskLists(res.result.items || []));
+  yield put(
+    taskListActions.successFetchTaskLists(res.result.items?.filter(hasId) || [])
+  );
 }
 
 function* deleteTaskList(a: Action<string>) {
