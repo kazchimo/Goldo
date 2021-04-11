@@ -6,6 +6,7 @@ import { taskListsSelector } from "../../modules/selector/taskListsSelector";
 import { taskListActions } from "../../modules/slice/taskListSlice";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { TaskBoard } from "../organisms/TaskBoard";
+import { TaskListIndex } from "../organisms/TaskListIndex";
 
 const useStyles = makeStyles({
   container: {
@@ -14,6 +15,9 @@ const useStyles = makeStyles({
   boardContainer: {
     marginRight: 8,
     marginLeft: 8,
+  },
+  index: {
+    marginLeft: 32,
   },
 });
 
@@ -39,6 +43,9 @@ export const TaskBoardPage: React.FC = () => {
 
   return (
     <div className={classes.container}>
+      <div className={classes.index}>
+        <TaskListIndex />
+      </div>
       {taskLists.map((t) => (
         <div key={t.id} className={classes.boardContainer}>
           <TaskBoard taskList={t} />
