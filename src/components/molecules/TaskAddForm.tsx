@@ -3,10 +3,10 @@ import AddIcon from "@material-ui/icons/Add";
 import { Field, FieldProps, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
 import React, { useCallback } from "react";
+import * as Yup from "yup";
 import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { tasksActions } from "../../modules/slice/taskSlice";
-import * as Yup from "yup";
 
 type Props = {
   taskList: TaskList;
@@ -52,7 +52,7 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
       validationSchema={schema}
       onSubmit={submit}
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, setErrors }) => (
         <Form>
           <Field
             render={(props: FieldProps) => (
@@ -60,6 +60,7 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
                 {...props}
                 label={"New Task"}
                 fullWidth
+                onBlur={() => setErrors({ title: "" })}
                 InputProps={{
                   endAdornment: (
                     <IconButton
