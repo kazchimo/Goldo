@@ -38,6 +38,18 @@ const taskSlice = createSlice({
   reducers: {
     addMany: taskAdapter.addMany,
     add: taskAdapter.addOne,
+    updateTask: (s, a: PayloadAction<TaskView>) => ({
+      ...s,
+      tasksByListId: {
+        ...s.tasksByListId,
+        [a.payload.listId]: deepTaskSort([
+          a.payload,
+          ..._.get(s.tasksByListId, a.payload.listId, []).filter(
+            (t) => t.id !== a.payload.id
+          ),
+        ]),
+      },
+    }),
     completeTask: (
       s,
       a: PayloadAction<{ taskId: string; taskListId: string }>
