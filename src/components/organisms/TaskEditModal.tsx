@@ -1,4 +1,4 @@
-import { Dialog, makeStyles } from "@material-ui/core";
+import { Dialog, Grid, makeStyles } from "@material-ui/core";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import React, { ReactEventHandler } from "react";
@@ -34,7 +34,7 @@ export const TaskEditModal: React.FC<Props> = ({
 
   return (
     <Formik
-      initialValues={{ title: task.title }}
+      initialValues={{ title: task.title, notes: task.notes }}
       onSubmit={(v, { setSubmitting }) => {
         const updated = { ...task, ...v };
         if (task !== updated) {
@@ -59,18 +59,37 @@ export const TaskEditModal: React.FC<Props> = ({
           }}
         >
           <Form>
-            <Field
-              render={(props: FieldProps) => (
-                <TextField
-                  {...props}
-                  label={"title"}
-                  multiline
-                  fullWidth
-                  variant={"outlined"}
+            <Grid container direction="column" spacing={2}>
+              <Grid item>
+                <Field
+                  render={(props: FieldProps) => (
+                    <TextField
+                      {...props}
+                      label={"title"}
+                      multiline
+                      fullWidth
+                      variant={"outlined"}
+                    />
+                  )}
+                  name={"title"}
                 />
-              )}
-              name={"title"}
-            />
+              </Grid>
+              <Grid item>
+                <Field
+                  name={"notes"}
+                  render={(props: FieldProps) => (
+                    <TextField
+                      {...props}
+                      label={"detail"}
+                      multiline
+                      fullWidth
+                      variant={"outlined"}
+                      rows={2}
+                    />
+                  )}
+                />
+              </Grid>
+            </Grid>
           </Form>
         </Dialog>
       )}
