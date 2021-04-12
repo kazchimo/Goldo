@@ -7,8 +7,8 @@ type Props = {} & IconButtonProps;
 
 export const TaskCompleteButton: React.FC<Props> = ({ ...props }) => {
   const [hover, setHover] = useState(false);
-  const enter = useCallback(() => setHover(true), [setHover]);
-  const leave = useCallback(() => setHover(false), [setHover]);
+  const enter = () => setHover(true);
+  const leave = () => setHover(false);
 
   return (
     <IconButton
@@ -18,9 +18,16 @@ export const TaskCompleteButton: React.FC<Props> = ({ ...props }) => {
       onMouseLeave={leave}
     >
       {hover ? (
-        <DoneIcon fontSize={"small"} color={"primary"} />
+        <DoneIcon
+          fontSize={"small"}
+          color={"primary"}
+          style={{ pointerEvents: "none" }}
+        />
       ) : (
-        <RadioButtonUncheckedIcon fontSize={"small"} />
+        <RadioButtonUncheckedIcon
+          fontSize={"small"}
+          style={{ pointerEvents: "none" }}
+        />
       )}
     </IconButton>
   );
