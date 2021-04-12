@@ -1,7 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
 import { GResponse, hasId, Task, Tasks, UninitTask } from "../../lib/gapi";
-import { TaskView } from "../../lib/taskView/TaskView";
 import { snackbarActions } from "../slice/snackBarSlice";
 import { tasksActions } from "../slice/taskSlice";
 
@@ -84,9 +83,17 @@ function* updateTask({ payload: task }: Action<Task>) {
   );
 }
 
+function* deleteTask({ payload: task }: Action<Task>) {
+  yield call(gapi.client.tasks.tasks.delete, {
+    tasklist: task.listId,
+    task: task.id,
+  });
+}
+
 export const taskSaga = [
   takeEvery(tasksActions.fetchTasks, fetchTasks),
   takeEvery(tasksActions.createTask, createTask),
   takeEvery(tasksActions.completeTask, completeTask),
   takeEvery(tasksActions.updateTask, updateTask),
+  takeEvery(tasksActions.deleteTask, deleteTask),
 ];

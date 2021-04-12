@@ -1,4 +1,11 @@
-import { Dialog, Grid, makeStyles } from "@material-ui/core";
+import {
+  Dialog,
+  Grid,
+  IconButton,
+  makeStyles,
+  Tooltip,
+} from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import React, { ReactEventHandler } from "react";
@@ -6,6 +13,7 @@ import * as Yup from "yup";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
+import { DeleteTaskButton } from "../atoms/DeleteTaskButton";
 
 type Props = {
   open: boolean;
@@ -60,6 +68,9 @@ export const TaskEditModal: React.FC<Props> = ({
         >
           <Form>
             <Grid container direction="column" spacing={2}>
+              <Grid item>
+                <DeleteTaskButton task={task} />
+              </Grid>
               <Grid item>
                 <Field
                   render={(props: FieldProps) => (

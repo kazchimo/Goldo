@@ -38,6 +38,15 @@ const taskSlice = createSlice({
   reducers: {
     addMany: taskAdapter.addMany,
     add: taskAdapter.addOne,
+    deleteTask: (s, a: PayloadAction<Task>) => ({
+      ...s,
+      tasksByListId: {
+        ...s.tasksByListId,
+        [a.payload.listId]: _.get(s.tasksByListId, a.payload.listId, [])
+          .map((t: TaskView) => deepRemove(a.payload.id, t))
+          .filter(notUndef),
+      },
+    }),
     updateTask: (s, a: PayloadAction<TaskView>) => ({
       ...s,
       tasksByListId: {
