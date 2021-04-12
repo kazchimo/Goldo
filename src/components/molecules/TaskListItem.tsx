@@ -17,6 +17,7 @@ import { useSnack } from "../../lib/hooks/useSnack";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import EditIcon from "@material-ui/icons/Edit";
+import { TaskCompleteButton } from "../atoms/TaskCompleteButton";
 import { TaskEditModal } from "../organisms/TaskEditModal";
 
 type Props = {
@@ -64,9 +65,7 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
             onClick={hasChildren ? () => setOpenSubtask((a) => !a) : () => {}}
           >
             <ListItemIcon>
-              <IconButton size={"small"} onClick={finishTask}>
-                <DoneIcon fontSize={"small"} />
-              </IconButton>
+              <TaskCompleteButton onClick={finishTask} />
             </ListItemIcon>
             <ListItemText primary={task.title} />
             {mouseEnter && (
