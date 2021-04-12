@@ -1,5 +1,5 @@
 import { Dialog, makeStyles } from "@material-ui/core";
-import { Field, Form, Formik } from "formik";
+import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import React, { ReactEventHandler } from "react";
 import * as Yup from "yup";
@@ -59,7 +59,18 @@ export const TaskEditModal: React.FC<Props> = ({
           }}
         >
           <Form>
-            <Field component={TextField} name={"title"} />
+            <Field
+              render={(props: FieldProps) => (
+                <TextField
+                  {...props}
+                  label={"title"}
+                  multiline
+                  fullWidth
+                  variant={"outlined"}
+                />
+              )}
+              name={"title"}
+            />
           </Form>
         </Dialog>
       )}
