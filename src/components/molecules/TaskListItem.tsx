@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  secondaryText: {
+    overflowWrap: "anywhere",
+  },
 }));
 
 export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
@@ -67,7 +70,11 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
             <ListItemIcon>
               <TaskCompleteButton onClick={finishTask} />
             </ListItemIcon>
-            <ListItemText primary={task.title} />
+            <ListItemText
+              primary={task.title}
+              secondary={task.notes}
+              secondaryTypographyProps={{ className: classes.secondaryText }}
+            />
             {mouseEnter && (
               <IconButton size={"small"} onClick={() => setOpenEditModal(true)}>
                 <EditIcon fontSize={"small"} />
