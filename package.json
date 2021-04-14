@@ -15,6 +15,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/redux-logger": "^3.0.8",
+    "date-fns": "^2.21.0",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",
     "fp-ts": "^2.9.5",
