@@ -6,9 +6,15 @@ import {
   ListSubheader,
   makeStyles,
 } from "@material-ui/core";
-import React from "react";
+import React, { MutableRefObject, RefObject } from "react";
 import { useSelector } from "react-redux";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
+
+type Props = {
+  refs: MutableRefObject<{
+    [listId: string]: RefObject<HTMLDivElement>;
+  }>;
+};
 
 const useStyles = makeStyles({
   container: {
@@ -19,7 +25,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const TaskListIndex: React.FC = () => {
+export const TaskListIndex: React.FC<Props> = ({ refs }) => {
   const taskLists = useSelector(taskListsSelector.taskLists);
   const classes = useStyles();
 
@@ -33,7 +39,16 @@ export const TaskListIndex: React.FC = () => {
     >
       <Divider variant={"middle"} />
       {taskLists.map((taskList) => (
-        <ListItem key={taskList.id}>
+        <ListItem
+          key={taskList.id}
+          button
+          onClick={() =>
+            refs.current[taskList.id].current?.scrollIntoView({
+              behavior: "smooth",
+              inline: "start",
+            })
+          }
+        >
           <ListItemText primary={taskList.title} />
         </ListItem>
       ))}

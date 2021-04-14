@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import React, { useEffect } from "react";
+import React, { createRef, RefObject, useEffect, useRef } from "react";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
@@ -28,6 +28,11 @@ export const TaskBoardPage: React.FC = () => {
   });
   const { taskLists } = useSelectors(taskListsSelector, "taskLists");
   const classes = useStyles();
+  const refs = useRef<{ [listId: string]: RefObject<HTMLDivElement> }>({});
+
+  taskLists.forEach((list) => {
+    refs.current[list.id] = createRef();
+  });
 
   useEffect(() => {
     fetchTaskLists();
@@ -44,10 +49,14 @@ export const TaskBoardPage: React.FC = () => {
   return (
     <div className={classes.container}>
       <div className={classes.index}>
-        <TaskListIndex />
+        <TaskListIndex refs={refs} />
       </div>
       {taskLists.map((t) => (
-        <div key={t.id} className={classes.boardContainer}>
+        <div
+          key={t.id}
+          className={classes.boardContainer}
+          ref={refs.current[t.id]}
+        >
           <TaskBoard taskList={t} />
         </div>
       ))}
