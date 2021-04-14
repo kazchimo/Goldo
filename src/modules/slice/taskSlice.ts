@@ -107,7 +107,9 @@ const taskSlice = createSlice({
 });
 
 const fetchTasks = createAction<string>("fetchTasks");
-const createTask = createAction<{ task: UninitTask }>("createTask");
+const createTask = createAction<{ task: UninitTask; previous?: string }>(
+  "createTask"
+);
 
 const tasksActions = {
   ...taskSlice.actions,

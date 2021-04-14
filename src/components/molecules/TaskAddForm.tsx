@@ -11,6 +11,7 @@ import { tasksActions } from "../../modules/slice/taskSlice";
 type Props = {
   taskList: TaskList;
   parentId?: string;
+  previous?: string;
 };
 
 const useStyles = makeStyles({
@@ -27,7 +28,11 @@ type Values = {
   title: string;
 };
 
-export const TaskAddForm: React.FC<Props> = ({ taskList, parentId }) => {
+export const TaskAddForm: React.FC<Props> = ({
+  taskList,
+  parentId,
+  previous,
+}) => {
   const { createTask } = useBoundActions(tasksActions);
   const classes = useStyles();
 
@@ -36,7 +41,12 @@ export const TaskAddForm: React.FC<Props> = ({ taskList, parentId }) => {
       if (taskList.id) {
         resetForm();
         createTask({
-          task: { title: v.title, listId: taskList.id, parent: parentId },
+          task: {
+            title: v.title,
+            listId: taskList.id,
+            parent: parentId,
+          },
+          previous,
         });
       } else {
         console.error("doesn't have a taskList id");
@@ -59,7 +69,7 @@ export const TaskAddForm: React.FC<Props> = ({ taskList, parentId }) => {
             {(props: FieldProps) => (
               <TextField
                 {...props}
-                label={"New Task"}
+                placeholder={"New Task"}
                 fullWidth
                 onBlur={() => setErrors({ title: "" })}
                 InputProps={{

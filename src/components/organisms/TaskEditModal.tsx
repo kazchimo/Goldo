@@ -1,6 +1,15 @@
-import { Dialog, Grid, makeStyles, Typography } from "@material-ui/core";
+import {
+  Dialog,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
+import _ from "lodash";
 import React, { ReactEventHandler } from "react";
 import * as Yup from "yup";
 import { TaskList } from "../../lib/gapi";
@@ -9,6 +18,7 @@ import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { DeleteTaskButton } from "../atoms/DeleteTaskButton";
 import { TaskAddForm } from "../molecules/TaskAddForm";
+import { TaskListItem } from "../molecules/TaskListItem";
 
 type Props = {
   open: boolean;
@@ -103,7 +113,25 @@ export const TaskEditModal: React.FC<Props> = ({
             </Grid>
           </Form>
           <Typography>Sub Tasks</Typography>
-          <TaskAddForm taskList={taskList} parentId={task.id} />
+          <List dense>
+            {task.children.map((t, idx) => (
+              <TaskListItem
+                key={t.id}
+                task={t}
+                index={idx}
+                taskList={taskList}
+              />
+            ))}
+            <ListItem>
+              <ListItemText inset>
+                <TaskAddForm
+                  taskList={taskList}
+                  parentId={task.id}
+                  previous={_.last(task.children)?.id}
+                />
+              </ListItemText>
+            </ListItem>
+          </List>
         </Dialog>
       )}
     </Formik>

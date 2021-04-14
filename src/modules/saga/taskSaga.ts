@@ -39,13 +39,16 @@ function* fetchTasks(p: Action<string>) {
   );
 }
 
-function* createTask({ payload: { task } }: Action<{ task: UninitTask }>) {
+function* createTask({
+  payload: { task, previous },
+}: Action<{ task: UninitTask; previous?: string }>) {
   console.log(task);
   const res: GResponse<Task> = yield call(
     gapi.client.tasks.tasks.insert,
     {
       tasklist: task.listId,
       parent: task.parent,
+      previous,
     },
     task
   );
