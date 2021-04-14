@@ -76,7 +76,7 @@ export const TaskEditModal: React.FC<Props> = ({
                       fullWidth
                       variant={"outlined"}
                     />
-                  )}{" "}
+                  )}
                 </Field>
               </Grid>
               <Grid item>
