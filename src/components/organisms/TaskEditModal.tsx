@@ -1,23 +1,29 @@
-import { Dialog, Grid, makeStyles } from "@material-ui/core";
+import { Dialog, Grid, makeStyles, Typography } from "@material-ui/core";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import React, { ReactEventHandler } from "react";
 import * as Yup from "yup";
+import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { DeleteTaskButton } from "../atoms/DeleteTaskButton";
+import { TaskAddForm } from "../molecules/TaskAddForm";
 
 type Props = {
   open: boolean;
   task: TaskView;
   onBackdropClick: ReactEventHandler<{}>;
+  taskList: TaskList;
 };
 
 const useStyles = makeStyles({
   container: {
     width: 300,
     padding: 8,
+  },
+  taskForm: {
+    marginBottom: 32,
   },
 });
 
@@ -29,6 +35,7 @@ export const TaskEditModal: React.FC<Props> = ({
   open,
   task,
   onBackdropClick,
+  taskList,
 }) => {
   const classes = useStyles();
   const { updateTask } = useBoundActions(tasksActions);
@@ -61,7 +68,7 @@ export const TaskEditModal: React.FC<Props> = ({
             className: classes.container,
           }}
         >
-          <Form>
+          <Form className={classes.taskForm}>
             <Grid container direction="column" spacing={2}>
               <Grid item>
                 <DeleteTaskButton task={task} />
@@ -95,6 +102,8 @@ export const TaskEditModal: React.FC<Props> = ({
               </Grid>
             </Grid>
           </Form>
+          <Typography>Sub Tasks</Typography>
+          <TaskAddForm taskList={taskList} parentId={task.id} />
         </Dialog>
       )}
     </Formik>

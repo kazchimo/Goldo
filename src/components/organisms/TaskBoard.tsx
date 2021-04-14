@@ -43,7 +43,7 @@ export const TaskBoard: React.FC<Props> = ({ taskList }) => {
                     key={t.id}
                     task={t}
                     index={idx}
-                    taskListId={taskList.id}
+                    taskList={taskList}
                   />
                 ))}
               </List>

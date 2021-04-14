@@ -7,23 +7,23 @@ import {
   ListItemText,
   makeStyles,
 } from "@material-ui/core";
-import DoneIcon from "@material-ui/icons/Done";
+import EditIcon from "@material-ui/icons/Edit";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import React, { useCallback, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSnack } from "../../lib/hooks/useSnack";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
-import EditIcon from "@material-ui/icons/Edit";
 import { TaskCompleteButton } from "../atoms/TaskCompleteButton";
 import { TaskDue } from "../atoms/TaskDue";
 import { TaskEditModal } from "../organisms/TaskEditModal";
 
 type Props = {
   task: TaskView;
-  taskListId: string;
+  taskList: TaskList;
   index: number;
 };
 
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
+export const TaskListItem: React.FC<Props> = ({ task, index, taskList }) => {
   const [openSubtask, setOpenSubtask] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const classes = useStyles();
@@ -48,7 +48,7 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
 
   const finishTask = useCallback(() => {
     successSnack("Complete Task");
-    task.id && completeTask({ taskId: task.id, taskListId });
+    task.id && completeTask({ taskId: task.id, taskListId: taskList.id });
   }, [successSnack]);
 
   return (
@@ -56,6 +56,7 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
       {(provided) => (
         <>
           <TaskEditModal
+            taskList={taskList}
             open={openEditModal}
             task={task}
             onBackdropClick={() => setOpenEditModal(false)}
@@ -97,7 +98,7 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
                     task={child}
                     index={idx}
                     key={child.id}
-                    taskListId={taskListId}
+                    taskList={taskList}
                   />
                 ))}
               </List>

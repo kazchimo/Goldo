@@ -10,6 +10,7 @@ import { tasksActions } from "../../modules/slice/taskSlice";
 
 type Props = {
   taskList: TaskList;
+  parentId?: string;
 };
 
 const useStyles = makeStyles({
@@ -26,7 +27,7 @@ type Values = {
   title: string;
 };
 
-export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
+export const TaskAddForm: React.FC<Props> = ({ taskList, parentId }) => {
   const { createTask } = useBoundActions(tasksActions);
   const classes = useStyles();
 
@@ -35,7 +36,7 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
       if (taskList.id) {
         resetForm();
         createTask({
-          task: { title: v.title, listId: taskList.id },
+          task: { title: v.title, listId: taskList.id, parent: parentId },
         });
       } else {
         console.error("doesn't have a taskList id");
