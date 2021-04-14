@@ -30,7 +30,6 @@ function* fetchTasks(p: Action<string>) {
     }
   }
 
-  yield put(tasksActions.addMany(tasks));
   yield put(
     tasksActions.addTasksOnListId({
       tasks,
@@ -57,7 +56,6 @@ function* createTask({
       message: "Create task",
     })
   );
-  yield put(tasksActions.add(res.result));
   yield put(
     tasksActions.addTaskOnListId({ task: res.result, listId: task.listId })
   );

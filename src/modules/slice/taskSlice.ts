@@ -1,6 +1,5 @@
 import {
   createAction,
-  createEntityAdapter,
   createSlice,
   EntityState,
   PayloadAction,
@@ -11,33 +10,20 @@ import { deepRemove, deepTaskSort, insertTask } from "../../lib/taskView/ops";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { notUndef } from "../../lib/typeGuards";
 
-export const taskAdapter = createEntityAdapter<Task>({
-  selectId: (t) => {
-    if (t.id) {
-      return t.id;
-    } else {
-      throw new Error("Task id is not defined.");
-    }
-  },
-});
-
 type State = {
   tasksByListId: {
     [key: string]: TaskView[];
   };
-} & EntityState<Task>;
+};
 
 const initialState: State = {
   tasksByListId: {},
-  ...taskAdapter.getInitialState(),
 };
 
 const taskSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    addMany: taskAdapter.addMany,
-    add: taskAdapter.addOne,
     deleteTask: (s, a: PayloadAction<Task>) => ({
       ...s,
       tasksByListId: {
