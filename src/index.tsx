@@ -3,21 +3,26 @@ import { SnackbarProvider } from "notistack";
 import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import ReactDOM from "react-dom";
-import "./index.css";
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
-import logger from "redux-logger";
+import createSagaMiddleware from "redux-saga";
 import App from "./App";
 import { Notifier } from "./components/organisms/Notifier";
 import { AppTemplate } from "./components/templates/AppTemplate";
+import "./index.css";
 import { reducer } from "./modules/reducers";
 import { allSagas } from "./modules/sagas";
 import reportWebVitals from "./reportWebVitals";
-import createSagaMiddleware from "redux-saga";
 
 const sagaMiddleware = createSagaMiddleware();
+const middlewares = [sagaMiddleware];
 
-const store = createStore(reducer, applyMiddleware(sagaMiddleware, logger));
+if (process.env.NODE_ENV !== "production") {
+  const { logger } = require("redux-logger");
+  middlewares.push(logger);
+}
+
+const store = createStore(reducer, applyMiddleware(...middlewares));
 
 sagaMiddleware.run(allSagas);
 
