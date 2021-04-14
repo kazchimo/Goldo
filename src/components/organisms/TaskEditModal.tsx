@@ -67,8 +67,8 @@ export const TaskEditModal: React.FC<Props> = ({
                 <DeleteTaskButton task={task} />
               </Grid>
               <Grid item>
-                <Field
-                  render={(props: FieldProps) => (
+                <Field name={"title"}>
+                  {(props: FieldProps) => (
                     <TextField
                       {...props}
                       label={"title"}
@@ -76,14 +76,12 @@ export const TaskEditModal: React.FC<Props> = ({
                       fullWidth
                       variant={"outlined"}
                     />
-                  )}
-                  name={"title"}
-                />
+                  )}{" "}
+                </Field>
               </Grid>
               <Grid item>
-                <Field
-                  name={"notes"}
-                  render={(props: FieldProps) => (
+                <Field name={"notes"}>
+                  {(props: FieldProps) => (
                     <TextField
                       {...props}
                       label={"detail"}
@@ -93,7 +91,7 @@ export const TaskEditModal: React.FC<Props> = ({
                       rows={2}
                     />
                   )}
-                />
+                </Field>
               </Grid>
             </Grid>
           </Form>
