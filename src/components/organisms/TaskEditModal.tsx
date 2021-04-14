@@ -8,6 +8,7 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
+import _ from "lodash";
 import React, { ReactEventHandler } from "react";
 import * as Yup from "yup";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
@@ -45,7 +46,7 @@ export const TaskEditModal: React.FC<Props> = ({
       initialValues={{ title: task.title, notes: task.notes }}
       onSubmit={(v, { setSubmitting }) => {
         const updated = { ...task, ...v };
-        if (task !== updated) {
+        if (!_.isEqual(updated, task)) {
           updateTask(updated);
         }
         setSubmitting(false);
