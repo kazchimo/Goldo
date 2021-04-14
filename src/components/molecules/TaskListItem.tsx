@@ -1,5 +1,6 @@
 import {
   Collapse,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -14,7 +15,6 @@ import React, { useCallback, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
-import { useSnack } from "../../lib/hooks/useSnack";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { TaskCompleteButton } from "../atoms/TaskCompleteButton";
@@ -70,18 +70,29 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskList }) => {
             <ListItemIcon>
               <TaskCompleteButton onClick={finishTask} />
             </ListItemIcon>
-            <ListItemText
-              secondary={task.notes}
-              secondaryTypographyProps={{ className: classes.secondaryText }}
-            >
-              {task.title}
-              {task.due && <TaskDue due={task.due} />}
-            </ListItemText>
-            {mouseEnter && (
-              <IconButton size={"small"} onClick={() => setOpenEditModal(true)}>
-                <EditIcon fontSize={"small"} />
-              </IconButton>
-            )}
+            <Grid container>
+              <Grid item xs={11}>
+                <ListItemText
+                  secondary={task.notes}
+                  secondaryTypographyProps={{
+                    className: classes.secondaryText,
+                  }}
+                >
+                  {task.title}
+                  {task.due && <TaskDue due={task.due} />}
+                </ListItemText>
+              </Grid>
+              <Grid item xs={1}>
+                {mouseEnter && (
+                  <IconButton
+                    size={"small"}
+                    onClick={() => setOpenEditModal(true)}
+                  >
+                    <EditIcon fontSize={"small"} />
+                  </IconButton>
+                )}
+              </Grid>
+            </Grid>
             {hasChildren && (
               <IconButton size={"small"}>
                 {openSubtask ? <ExpandLess /> : <ExpandMore />}
