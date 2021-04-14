@@ -18,6 +18,7 @@ import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import EditIcon from "@material-ui/icons/Edit";
 import { TaskCompleteButton } from "../atoms/TaskCompleteButton";
+import { TaskDue } from "../atoms/TaskDue";
 import { TaskEditModal } from "../organisms/TaskEditModal";
 
 type Props = {
@@ -71,10 +72,12 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskListId }) => {
               <TaskCompleteButton onClick={finishTask} />
             </ListItemIcon>
             <ListItemText
-              primary={task.title}
               secondary={task.notes}
               secondaryTypographyProps={{ className: classes.secondaryText }}
-            />
+            >
+              {task.title}
+              {task.due && <TaskDue due={task.due} />}
+            </ListItemText>
             {mouseEnter && (
               <IconButton size={"small"} onClick={() => setOpenEditModal(true)}>
                 <EditIcon fontSize={"small"} />
