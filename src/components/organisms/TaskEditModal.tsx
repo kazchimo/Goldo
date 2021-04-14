@@ -30,7 +30,7 @@ type Props = {
 const useStyles = makeStyles({
   container: {
     width: 300,
-    padding: 8,
+    padding: 16,
   },
   taskForm: {
     marginBottom: 32,
