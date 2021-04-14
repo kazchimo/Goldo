@@ -9,6 +9,7 @@ import { applyMiddleware, createStore } from "redux";
 import logger from "redux-logger";
 import App from "./App";
 import { Notifier } from "./components/organisms/Notifier";
+import { AppTemplate } from "./components/templates/AppTemplate";
 import { reducer } from "./modules/reducers";
 import { allSagas } from "./modules/sagas";
 import reportWebVitals from "./reportWebVitals";
@@ -26,8 +27,10 @@ ReactDOM.render(
       <SnackbarProvider maxSnack={3}>
         <ConfirmProvider>
           <Provider store={store}>
-            <Notifier />
-            <App />
+            <AppTemplate>
+              <Notifier />
+              <App />
+            </AppTemplate>
           </Provider>
         </ConfirmProvider>
       </SnackbarProvider>
