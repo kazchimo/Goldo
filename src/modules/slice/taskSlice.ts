@@ -1,9 +1,4 @@
-import {
-  createAction,
-  createSlice,
-  EntityState,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import _ from "lodash";
 import { Task, UninitTask } from "../../lib/gapi";
 import { deepRemove, deepTaskSort, insertTask } from "../../lib/taskView/ops";
