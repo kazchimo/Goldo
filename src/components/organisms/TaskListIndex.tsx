@@ -1,12 +1,10 @@
 import {
   Divider,
-  Grid,
   List,
   ListItem,
   ListItemText,
   ListSubheader,
   makeStyles,
-  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
