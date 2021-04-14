@@ -41,15 +41,13 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskList }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const classes = useStyles();
   const { completeTask } = useBoundActions(tasksActions);
-  const { successSnack } = useSnack();
   const [mouseEnter, setMouseEnter] = useState(false);
 
   const hasChildren = task.children.length > 0;
 
   const finishTask = useCallback(() => {
-    successSnack("Complete Task");
     task.id && completeTask({ taskId: task.id, taskListId: taskList.id });
-  }, [successSnack]);
+  }, []);
 
   return (
     <Draggable draggableId={"draggable-" + task.id} index={index}>
