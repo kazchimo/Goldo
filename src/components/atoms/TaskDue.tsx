@@ -48,7 +48,7 @@ export const TaskDue: React.FC<Props> = ({ due }) => {
         <Grid item>
           <Typography
             color={diff >= 0 ? "primary" : "secondary"}
-            variant={"subtitle2"}
+            variant={"caption"}
           >
             {dayString(diff)}
           </Typography>
