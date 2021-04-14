@@ -54,8 +54,8 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
     >
       {({ isSubmitting, setErrors }) => (
         <Form>
-          <Field
-            render={(props: FieldProps) => (
+          <Field name={"title"} className={classes.addForm}>
+            {(props: FieldProps) => (
               <TextField
                 {...props}
                 label={"New Task"}
@@ -74,9 +74,7 @@ export const TaskAddForm: React.FC<Props> = ({ taskList }) => {
                 }}
               />
             )}
-            name={"title"}
-            className={classes.addForm}
-          />
+          </Field>
         </Form>
       )}
     </Formik>
