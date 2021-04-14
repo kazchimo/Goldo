@@ -46,7 +46,9 @@ export const TaskEditModal: React.FC<Props> = ({
       initialValues={{ title: task.title, notes: task.notes }}
       onSubmit={(v, { setSubmitting }) => {
         const updated = { ...task, ...v };
-        if (!_.isEqual(updated, task)) {
+        const equal =
+          task.title === updated.title && task.notes === updated.notes;
+        if (!equal) {
           updateTask(updated);
         }
         setSubmitting(false);
