@@ -1,3 +1,4 @@
+import { MuiThemeProvider } from "@material-ui/core";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import "date-fns";
 import { ConfirmProvider } from "material-ui-confirm";
@@ -13,6 +14,7 @@ import App from "./App";
 import { Notifier } from "./components/organisms/Notifier";
 import { AppTemplate } from "./components/templates/AppTemplate";
 import "./index.css";
+import { theme } from "./consts/theme";
 import { reducer } from "./modules/reducers";
 import { allSagas } from "./modules/sagas";
 import reportWebVitals from "./reportWebVitals";
@@ -32,22 +34,24 @@ sagaMiddleware.run(allSagas);
 
 ReactDOM.render(
   <React.StrictMode>
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <DragDropContext onDragEnd={console.log}>
-        <SnackbarProvider maxSnack={3}>
-          <BrowserRouter>
-            <ConfirmProvider>
-              <Provider store={store}>
-                <AppTemplate>
-                  <Notifier />
-                  <App />
-                </AppTemplate>
-              </Provider>
-            </ConfirmProvider>
-          </BrowserRouter>
-        </SnackbarProvider>
-      </DragDropContext>
-    </MuiPickersUtilsProvider>
+    <MuiThemeProvider theme={theme}>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <DragDropContext onDragEnd={console.log}>
+          <SnackbarProvider maxSnack={3}>
+            <BrowserRouter>
+              <ConfirmProvider>
+                <Provider store={store}>
+                  <AppTemplate>
+                    <Notifier />
+                    <App />
+                  </AppTemplate>
+                </Provider>
+              </ConfirmProvider>
+            </BrowserRouter>
+          </SnackbarProvider>
+        </DragDropContext>
+      </MuiPickersUtilsProvider>
+    </MuiThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
