@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import { TaskBoardPage } from "./components/page/TaskBoardPage";
+import { TodayPage } from "./components/page/TodayPage";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
 import { useSelectors } from "./lib/hooks/useSelectors";
 import { authSelector } from "./modules/selector/authSelector";
@@ -46,6 +47,9 @@ function App() {
         <Switch>
           <Route path={"/board"}>
             <TaskBoardPage />
+          </Route>
+          <Route path={"/today"}>
+            <TodayPage />
           </Route>
         </Switch>
       )}

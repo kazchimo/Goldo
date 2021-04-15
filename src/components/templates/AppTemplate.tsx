@@ -4,10 +4,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import {
   createStyles,
   makeStyles,
@@ -18,14 +14,13 @@ import Toolbar from "@material-ui/core/Toolbar";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MenuIcon from "@material-ui/icons/Menu";
-import ViewColumnIcon from "@material-ui/icons/ViewColumn";
 import clsx from "clsx";
 import React, { ReactNode } from "react";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { loadingSelectors } from "../../modules/selector/loadingSelector";
 import logo from "../../assets/logo.png";
+import { loadingSelectors } from "../../modules/selector/loadingSelector";
 import { ThemeSwitchButton } from "../atoms/ThemeSwitchButton";
+import { SidebarLinks } from "../organisms/SidebarLinks";
 
 const drawerWidth = 240;
 
@@ -96,7 +91,6 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const history = useHistory();
   const loading = useSelector(loadingSelectors.loading);
 
   const handleDrawerOpen = () => {
@@ -152,14 +146,7 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          <ListItem button onClick={() => history.push("/board")}>
-            <ListItemIcon>
-              <ViewColumnIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Kanban Board"} />
-          </ListItem>
-        </List>
+        <SidebarLinks />
       </Drawer>
       <main
         className={clsx(classes.content, {
