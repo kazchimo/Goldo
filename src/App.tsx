@@ -24,10 +24,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const { initGapi, signIn, onLoading, offLoading } = useBoundActions({
+  const { initGapi, signIn } = useBoundActions({
     ...authActions,
     ...gapiActions,
-    ...loadingActions,
   });
   const { gapiIsInit, login } = useSelectors(
     { ...gapiSelector, ...authSelector },
@@ -39,7 +38,6 @@ function App() {
   useEffect(() => {
     if (gapiIsInit && !login) {
       signIn();
-      onLoading();
     }
   }, [gapiIsInit, login]);
 
