@@ -1,4 +1,4 @@
-import { IconButton } from "@material-ui/core";
+import { IconButton, Tooltip } from "@material-ui/core";
 import React, { useCallback } from "react";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import { useSelector } from "react-redux";
@@ -19,8 +19,10 @@ export const ThemeSwitchButton: React.FC = () => {
   }, [theme]);
 
   return (
-    <IconButton onClick={flip}>
-      <Brightness4Icon />
-    </IconButton>
+    <Tooltip title={"Toggle light/dark theme"}>
+      <IconButton onClick={flip}>
+        <Brightness4Icon />
+      </IconButton>
+    </Tooltip>
   );
 };
