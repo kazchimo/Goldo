@@ -24,7 +24,9 @@ export const TaskDatePicker: React.FC<Props> = ({ task, open, close }) => {
       open={open}
       onBackdropClick={() => {
         close();
-        updateTask({ ...task, due: due?.toISOString() });
+        if (due?.toISOString() !== task.due) {
+          updateTask({ ...task, due: due?.toISOString() });
+        }
       }}
     >
       <DatePicker onChange={(d) => setDue(d)} value={due} variant={"static"} />
