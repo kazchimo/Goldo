@@ -1,5 +1,5 @@
 import { Grid, Paper, Typography } from "@material-ui/core";
-import { differenceInDays, parseISO } from "date-fns";
+import { differenceInCalendarDays, differenceInDays, parseISO } from "date-fns";
 import React from "react";
 import EventNoteIcon from "@material-ui/icons/EventNote";
 
@@ -25,7 +25,7 @@ const dayString = (day: number) => {
 };
 
 export const TaskDue: React.FC<Props> = ({ due }) => {
-  const diff = differenceInDays(parseISO(due), new Date()) + 1;
+  const diff = differenceInCalendarDays(parseISO(due), new Date());
 
   return (
     <Paper
