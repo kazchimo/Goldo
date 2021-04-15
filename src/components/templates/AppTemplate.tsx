@@ -25,6 +25,8 @@ import React, { ReactNode } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { loadingSelectors } from "../../modules/selector/loadingSelector";
+import logo from "../../assets/logo.png";
+import { HeaderTitle } from "../atoms/HeaderTitle";
 
 const drawerWidth = 240;
 
@@ -126,9 +128,7 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-            goldo
-          </Typography>
+          <HeaderTitle />
         </Toolbar>
       </AppBar>
       <Drawer
