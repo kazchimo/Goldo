@@ -1,4 +1,5 @@
 import { db } from "../db/db";
+import { TaskView } from "./taskView/TaskView";
 
 type HasId<T extends { id?: string }> = T & { id: string };
 
@@ -12,7 +13,11 @@ export type Tasks = gapi.client.tasks.Tasks;
 
 export type Task = HasId<gapi.client.tasks.Task> & { listId: string };
 
+export type DueTaskView = TaskView & { due: string };
+
 export type UninitTask = gapi.client.tasks.Task & { listId: string };
+
+export const hasDue = (task: Task): task is DueTaskView => !!task.due;
 
 export const hasId = <T extends { id?: string }>(task: T): task is HasId<T> =>
   !!task.id;

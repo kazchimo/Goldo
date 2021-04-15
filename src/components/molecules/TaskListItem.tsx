@@ -13,7 +13,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import React, { useCallback, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { TaskList } from "../../lib/gapi";
+import { hasDue, TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
@@ -79,7 +79,7 @@ export const TaskListItem: React.FC<Props> = ({ task, index, taskList }) => {
                   }}
                 >
                   {task.title}
-                  {task.due && <TaskDue due={task.due} />}
+                  {hasDue(task) && <TaskDue task={task} />}
                 </ListItemText>
               </Grid>
               <Grid item xs={1}>

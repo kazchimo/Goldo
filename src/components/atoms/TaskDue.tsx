@@ -1,10 +1,12 @@
-import { Grid, Paper, Typography } from "@material-ui/core";
-import { differenceInCalendarDays, differenceInDays, parseISO } from "date-fns";
-import React from "react";
+import { Button } from "@material-ui/core";
 import EventNoteIcon from "@material-ui/icons/EventNote";
+import { differenceInCalendarDays, parseISO } from "date-fns";
+import React, { useCallback, useState } from "react";
+import { DueTaskView } from "../../lib/gapi";
+import { TaskDatePicker } from "../organisms/TaskDatePicker";
 
 type Props = {
-  due: string;
+  task: DueTaskView;
 };
 
 const dayString = (day: number) => {
@@ -24,36 +26,30 @@ const dayString = (day: number) => {
   }
 };
 
-export const TaskDue: React.FC<Props> = ({ due }) => {
-  const diff = differenceInCalendarDays(parseISO(due), new Date());
+export const TaskDue: React.FC<Props> = ({ task }) => {
+  const diff = differenceInCalendarDays(parseISO(task.due), new Date());
+  const [open, setOpen] = useState(false);
+
+  const openPicker = useCallback(() => setOpen(true), [setOpen]);
+  const closePicker = useCallback(() => setOpen(false), [setOpen]);
 
   return (
-    <Paper
-      elevation={0}
-      variant={"outlined"}
-      style={{ maxWidth: "fit-content" }}
-    >
-      <Grid container>
-        <Grid
-          item
-          style={{
-            height: 20,
-          }}
-        >
+    <div>
+      <TaskDatePicker task={task} open={open} close={closePicker} />
+      <Button
+        onClick={openPicker}
+        style={{ maxWidth: "fit-content", padding: 2 }}
+        size={"small"}
+        color={diff >= 0 ? "primary" : "secondary"}
+        startIcon={
           <EventNoteIcon
             fontSize={"small"}
             color={diff >= 0 ? "primary" : "secondary"}
           />
-        </Grid>
-        <Grid item>
-          <Typography
-            color={diff >= 0 ? "primary" : "secondary"}
-            variant={"caption"}
-          >
-            {dayString(diff)}
-          </Typography>
-        </Grid>
-      </Grid>
-    </Paper>
+        }
+      >
+        {dayString(diff)}
+      </Button>
+    </div>
   );
 };

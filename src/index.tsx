@@ -1,3 +1,5 @@
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import "date-fns";
 import { ConfirmProvider } from "material-ui-confirm";
 import { SnackbarProvider } from "notistack";
 import React from "react";
@@ -13,6 +15,7 @@ import "./index.css";
 import { reducer } from "./modules/reducers";
 import { allSagas } from "./modules/sagas";
 import reportWebVitals from "./reportWebVitals";
+import DateFnsUtils from "@date-io/date-fns";
 
 const sagaMiddleware = createSagaMiddleware();
 const middlewares = [sagaMiddleware];
@@ -28,18 +31,20 @@ sagaMiddleware.run(allSagas);
 
 ReactDOM.render(
   <React.StrictMode>
-    <DragDropContext onDragEnd={console.log}>
-      <SnackbarProvider maxSnack={3}>
-        <ConfirmProvider>
-          <Provider store={store}>
-            <AppTemplate>
-              <Notifier />
-              <App />
-            </AppTemplate>
-          </Provider>
-        </ConfirmProvider>
-      </SnackbarProvider>
-    </DragDropContext>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <DragDropContext onDragEnd={console.log}>
+        <SnackbarProvider maxSnack={3}>
+          <ConfirmProvider>
+            <Provider store={store}>
+              <AppTemplate>
+                <Notifier />
+                <App />
+              </AppTemplate>
+            </Provider>
+          </ConfirmProvider>
+        </SnackbarProvider>
+      </DragDropContext>
+    </MuiPickersUtilsProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
