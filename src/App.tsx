@@ -1,8 +1,4 @@
-import {
-  CircularProgress,
-  LinearProgress,
-  makeStyles,
-} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import { TaskBoardPage } from "./components/page/TaskBoardPage";
@@ -12,7 +8,6 @@ import { authSelector } from "./modules/selector/authSelector";
 import { gapiSelector } from "./modules/selector/gapiSelector";
 import { authActions } from "./modules/slice/authSlice";
 import { gapiActions } from "./modules/slice/gapiSlice";
-import { loadingActions } from "./modules/slice/loadingSlice";
 
 const useStyles = makeStyles((theme) => ({
   app: {
