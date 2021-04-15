@@ -11,7 +11,7 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { hasDue, TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
@@ -36,85 +36,87 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const TaskListItem: React.FC<Props> = ({ task, index, taskList }) => {
-  const [openSubtask, setOpenSubtask] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState(false);
-  const classes = useStyles();
-  const { completeTask } = useBoundActions(tasksActions);
-  const [mouseEnter, setMouseEnter] = useState(false);
+export const TaskListItem: React.FC<Props> = memo(
+  ({ task, index, taskList }) => {
+    const [openSubtask, setOpenSubtask] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const classes = useStyles();
+    const { completeTask } = useBoundActions(tasksActions);
+    const [mouseEnter, setMouseEnter] = useState(false);
 
-  const hasChildren = task.children.length > 0;
+    const hasChildren = task.children.length > 0;
 
-  const finishTask = useCallback(() => {
-    task.id && completeTask({ taskId: task.id, taskListId: taskList.id });
-  }, []);
+    const finishTask = useCallback(() => {
+      task.id && completeTask({ taskId: task.id, taskListId: taskList.id });
+    }, []);
 
-  return (
-    <Draggable draggableId={"draggable-" + task.id} index={index}>
-      {(provided) => (
-        <>
-          <TaskEditModal
-            taskList={taskList}
-            open={openEditModal}
-            task={task}
-            onBackdropClick={() => setOpenEditModal(false)}
-          />
-          <ListItem
-            onMouseEnter={() => setMouseEnter(true)}
-            onMouseLeave={() => setMouseEnter(false)}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            onClick={hasChildren ? () => setOpenSubtask((a) => !a) : () => {}}
-          >
-            <ListItemIcon>
-              <TaskCompleteButton onClick={finishTask} />
-            </ListItemIcon>
-            <Grid container>
-              <Grid item xs={11}>
-                <ListItemText
-                  secondary={task.notes}
-                  secondaryTypographyProps={{
-                    className: classes.secondaryText,
-                  }}
-                >
-                  {task.title}
-                  {hasDue(task) && <TaskDue task={task} />}
-                </ListItemText>
-              </Grid>
-              <Grid item xs={1}>
-                {mouseEnter && (
-                  <IconButton
-                    size={"small"}
-                    onClick={() => setOpenEditModal(true)}
+    return (
+      <Draggable draggableId={"draggable-" + task.id} index={index}>
+        {(provided) => (
+          <>
+            <TaskEditModal
+              taskList={taskList}
+              open={openEditModal}
+              task={task}
+              onBackdropClick={() => setOpenEditModal(false)}
+            />
+            <ListItem
+              onMouseEnter={() => setMouseEnter(true)}
+              onMouseLeave={() => setMouseEnter(false)}
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              onClick={hasChildren ? () => setOpenSubtask((a) => !a) : () => {}}
+            >
+              <ListItemIcon>
+                <TaskCompleteButton onClick={finishTask} />
+              </ListItemIcon>
+              <Grid container>
+                <Grid item xs={11}>
+                  <ListItemText
+                    secondary={task.notes}
+                    secondaryTypographyProps={{
+                      className: classes.secondaryText,
+                    }}
                   >
-                    <EditIcon fontSize={"small"} />
-                  </IconButton>
-                )}
+                    {task.title}
+                    {hasDue(task) && <TaskDue task={task} />}
+                  </ListItemText>
+                </Grid>
+                <Grid item xs={1}>
+                  {mouseEnter && (
+                    <IconButton
+                      size={"small"}
+                      onClick={() => setOpenEditModal(true)}
+                    >
+                      <EditIcon fontSize={"small"} />
+                    </IconButton>
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
+              {hasChildren && (
+                <IconButton size={"small"}>
+                  {openSubtask ? <ExpandLess /> : <ExpandMore />}
+                </IconButton>
+              )}
+            </ListItem>
             {hasChildren && (
-              <IconButton size={"small"}>
-                {openSubtask ? <ExpandLess /> : <ExpandMore />}
-              </IconButton>
+              <Collapse in={openSubtask}>
+                <List dense className={classes.nested}>
+                  {task.children.map((child, idx) => (
+                    <TaskListItem
+                      task={child}
+                      index={idx}
+                      key={child.id}
+                      taskList={taskList}
+                    />
+                  ))}
+                </List>
+              </Collapse>
             )}
-          </ListItem>
-          {hasChildren && (
-            <Collapse in={openSubtask}>
-              <List dense className={classes.nested}>
-                {task.children.map((child, idx) => (
-                  <TaskListItem
-                    task={child}
-                    index={idx}
-                    key={child.id}
-                    taskList={taskList}
-                  />
-                ))}
-              </List>
-            </Collapse>
-          )}
-        </>
-      )}
-    </Draggable>
-  );
-};
+          </>
+        )}
+      </Draggable>
+    );
+  }
+);
