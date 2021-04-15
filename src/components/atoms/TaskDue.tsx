@@ -3,7 +3,7 @@ import EventNoteIcon from "@material-ui/icons/EventNote";
 import { differenceInCalendarDays, parseISO } from "date-fns";
 import React, { useCallback, useState } from "react";
 import { DueTaskView } from "../../lib/gapi";
-import { TaskDatePicker } from "../organisms/TaskDatePicker";
+import { TaskDatePickerDialog } from "../organisms/TaskDatePickerDialog";
 
 type Props = {
   task: DueTaskView;
@@ -35,7 +35,7 @@ export const TaskDue: React.FC<Props> = ({ task }) => {
 
   return (
     <div>
-      <TaskDatePicker task={task} open={open} close={closePicker} />
+      <TaskDatePickerDialog task={task} open={open} close={closePicker} />
       <Button
         onClick={openPicker}
         style={{ maxWidth: "fit-content", padding: 2 }}

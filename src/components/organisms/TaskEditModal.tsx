@@ -7,6 +7,8 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
+import { parseISO } from "date-fns";
+import { DatePicker } from "formik-material-ui-pickers";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import _ from "lodash";
@@ -52,11 +54,17 @@ export const TaskEditModal: React.FC<Props> = ({
 
   return (
     <Formik
-      initialValues={{ title: task.title, notes: task.notes }}
+      initialValues={{
+        title: task.title,
+        notes: task.notes,
+        due: task.due ? parseISO(task.due) : undefined,
+      }}
       onSubmit={(v, { setSubmitting }) => {
-        const updated = { ...task, ...v };
+        const updated = { ...task, ...v, due: v.due?.toISOString() };
         const equal =
-          task.title === updated.title && task.notes === updated.notes;
+          task.title === updated.title &&
+          task.notes === updated.notes &&
+          task.due === updated.due;
         if (!equal) {
           updateTask(updated);
         }
@@ -109,6 +117,9 @@ export const TaskEditModal: React.FC<Props> = ({
                     />
                   )}
                 </Field>
+              </Grid>
+              <Grid item>
+                <Field component={DatePicker} name={"due"} />
               </Grid>
             </Grid>
           </Form>
