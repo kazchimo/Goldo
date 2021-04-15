@@ -13,7 +13,11 @@ type Props = {
   close: () => void;
 };
 
-export const TaskDatePicker: React.FC<Props> = ({ task, open, close }) => {
+export const TaskDatePickerDialog: React.FC<Props> = ({
+  task,
+  open,
+  close,
+}) => {
   const [due, setDue] = useState<Date | null>(
     task.due ? parseISO(task.due) : null
   );
