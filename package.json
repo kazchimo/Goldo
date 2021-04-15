@@ -20,6 +20,7 @@
     "date-fns": "^2.21.0",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",
+    "formik-material-ui-pickers": "^0.0.12",
     "fp-ts": "^2.9.5",
     "gapi": "^0.0.3",
     "lodash": "^4.17.21",
