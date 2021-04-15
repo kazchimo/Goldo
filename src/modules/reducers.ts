@@ -6,6 +6,7 @@ import { snackbarReducer } from "./slice/snackBarSlice";
 import { taskBoardPageReducer } from "./slice/taskBoardPageSlice";
 import { taskListReducer } from "./slice/taskListSlice";
 import { tasksReducer } from "./slice/taskSlice";
+import { themeReducer } from "./slice/themeSlice";
 
 const reducer = combineReducers({
   tasks: tasksReducer,
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   snackbar: snackbarReducer,
   loading: loadingReducers,
   taskBoardPage: taskBoardPageReducer,
+  theme: themeReducer,
 });
 
 export type RootState = ReturnType<typeof reducer>;

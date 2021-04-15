@@ -1,4 +1,4 @@
-import { LinearProgress } from "@material-ui/core";
+import { Grid, LinearProgress } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -15,7 +15,6 @@ import {
   useTheme,
 } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -26,7 +25,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { loadingSelectors } from "../../modules/selector/loadingSelector";
 import logo from "../../assets/logo.png";
-import { HeaderTitle } from "../atoms/HeaderTitle";
+import { ThemeSwitchButton } from "../atoms/ThemeSwitchButton";
 
 const drawerWidth = 240;
 
@@ -128,7 +127,10 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <HeaderTitle />
+          <Grid container>
+            <img src={logo} alt={"logo"} style={{ height: 30 }} />
+          </Grid>
+          <ThemeSwitchButton />
         </Toolbar>
       </AppBar>
       <Drawer

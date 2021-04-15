@@ -1,4 +1,4 @@
-import { MuiThemeProvider } from "@material-ui/core";
+import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import "date-fns";
 import { ConfirmProvider } from "material-ui-confirm";
@@ -13,12 +13,11 @@ import createSagaMiddleware from "redux-saga";
 import App from "./App";
 import { Notifier } from "./components/organisms/Notifier";
 import { AppTemplate } from "./components/templates/AppTemplate";
+import { ThemeProvider } from "./components/templates/ThemeProvider";
 import "./index.css";
-import { theme } from "./consts/theme";
 import { reducer } from "./modules/reducers";
 import { allSagas } from "./modules/sagas";
 import reportWebVitals from "./reportWebVitals";
-import DateFnsUtils from "@date-io/date-fns";
 
 const sagaMiddleware = createSagaMiddleware();
 const middlewares = [sagaMiddleware];
@@ -34,24 +33,24 @@ sagaMiddleware.run(allSagas);
 
 ReactDOM.render(
   <React.StrictMode>
-    <MuiThemeProvider theme={theme}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <DragDropContext onDragEnd={console.log}>
-          <SnackbarProvider maxSnack={3}>
-            <BrowserRouter>
-              <ConfirmProvider>
-                <Provider store={store}>
+    <Provider store={store}>
+      <ThemeProvider>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <DragDropContext onDragEnd={console.log}>
+            <SnackbarProvider maxSnack={3}>
+              <BrowserRouter>
+                <ConfirmProvider>
                   <AppTemplate>
                     <Notifier />
                     <App />
                   </AppTemplate>
-                </Provider>
-              </ConfirmProvider>
-            </BrowserRouter>
-          </SnackbarProvider>
-        </DragDropContext>
-      </MuiPickersUtilsProvider>
-    </MuiThemeProvider>
+                </ConfirmProvider>
+              </BrowserRouter>
+            </SnackbarProvider>
+          </DragDropContext>
+        </MuiPickersUtilsProvider>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
