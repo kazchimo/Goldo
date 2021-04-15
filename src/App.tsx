@@ -7,6 +7,7 @@ import { authSelector } from "./modules/selector/authSelector";
 import { gapiSelector } from "./modules/selector/gapiSelector";
 import { authActions } from "./modules/slice/authSlice";
 import { gapiActions } from "./modules/slice/gapiSlice";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -41,7 +42,15 @@ function App() {
 
   return (
     <div className={classes.app}>
-      {login && gapiIsInit ? <TaskBoardPage /> : <CircularProgress />}
+      {login && gapiIsInit ? (
+        <Switch>
+          <Route path={"/board"}>
+            <TaskBoardPage />
+          </Route>
+        </Switch>
+      ) : (
+        <CircularProgress />
+      )}
     </div>
   );
 }

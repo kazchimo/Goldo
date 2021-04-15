@@ -6,6 +6,7 @@ import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 import { applyMiddleware, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 import App from "./App";
@@ -34,14 +35,16 @@ ReactDOM.render(
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <DragDropContext onDragEnd={console.log}>
         <SnackbarProvider maxSnack={3}>
-          <ConfirmProvider>
-            <Provider store={store}>
-              <AppTemplate>
-                <Notifier />
-                <App />
-              </AppTemplate>
-            </Provider>
-          </ConfirmProvider>
+          <BrowserRouter>
+            <ConfirmProvider>
+              <Provider store={store}>
+                <AppTemplate>
+                  <Notifier />
+                  <App />
+                </AppTemplate>
+              </Provider>
+            </ConfirmProvider>
+          </BrowserRouter>
         </SnackbarProvider>
       </DragDropContext>
     </MuiPickersUtilsProvider>
