@@ -1,5 +1,10 @@
-import { CircularProgress, makeStyles } from "@material-ui/core";
+import {
+  CircularProgress,
+  LinearProgress,
+  makeStyles,
+} from "@material-ui/core";
 import React, { useEffect } from "react";
+import { Route, Switch } from "react-router-dom";
 import { TaskBoardPage } from "./components/page/TaskBoardPage";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
 import { useSelectors } from "./lib/hooks/useSelectors";
@@ -7,7 +12,7 @@ import { authSelector } from "./modules/selector/authSelector";
 import { gapiSelector } from "./modules/selector/gapiSelector";
 import { authActions } from "./modules/slice/authSlice";
 import { gapiActions } from "./modules/slice/gapiSlice";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { loadingActions } from "./modules/slice/loadingSlice";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -19,9 +24,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const { initGapi, signIn } = useBoundActions({
+  const { initGapi, signIn, onLoading, offLoading } = useBoundActions({
     ...authActions,
     ...gapiActions,
+    ...loadingActions,
   });
   const { gapiIsInit, login } = useSelectors(
     { ...gapiSelector, ...authSelector },
@@ -33,8 +39,9 @@ function App() {
   useEffect(() => {
     if (gapiIsInit && !login) {
       signIn();
+      onLoading();
     }
-  }, [gapiIsInit]);
+  }, [gapiIsInit, login]);
 
   useEffect(() => {
     initGapi();
@@ -42,14 +49,12 @@ function App() {
 
   return (
     <div className={classes.app}>
-      {login && gapiIsInit ? (
+      {login && gapiIsInit && (
         <Switch>
           <Route path={"/board"}>
             <TaskBoardPage />
           </Route>
         </Switch>
-      ) : (
-        <CircularProgress />
       )}
     </div>
   );

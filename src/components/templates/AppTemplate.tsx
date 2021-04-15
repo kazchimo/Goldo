@@ -1,3 +1,4 @@
+import { LinearProgress } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -21,7 +22,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ViewColumnIcon from "@material-ui/icons/ViewColumn";
 import clsx from "clsx";
 import React, { ReactNode } from "react";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { loadingSelectors } from "../../modules/selector/loadingSelector";
 
 const drawerWidth = 240;
 
@@ -93,6 +96,7 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const history = useHistory();
+  const loading = useSelector(loadingSelectors.loading);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -111,6 +115,7 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
           [classes.appBarShift]: open,
         })}
       >
+        {loading && <LinearProgress />}
         <Toolbar>
           <IconButton
             color="inherit"
