@@ -13,9 +13,6 @@ const useStyles = makeStyles({
     marginRight: 8,
     marginLeft: 8,
   },
-  index: {
-    marginLeft: 32,
-  },
 });
 
 export const TaskBoardPage: React.FC = () => {
@@ -29,7 +26,7 @@ export const TaskBoardPage: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      <div className={classes.index}>
+      <div>
         <TaskListIndex refs={refs} />
       </div>
       {taskLists.map((t) => (
