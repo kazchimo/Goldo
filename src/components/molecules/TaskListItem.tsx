@@ -71,7 +71,7 @@ export const TaskListItem: React.FC<Props> = memo(
               <ListItemIcon>
                 <TaskCompleteButton onClick={finishTask} />
               </ListItemIcon>
-              <Grid container>
+              <Grid container alignItems={"center"}>
                 <Grid item xs={11}>
                   <ListItemText
                     secondary={task.notes}
