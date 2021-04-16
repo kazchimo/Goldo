@@ -36,8 +36,22 @@ const todayTaskViewByListId = createSelector(tasksByListId, (s) => {
   );
 });
 
+const overdueTaskViewsByListId = createSelector(tasksByListId, (s) => {
+  const now = new Date();
+
+  return _.omitBy(
+    _.mapValues(s, (ts) =>
+      ts.filter(
+        (t) => hasDue(t) && differenceInCalendarDays(parseISO(t.due), now) < 0
+      )
+    ),
+    (vs) => vs.length === 0
+  );
+});
+
 export const tasksSelector = {
   tasksByListId,
   tasksViewByListId,
   todayTaskViewByListId,
+  overdueTaskViewsByListId,
 };

@@ -24,19 +24,25 @@ const useStyles = makeStyles({
 });
 
 export const TodayPage: React.FC = () => {
-  const { todayTaskViewByListId, taskLists } = useSelectors(
+  const {
+    todayTaskViewByListId,
+    taskLists,
+    overdueTaskViewsByListId,
+  } = useSelectors(
     { ...tasksSelector, ...taskListsSelector },
     "todayTaskViewByListId",
-    "taskLists"
+    "taskLists",
+    "overdueTaskViewsByListId"
   );
   const classes = useStyles();
 
-  const taskListIds = Object.keys(todayTaskViewByListId);
+  const todayListIds = Object.keys(todayTaskViewByListId);
+  const overdueListIds = Object.keys(overdueTaskViewsByListId);
 
   return (
     <Paper variant={"outlined"} className={classes.boardPaper}>
       <List subheader={<ListSubheader>Today</ListSubheader>}>
-        {taskListIds.map((listId) => (
+        {todayListIds.map((listId) => (
           <ListItem key={listId}>
             <List
               className={classes.innerList}
@@ -48,6 +54,30 @@ export const TodayPage: React.FC = () => {
               }
             >
               {todayTaskViewByListId[listId].map((task, i) => (
+                <TaskListItem
+                  key={task.id}
+                  task={{ ...task, children: [] }}
+                  taskList={taskLists.filter((l) => l.id === listId)[0]}
+                  index={i}
+                />
+              ))}
+            </List>
+          </ListItem>
+        ))}
+      </List>
+      <List subheader={<ListSubheader>Overdue</ListSubheader>}>
+        {overdueListIds.map((listId) => (
+          <ListItem key={listId}>
+            <List
+              className={classes.innerList}
+              subheader={
+                <ListSubheader>
+                  {taskLists.filter((l) => l.id === listId)[0].title}
+                  <Divider />
+                </ListSubheader>
+              }
+            >
+              {overdueTaskViewsByListId[listId].map((task, i) => (
                 <TaskListItem
                   key={task.id}
                   task={{ ...task, children: [] }}
