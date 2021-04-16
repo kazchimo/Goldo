@@ -84,6 +84,11 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
       marginLeft: 0,
     },
+    linearProgress: {
+      position: "absolute",
+      zIndex: 100,
+      width: "100%",
+    },
   })
 );
 
@@ -110,7 +115,7 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
           [classes.appBarShift]: open,
         })}
       >
-        {loading && <LinearProgress />}
+        {loading && <LinearProgress className={classes.linearProgress} />}
         <Toolbar>
           <IconButton
             color="inherit"
