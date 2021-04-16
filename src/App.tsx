@@ -9,6 +9,7 @@ import { appSelector } from "./modules/selector/appSelector";
 import { authSelector } from "./modules/selector/authSelector";
 import { gapiSelector } from "./modules/selector/gapiSelector";
 import { taskListsSelector } from "./modules/selector/taskListsSelector";
+import { appActions } from "./modules/slice/appSlice";
 import { authActions } from "./modules/slice/authSlice";
 import { gapiActions } from "./modules/slice/gapiSlice";
 import { loadingActions } from "./modules/slice/loadingSlice";
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const {
+    resetInitialLoading,
     initGapi,
     signIn,
     restoreTheme,
@@ -35,6 +37,7 @@ function App() {
     offLoading,
     onLoading,
   } = useBoundActions({
+    ...appActions,
     ...authActions,
     ...gapiActions,
     ...themeActions,
@@ -55,6 +58,9 @@ function App() {
   useEffect(() => {
     initGapi();
     restoreTheme();
+  });
+
+  useEffect(() => {
     if (gapiIsInit && !login) {
       signIn();
     }
@@ -62,6 +68,7 @@ function App() {
 
   useEffect(() => {
     if (gapiIsInit && login && shouldReload) {
+      resetInitialLoading();
       onLoading();
       fetchTaskLists();
     }
@@ -71,6 +78,7 @@ function App() {
     if (finishInitialLoading) {
       offLoading();
       setShouldReload(false);
+      resetInitialLoading();
     }
   }, [finishInitialLoading]);
 

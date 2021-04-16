@@ -17,7 +17,13 @@ const fetchTasksCountLens = Lens.fromPath<State>()(["fetchTasksCount"]);
 const slice = createSlice({
   name: "app",
   initialState,
-  reducers: {},
+  reducers: {
+    resetInitialLoading: (s) => ({
+      ...s,
+      fetchTaskListsCount: undefined,
+      fetchTasksCount: undefined,
+    }),
+  },
   extraReducers: {
     [tasksActions.addTasks.type]: (s) =>
       fetchTasksCountLens.modify((s) => (s || 0) + 1)(s),
