@@ -1,7 +1,10 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { selectSelf } from "../selectors";
+import { RootState } from "../reducers";
+import { taskListAdapter } from "../slice/taskListSlice";
 
-const taskLists = createSelector(selectSelf, (s) => s.taskLists);
+const selector = taskListAdapter.getSelectors<RootState>((s) => s.taskLists);
+
+const taskLists = createSelector(selector.selectAll, (s) => s);
 
 export const taskListsSelector = {
   taskLists,

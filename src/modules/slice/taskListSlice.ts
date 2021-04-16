@@ -1,19 +1,26 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAction,
+  createEntityAdapter,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { TaskList } from "../../lib/gapi";
 
-const initialState: TaskList[] = [];
+export const taskListAdapter = createEntityAdapter<TaskList>({
+  selectId: (l) => l.id,
+  sortComparer: (a, b) => a.id.localeCompare(b.id),
+});
+
+const initialState = taskListAdapter.getInitialState();
 
 const taskListSlice = createSlice({
   name: "taskList",
   initialState,
   reducers: {
-    successFetchTaskLists: (s, a: PayloadAction<TaskList[]>) => a.payload,
-    deleteTaskList: (s, a: PayloadAction<string>) =>
-      s.filter((t) => t.id !== a.payload),
-    updateList: (s, a: PayloadAction<TaskList>) => [
-      ...s.filter((t) => t.id !== a.payload.id),
-      a.payload,
-    ],
+    successFetchTaskLists: taskListAdapter.addMany,
+    deleteTaskList: taskListAdapter.removeOne,
+    updateList: (s, a: PayloadAction<TaskList>) =>
+      taskListAdapter.updateOne(s, { id: a.payload.id, changes: a.payload }),
   },
 });
 
