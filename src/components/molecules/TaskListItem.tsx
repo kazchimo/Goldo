@@ -97,16 +97,18 @@ export const TaskListItem: React.FC<Props> = memo(
         </ListItem>
         {hasChildren && (
           <Collapse in={openSubtask}>
-            <List dense className={classes.nested}>
-              {task.children.map((child, idx) => (
-                <TaskListItem
-                  task={child}
-                  index={idx}
-                  key={child.id}
-                  taskList={taskList}
-                />
-              ))}
-            </List>
+            {openSubtask && (
+              <List dense className={classes.nested}>
+                {task.children.map((child, idx) => (
+                  <TaskListItem
+                    task={child}
+                    index={idx}
+                    key={child.id}
+                    taskList={taskList}
+                  />
+                ))}
+              </List>
+            )}
           </Collapse>
         )}
       </>
