@@ -1,3 +1,4 @@
+import { parseISO } from "date-fns";
 import { call, put, takeEvery } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
 import { GResponse, hasId, Task, Tasks, UninitTask } from "../../lib/gapi";
@@ -60,13 +61,17 @@ function* completeTask({ payload: { id, listId } }: Action<Task>) {
 }
 
 function* updateTask({ payload: task }: Action<Task>) {
+  // NOTE: handle discarding of portion of timestamp by google api
+  const due = task.due !== "" && task.due !== undefined && parseISO(task.due);
+  due && due.setHours(9);
+
   yield call(
     gapi.client.tasks.tasks.update,
     {
       tasklist: task.listId,
       task: task.id,
     },
-    task
+    { ...task, due: due ? due.toISOString() : undefined }
   );
 }
 
