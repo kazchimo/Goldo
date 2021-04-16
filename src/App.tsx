@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 import React, { useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { TaskBoardPage } from "./components/page/TaskBoardPage";
 import { TodayPage } from "./components/page/TodayPage";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
@@ -80,10 +80,13 @@ function App() {
     <div className={classes.app}>
       {login && gapiIsInit && (
         <Switch>
-          <Route path={"/board"}>
+          <Route exact path={"/"}>
+            <Redirect to={"/today"} />
+          </Route>
+          <Route path={["/board"]}>
             <TaskBoardPage />
           </Route>
-          <Route path={"/today"}>
+          <Route path={["/today"]}>
             <TodayPage />
           </Route>
         </Switch>
