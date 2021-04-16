@@ -4,6 +4,7 @@ import {
   ListSubheader,
   makeStyles,
   Popover,
+  Tooltip,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import React, { useCallback, useState } from "react";
@@ -58,7 +59,11 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
         <Grid item xs={12}>
           <Grid container justify={"space-between"}>
             <Grid item>
-              <TaskListTitleForm taskList={taskList} />
+              <Tooltip title={"Rename title"} placement={"right"}>
+                <div>
+                  <TaskListTitleForm taskList={taskList} />
+                </div>
+              </Tooltip>
             </Grid>
             <Grid item>
               <IconButton size={"small"} onClick={open}>
