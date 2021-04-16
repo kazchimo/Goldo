@@ -10,6 +10,7 @@ import React, { useCallback, useState } from "react";
 import { TaskList } from "../../lib/gapi";
 import { TaskAddForm } from "./TaskAddForm";
 import { TaskListOptions } from "./TaskListOptions";
+import { TaskListTitleForm } from "./TaskListTitleForm";
 
 type Props = {
   taskList: TaskList;
@@ -56,7 +57,9 @@ export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
       <Grid container>
         <Grid item xs={12}>
           <Grid container justify={"space-between"}>
-            <Grid item>{taskList.title}</Grid>
+            <Grid item>
+              <TaskListTitleForm taskList={taskList} />
+            </Grid>
             <Grid item>
               <IconButton size={"small"} onClick={open}>
                 <MoreVertIcon />

@@ -10,6 +10,10 @@ const taskListSlice = createSlice({
     successFetchTaskLists: (s, a: PayloadAction<TaskList[]>) => a.payload,
     deleteTaskList: (s, a: PayloadAction<string>) =>
       s.filter((t) => t.id !== a.payload),
+    updateList: (s, a: PayloadAction<TaskList>) => [
+      ...s.filter((t) => t.id !== a.payload.id),
+      a.payload,
+    ],
   },
 });
 

@@ -14,6 +14,7 @@ type Props = {
 const useStyles = makeStyles((theme) => ({
   board: {
     width: 300,
+    maxHeight: 800,
     overflow: "auto",
   },
 }));
