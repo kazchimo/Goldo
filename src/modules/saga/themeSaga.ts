@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { put, takeEvery, takeLatest } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
 import { themeActions } from "../slice/themeSlice";
 
