@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 
-type State = "dark" | "light";
+export type State = "dark" | "light";
 
 const slice = createSlice({
   name: "theme",
@@ -11,6 +11,8 @@ const slice = createSlice({
   },
 });
 
-export const themeActions = slice.actions;
+const restoreTheme = createAction("restoreTheme");
+
+export const themeActions = { ...slice.actions, restoreTheme };
 
 export const themeReducer = slice.reducer;

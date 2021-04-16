@@ -9,6 +9,7 @@ import { authSelector } from "./modules/selector/authSelector";
 import { gapiSelector } from "./modules/selector/gapiSelector";
 import { authActions } from "./modules/slice/authSlice";
 import { gapiActions } from "./modules/slice/gapiSlice";
+import { themeActions } from "./modules/slice/themeSlice";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -20,9 +21,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const { initGapi, signIn } = useBoundActions({
+  const { initGapi, signIn, restoreTheme } = useBoundActions({
     ...authActions,
     ...gapiActions,
+    ...themeActions,
   });
   const { gapiIsInit, login } = useSelectors(
     { ...gapiSelector, ...authSelector },
@@ -38,6 +40,7 @@ function App() {
   }, [gapiIsInit, login]);
 
   useEffect(() => {
+    restoreTheme();
     initGapi();
   }, []);
 
