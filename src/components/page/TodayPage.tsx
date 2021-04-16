@@ -1,11 +1,9 @@
 import {
   Divider,
-  Grid,
   List,
   ListItem,
   ListSubheader,
   Paper,
-  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
@@ -52,7 +50,7 @@ export const TodayPage: React.FC = () => {
               {todayTaskViewByListId[listId].map((task, i) => (
                 <TaskListItem
                   key={task.id}
-                  task={task}
+                  task={{ ...task, children: [] }}
                   taskList={taskLists.filter((l) => l.id === listId)[0]}
                   index={i}
                 />

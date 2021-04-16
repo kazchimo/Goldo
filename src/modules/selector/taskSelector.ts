@@ -23,8 +23,9 @@ const tasksViewByListId = createSelector(selector.selectAll, (s) =>
   )
 );
 
-const todayTaskViewByListId = createSelector(tasksViewByListId, (s) => {
+const todayTaskViewByListId = createSelector(tasksByListId, (s) => {
   const now = new Date();
+
   return _.omitBy(
     _.mapValues(s, (ts) =>
       ts.filter(

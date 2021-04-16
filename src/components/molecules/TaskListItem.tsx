@@ -13,7 +13,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import React, { memo, useCallback, useState } from "react";
-import { hasDue, TaskList } from "../../lib/gapi";
+import { hasDue, Task, TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
