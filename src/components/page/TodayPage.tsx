@@ -36,38 +36,31 @@ export const TodayPage: React.FC = () => {
   const taskListIds = Object.keys(todayTaskViewByListId);
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <Paper variant={"outlined"} className={classes.boardPaper}>
-          <List subheader={<ListSubheader>Today</ListSubheader>}>
-            {taskListIds.map((listId) => (
-              <ListItem key={listId}>
-                <List
-                  className={classes.innerList}
-                  subheader={
-                    <ListSubheader>
-                      {taskLists.filter((l) => l.id === listId)[0].title}
-                      <Divider />
-                    </ListSubheader>
-                  }
-                >
-                  <Grid container>
-                    {todayTaskViewByListId[listId].map((task, i) => (
-                      <Grid item xs={12} key={task.id}>
-                        <TaskListItem
-                          task={task}
-                          taskList={taskLists.filter((l) => l.id === listId)[0]}
-                          index={i}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </List>
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      </Grid>
-    </Grid>
+    <Paper variant={"outlined"} className={classes.boardPaper}>
+      <List subheader={<ListSubheader>Today</ListSubheader>}>
+        {taskListIds.map((listId) => (
+          <ListItem key={listId}>
+            <List
+              className={classes.innerList}
+              subheader={
+                <ListSubheader>
+                  {taskLists.filter((l) => l.id === listId)[0].title}
+                  <Divider />
+                </ListSubheader>
+              }
+            >
+              {todayTaskViewByListId[listId].map((task, i) => (
+                <TaskListItem
+                  key={task.id}
+                  task={task}
+                  taskList={taskLists.filter((l) => l.id === listId)[0]}
+                  index={i}
+                />
+              ))}
+            </List>
+          </ListItem>
+        ))}
+      </List>
+    </Paper>
   );
 };
