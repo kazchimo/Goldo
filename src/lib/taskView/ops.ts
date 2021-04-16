@@ -93,3 +93,8 @@ export const deepRemove = (
     };
   }
 };
+
+export const allRelates = (task: TaskView): TaskView[] => [
+  task,
+  ...task.children.flatMap(allRelates),
+];

@@ -6,6 +6,8 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { Task, UninitTask } from "../../lib/gapi";
+import { allRelates } from "../../lib/taskView/ops";
+import { TaskView } from "../../lib/taskView/TaskView";
 
 export const tasksAdaptor = createEntityAdapter<Task>({
   selectId: (t) => t.id,
@@ -31,8 +33,11 @@ const taskSlice = createSlice({
       tasksAdaptor.removeOne(s, t.payload.id),
     updateTask: (s, t: PayloadAction<Task>) =>
       tasksAdaptor.updateOne(s, { id: t.payload.id, changes: t.payload }),
-    completeTask: (s, t: PayloadAction<Task>) =>
-      tasksAdaptor.removeOne(s, t.payload.id),
+    completeTask: (s, t: PayloadAction<TaskView>) =>
+      tasksAdaptor.removeMany(
+        s,
+        allRelates(t.payload).map((a) => a.id)
+      ),
     addTask: tasksAdaptor.addOne,
     addTasks: tasksAdaptor.addMany,
   },
