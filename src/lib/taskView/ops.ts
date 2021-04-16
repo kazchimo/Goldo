@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { Task } from "../gapi";
 import { notUndef } from "../typeGuards";
 import { taskViewChildrenLens } from "./lens";
 import { ChildTaskView, TaskView } from "./TaskView";
