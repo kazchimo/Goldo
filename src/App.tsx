@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { TaskBoardPage } from "./components/page/TaskBoardPage";
 import { TodayPage } from "./components/page/TodayPage";
@@ -50,31 +50,50 @@ function App() {
     "taskLists"
   );
   const classes = useStyles();
+  const [shouldReload, setShouldReload] = useState(true);
 
   useEffect(() => {
     initGapi();
     restoreTheme();
-
     if (gapiIsInit && !login) {
       signIn();
-      onLoading();
-      fetchTaskLists();
     }
   }, [gapiIsInit, login]);
 
   useEffect(() => {
+    if (gapiIsInit && login && shouldReload) {
+      onLoading();
+      fetchTaskLists();
+    }
+  }, [gapiIsInit, login, shouldReload]);
+
+  useEffect(() => {
     if (finishInitialLoading) {
       offLoading();
+      setShouldReload(false);
     }
   }, [finishInitialLoading]);
 
   useEffect(() => {
-    taskLists.forEach((t) => {
-      if (t.id) {
-        fetchTasks(t.id);
-      }
+    if (shouldReload) {
+      taskLists.forEach((t) => {
+        if (t.id) {
+          fetchTasks(t.id);
+        }
+      });
+    }
+  }, [taskLists, shouldReload]);
+
+  useEffect(() => {
+    window.addEventListener("focus", () => {
+      console.log("focus");
+      setShouldReload(true);
     });
-  }, [taskLists]);
+
+    return () => {
+      window.removeEventListener("focus", () => setShouldReload(true));
+    };
+  });
 
   return (
     <div className={classes.app}>
