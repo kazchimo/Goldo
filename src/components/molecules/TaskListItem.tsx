@@ -47,7 +47,7 @@ export const TaskListItem: React.FC<Props> = memo(
     const hasChildren = task.children.length > 0;
 
     const finishTask = useCallback(() => {
-      task.id && completeTask(task);
+      completeTask(task);
     }, []);
 
     return (
