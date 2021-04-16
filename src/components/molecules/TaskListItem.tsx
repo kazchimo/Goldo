@@ -117,5 +117,6 @@ export const TaskListItem: React.FC<Props> = memo(
     _.isEqual(a.task.children, b.task.children) &&
     a.task.title === b.task.title &&
     a.task.parent === b.task.parent &&
-    a.task.notes === b.task.notes
+    a.task.notes === b.task.notes &&
+    a.task.due === b.task.due
 );
