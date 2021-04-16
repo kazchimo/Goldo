@@ -11,6 +11,7 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import _ from "lodash";
 import React, { memo, useCallback, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { hasDue, TaskList } from "../../lib/gapi";
@@ -48,7 +49,7 @@ export const TaskListItem: React.FC<Props> = memo(
 
     const finishTask = useCallback(() => {
       completeTask(task);
-    }, []);
+    }, [task]);
 
     return (
       <Draggable draggableId={"draggable-" + task.id} index={index}>
@@ -118,5 +119,11 @@ export const TaskListItem: React.FC<Props> = memo(
         )}
       </Draggable>
     );
-  }
+  },
+  (a, b) =>
+    a.taskList === b.taskList &&
+    _.isEqual(a.task.children, b.task.children) &&
+    a.task.title === b.task.title &&
+    a.task.parent === b.task.parent &&
+    a.task.notes === b.task.notes
 );
