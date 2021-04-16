@@ -1,9 +1,9 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { selectSelf } from "../selectors";
 
-const selector = createSelector(selectSelf, (s) => s.taskBoardPage);
+const selector = createSelector(selectSelf, (s) => s.app);
 
-export const taskBoardPageSelector = {
+export const appSelector = {
   finishInitialLoading: createSelector(
     selector,
     ({ fetchTaskListsCount, fetchTasksCount }) =>

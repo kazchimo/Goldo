@@ -1,9 +1,9 @@
 import { combineReducers } from "@reduxjs/toolkit";
+import { appReducer } from "./slice/appSlice";
 import { authReducer } from "./slice/authSlice";
 import { gapiReducers } from "./slice/gapiSlice";
 import { loadingReducers } from "./slice/loadingSlice";
 import { snackbarReducer } from "./slice/snackBarSlice";
-import { taskBoardPageReducer } from "./slice/taskBoardPageSlice";
 import { taskListReducer } from "./slice/taskListSlice";
 import { tasksReducer } from "./slice/taskSlice";
 import { themeReducer } from "./slice/themeSlice";
@@ -15,7 +15,7 @@ const reducer = combineReducers({
   gapi: gapiReducers,
   snackbar: snackbarReducer,
   loading: loadingReducers,
-  taskBoardPage: taskBoardPageReducer,
+  app: appReducer,
   theme: themeReducer,
 });
 

@@ -1,12 +1,7 @@
 import { makeStyles } from "@material-ui/core";
-import React, { createRef, RefObject, useEffect, useRef } from "react";
-import { useBoundActions } from "../../lib/hooks/useBoundActions";
+import React, { createRef, RefObject, useRef } from "react";
 import { useSelectors } from "../../lib/hooks/useSelectors";
-import { taskBoardPageSelector } from "../../modules/selector/taskBoardPageSelector";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
-import { loadingActions } from "../../modules/slice/loadingSlice";
-import { taskListActions } from "../../modules/slice/taskListSlice";
-import { tasksActions } from "../../modules/slice/taskSlice";
 import { TaskBoard } from "../organisms/TaskBoard";
 import { TaskListIndex } from "../organisms/TaskListIndex";
 
@@ -24,43 +19,13 @@ const useStyles = makeStyles({
 });
 
 export const TaskBoardPage: React.FC = () => {
-  const { fetchTaskLists, fetchTasks, onLoading, offLoading } = useBoundActions(
-    {
-      ...tasksActions,
-      ...taskListActions,
-      ...loadingActions,
-    }
-  );
-  const { taskLists, finishInitialLoading } = useSelectors(
-    { ...taskListsSelector, ...taskBoardPageSelector },
-    "taskLists",
-    "finishInitialLoading"
-  );
+  const { taskLists } = useSelectors({ ...taskListsSelector }, "taskLists");
   const classes = useStyles();
   const refs = useRef<{ [listId: string]: RefObject<HTMLDivElement> }>({});
 
   taskLists.forEach((list) => {
     refs.current[list.id] = createRef();
   });
-
-  useEffect(() => {
-    fetchTaskLists();
-    onLoading();
-  }, []);
-
-  useEffect(() => {
-    if (finishInitialLoading) {
-      offLoading();
-    }
-  }, [finishInitialLoading]);
-
-  useEffect(() => {
-    taskLists.forEach((t) => {
-      if (t.id) {
-        fetchTasks(t.id);
-      }
-    });
-  }, [taskLists]);
 
   return (
     <div className={classes.container}>

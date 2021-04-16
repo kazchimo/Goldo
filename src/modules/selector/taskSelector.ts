@@ -1,5 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
+import { differenceInCalendarDays, parseISO } from "date-fns";
 import _ from "lodash";
+import { hasDue } from "../../lib/gapi";
 import { insertTask } from "../../lib/taskView/ops";
 import { RootState } from "../reducers";
 import { tasksAdaptor } from "../slice/taskSlice";
@@ -21,7 +23,17 @@ const tasksViewByListId = createSelector(selector.selectAll, (s) =>
   )
 );
 
+const todayTaskViewByListId = createSelector(tasksViewByListId, (s) => {
+  const now = new Date();
+  return _.mapValues(s, (ts) =>
+    ts.filter(
+      (t) => hasDue(t) && differenceInCalendarDays(parseISO(t.due), now) === 0
+    )
+  );
+});
+
 export const tasksSelector = {
   tasksByListId,
   tasksViewByListId,
+  todayTaskViewByListId,
 };

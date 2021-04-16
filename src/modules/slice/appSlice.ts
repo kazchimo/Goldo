@@ -15,7 +15,7 @@ const fetchTaskListsCountLens = Lens.fromPath<State>()(["fetchTaskListsCount"]);
 const fetchTasksCountLens = Lens.fromPath<State>()(["fetchTasksCount"]);
 
 const slice = createSlice({
-  name: "taskBoardPage",
+  name: "app",
   initialState,
   reducers: {},
   extraReducers: {
@@ -26,6 +26,6 @@ const slice = createSlice({
   },
 });
 
-export const taskBoardPageActions = slice.actions;
+export const appActions = slice.actions;
 
-export const taskBoardPageReducer = slice.reducer;
+export const appReducer = slice.reducer;
