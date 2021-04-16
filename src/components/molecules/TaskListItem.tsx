@@ -13,7 +13,6 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import React, { memo, useCallback, useState } from "react";
-import { Draggable } from "react-beautiful-dnd";
 import { hasDue, TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
@@ -52,72 +51,65 @@ export const TaskListItem: React.FC<Props> = memo(
     }, [task]);
 
     return (
-      <Draggable draggableId={"draggable-" + task.id} index={index}>
-        {(provided) => (
-          <>
-            <TaskEditModal
-              taskList={taskList}
-              open={openEditModal}
-              task={task}
-              onBackdropClick={() => setOpenEditModal(false)}
-            />
-            <ListItem
-              onMouseEnter={() => setMouseEnter(true)}
-              onMouseLeave={() => setMouseEnter(false)}
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              onClick={hasChildren ? () => setOpenSubtask((a) => !a) : () => {}}
-            >
-              <ListItemIcon>
-                <TaskCompleteButton onClick={finishTask} />
-              </ListItemIcon>
-              <Grid container alignItems={"center"}>
-                <Grid item xs={11}>
-                  <ListItemText
-                    secondary={task.notes}
-                    secondaryTypographyProps={{
-                      className: classes.secondaryText,
-                    }}
-                  >
-                    {task.title}
-                    {hasDue(task) && <TaskDue task={task} />}
-                  </ListItemText>
-                </Grid>
-                <Grid item xs={1}>
-                  {mouseEnter && (
-                    <IconButton
-                      size={"small"}
-                      onClick={() => setOpenEditModal(true)}
-                    >
-                      <EditIcon fontSize={"small"} />
-                    </IconButton>
-                  )}
-                </Grid>
-              </Grid>
-              {hasChildren && (
-                <IconButton size={"small"}>
-                  {openSubtask ? <ExpandLess /> : <ExpandMore />}
+      <>
+        <TaskEditModal
+          taskList={taskList}
+          open={openEditModal}
+          task={task}
+          onBackdropClick={() => setOpenEditModal(false)}
+        />
+        <ListItem
+          onMouseEnter={() => setMouseEnter(true)}
+          onMouseLeave={() => setMouseEnter(false)}
+          onClick={hasChildren ? () => setOpenSubtask((a) => !a) : () => {}}
+        >
+          <ListItemIcon>
+            <TaskCompleteButton onClick={finishTask} />
+          </ListItemIcon>
+          <Grid container alignItems={"center"}>
+            <Grid item xs={11}>
+              <ListItemText
+                secondary={task.notes}
+                secondaryTypographyProps={{
+                  className: classes.secondaryText,
+                }}
+              >
+                {task.title}
+                {hasDue(task) && <TaskDue task={task} />}
+              </ListItemText>
+            </Grid>
+            <Grid item xs={1}>
+              {mouseEnter && (
+                <IconButton
+                  size={"small"}
+                  onClick={() => setOpenEditModal(true)}
+                >
+                  <EditIcon fontSize={"small"} />
                 </IconButton>
               )}
-            </ListItem>
-            {hasChildren && (
-              <Collapse in={openSubtask}>
-                <List dense className={classes.nested}>
-                  {task.children.map((child, idx) => (
-                    <TaskListItem
-                      task={child}
-                      index={idx}
-                      key={child.id}
-                      taskList={taskList}
-                    />
-                  ))}
-                </List>
-              </Collapse>
-            )}
-          </>
+            </Grid>
+          </Grid>
+          {hasChildren && (
+            <IconButton size={"small"}>
+              {openSubtask ? <ExpandLess /> : <ExpandMore />}
+            </IconButton>
+          )}
+        </ListItem>
+        {hasChildren && (
+          <Collapse in={openSubtask}>
+            <List dense className={classes.nested}>
+              {task.children.map((child, idx) => (
+                <TaskListItem
+                  task={child}
+                  index={idx}
+                  key={child.id}
+                  taskList={taskList}
+                />
+              ))}
+            </List>
+          </Collapse>
         )}
-      </Draggable>
+      </>
     );
   },
   (a, b) =>

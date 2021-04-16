@@ -5,6 +5,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ViewColumnIcon from "@material-ui/icons/ViewColumn";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import TodayIcon from "@material-ui/icons/Today";
 
 export const SidebarLinks: React.FC = () => {
   const history = useHistory();
@@ -13,7 +14,7 @@ export const SidebarLinks: React.FC = () => {
     <List>
       <ListItem button onClick={() => history.push("/today")}>
         <ListItemIcon>
-          <ViewColumnIcon />
+          <TodayIcon />
         </ListItemIcon>
         <ListItemText primary={"Today"} />
       </ListItem>

@@ -25,10 +25,13 @@ const tasksViewByListId = createSelector(selector.selectAll, (s) =>
 
 const todayTaskViewByListId = createSelector(tasksViewByListId, (s) => {
   const now = new Date();
-  return _.mapValues(s, (ts) =>
-    ts.filter(
-      (t) => hasDue(t) && differenceInCalendarDays(parseISO(t.due), now) === 0
-    )
+  return _.omitBy(
+    _.mapValues(s, (ts) =>
+      ts.filter(
+        (t) => hasDue(t) && differenceInCalendarDays(parseISO(t.due), now) === 0
+      )
+    ),
+    (vs) => vs.length === 0
   );
 });
 
