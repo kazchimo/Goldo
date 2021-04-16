@@ -20,10 +20,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const TaskBoard: React.FC<Props> = ({ taskList }) => {
-  const { tasksByListId } = useSelectors(tasksSelector, "tasksByListId");
+  const { tasksViewByListId } = useSelectors(
+    tasksSelector,
+    "tasksViewByListId"
+  );
   const classes = useStyles();
 
-  const tasks = (taskList.id && tasksByListId[taskList.id]) || [];
+  const tasks = (taskList.id && tasksViewByListId[taskList.id]) || [];
 
   return (
     <>

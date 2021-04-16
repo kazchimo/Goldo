@@ -30,12 +30,7 @@ function* fetchTasks(p: Action<string>) {
     }
   }
 
-  yield put(
-    tasksActions.addTasksOnListId({
-      tasks,
-      listId: p.payload,
-    })
-  );
+  yield put(tasksActions.addTasks(tasks));
 }
 
 function* createTask({
@@ -56,21 +51,17 @@ function* createTask({
       message: "Create task",
     })
   );
-  yield put(
-    tasksActions.addTaskOnListId({ task: res.result, listId: task.listId })
-  );
+  yield put(tasksActions.addTask(res.result));
 }
 
-function* completeTask({
-  payload: { taskId, taskListId },
-}: Action<{ taskListId: string; taskId: string }>) {
+function* completeTask({ payload: { id, listId } }: Action<Task>) {
   yield call(
     gapi.client.tasks.tasks.update,
     {
-      tasklist: taskListId,
-      task: taskId,
+      tasklist: listId,
+      task: id,
     },
-    { id: taskId, status: "completed" }
+    { id: id, status: "completed" }
   );
 }
 

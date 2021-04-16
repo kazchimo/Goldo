@@ -1,89 +1,40 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import _ from "lodash";
+import {
+  createAction,
+  createEntityAdapter,
+  createSlice,
+  EntityState,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { Task, UninitTask } from "../../lib/gapi";
-import { deepRemove, deepTaskSort, insertTask } from "../../lib/taskView/ops";
-import { TaskView } from "../../lib/taskView/TaskView";
-import { notUndef } from "../../lib/typeGuards";
 
-type State = {
-  tasksByListId: {
-    [key: string]: TaskView[];
-  };
-};
+export const tasksAdaptor = createEntityAdapter<Task>({
+  selectId: (t) => t.id,
+  sortComparer: (a, b) =>
+    a.listId !== b.listId
+      ? a.listId.localeCompare(b.listId)
+      : a.position
+      ? b.position
+        ? a.position.localeCompare(b.position)
+        : -1
+      : 1,
+});
 
-const initialState: State = {
-  tasksByListId: {},
-};
+type State = EntityState<Task>;
+
+const initialState: State = tasksAdaptor.getInitialState();
 
 const taskSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    deleteTask: (s, a: PayloadAction<Task>) => ({
-      ...s,
-      tasksByListId: {
-        ...s.tasksByListId,
-        [a.payload.listId]: _.get(s.tasksByListId, a.payload.listId, [])
-          .map((t: TaskView) => deepRemove(a.payload.id, t))
-          .filter(notUndef),
-      },
-    }),
-    updateTask: (s, a: PayloadAction<TaskView>) => ({
-      ...s,
-      tasksByListId: {
-        ...s.tasksByListId,
-        [a.payload.listId]: deepTaskSort([
-          a.payload,
-          ..._.get(s.tasksByListId, a.payload.listId, []).filter(
-            (t) => t.id !== a.payload.id
-          ),
-        ]),
-      },
-    }),
-    completeTask: (
-      s,
-      a: PayloadAction<{ taskId: string; taskListId: string }>
-    ) => ({
-      ...s,
-      tasksByListId: {
-        ...s.tasksByListId,
-        [a.payload.taskListId]: _.get(s.tasksByListId, a.payload.taskListId, [])
-          .map((t: TaskView) => deepRemove(a.payload.taskId, t))
-          .filter(notUndef),
-      },
-    }),
-    addTaskOnListId: (
-      s: State,
-      p: PayloadAction<{ task: Task; listId: string }>
-    ) => {
-      return {
-        ...s,
-        tasksByListId: {
-          ...s.tasksByListId,
-          [p.payload.listId]: deepTaskSort(
-            insertTask(
-              [{ ...p.payload.task, children: [] }],
-              _.get(s.tasksByListId, p.payload.listId, [])
-            )
-          ),
-        },
-      };
-    },
-    addTasksOnListId: (
-      s: State,
-      p: PayloadAction<{ tasks: Task[]; listId: string }>
-    ) => ({
-      ...s,
-      tasksByListId: {
-        ...s.tasksByListId,
-        [p.payload.listId]: deepTaskSort(
-          insertTask(
-            p.payload.tasks.map((t) => ({ ...t, children: [] })),
-            _.get(s.tasksByListId, p.payload.listId, [])
-          )
-        ),
-      },
-    }),
+    deleteTask: (s, t: PayloadAction<Task>) =>
+      tasksAdaptor.removeOne(s, t.payload.id),
+    updateTask: (s, t: PayloadAction<Task>) =>
+      tasksAdaptor.updateOne(s, { id: t.payload.id, changes: t.payload }),
+    completeTask: (s, t: PayloadAction<Task>) =>
+      tasksAdaptor.removeOne(s, t.payload.id),
+    addTask: tasksAdaptor.addOne,
+    addTasks: tasksAdaptor.addMany,
   },
 });
 

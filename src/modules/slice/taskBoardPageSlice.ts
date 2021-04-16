@@ -19,7 +19,7 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [tasksActions.addTasksOnListId.type]: (s) =>
+    [tasksActions.addTasks.type]: (s) =>
       fetchTasksCountLens.modify((s) => (s || 0) + 1)(s),
     [taskListActions.successFetchTaskLists.type]: (s, a) =>
       fetchTaskListsCountLens.modify((s) => (s || 0) + a.payload.length)(s),
