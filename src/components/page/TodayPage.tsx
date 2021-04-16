@@ -5,6 +5,7 @@ import {
   ListItem,
   ListSubheader,
   Paper,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
@@ -38,9 +39,9 @@ export const TodayPage: React.FC = () => {
     <Grid container>
       <Grid item xs={12}>
         <Paper variant={"outlined"} className={classes.boardPaper}>
-          {taskListIds.map((listId) => (
-            <List key={listId} subheader={<ListSubheader>Today</ListSubheader>}>
-              <ListItem>
+          <List subheader={<ListSubheader>Today</ListSubheader>}>
+            {taskListIds.map((listId) => (
+              <ListItem key={listId}>
                 <List
                   className={classes.innerList}
                   subheader={
@@ -63,8 +64,8 @@ export const TodayPage: React.FC = () => {
                   </Grid>
                 </List>
               </ListItem>
-            </List>
-          ))}
+            ))}
+          </List>
         </Paper>
       </Grid>
     </Grid>
