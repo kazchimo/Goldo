@@ -58,7 +58,7 @@ function App() {
   useEffect(() => {
     initGapi();
     restoreTheme();
-  });
+  }, []);
 
   useEffect(() => {
     if (gapiIsInit && !login) {
