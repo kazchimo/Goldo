@@ -19,6 +19,7 @@ import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { TaskCompleteButton } from "../atoms/TaskCompleteButton";
 import { TaskDue } from "../atoms/TaskDue";
+import { TaskListItemText } from "../atoms/TaskListItemText";
 import { TaskEditModal } from "../organisms/TaskEditModal";
 
 type Props = {
@@ -74,7 +75,7 @@ export const TaskListItem: React.FC<Props> = memo(
                   className: classes.secondaryText,
                 }}
               >
-                {task.title}
+                <TaskListItemText task={task} />
                 {hasDue(task) && <TaskDue task={task} />}
               </ListItemText>
             </Grid>
