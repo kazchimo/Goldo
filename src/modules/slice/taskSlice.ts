@@ -5,6 +5,7 @@ import {
   EntityState,
   PayloadAction,
 } from "@reduxjs/toolkit";
+import _ from "lodash";
 import { Task, UninitTask } from "../../lib/gapi";
 import { allRelates } from "../../lib/taskView/ops";
 import { TaskView } from "../../lib/taskView/TaskView";
@@ -12,13 +13,7 @@ import { TaskView } from "../../lib/taskView/TaskView";
 export const tasksAdaptor = createEntityAdapter<Task>({
   selectId: (t) => t.id,
   sortComparer: (a, b) =>
-    a.listId !== b.listId
-      ? a.listId.localeCompare(b.listId)
-      : a.position
-      ? b.position
-        ? a.position.localeCompare(b.position)
-        : -1
-      : 1,
+    a.position && b.position ? parseInt(a.position) - parseInt(b.position) : 0,
 });
 
 type State = EntityState<Task>;
@@ -39,6 +34,20 @@ const taskSlice = createSlice({
         allRelates(t.payload).map((a) => a.id)
       ),
     addTask: tasksAdaptor.addOne,
+    addTaskToTop: (s, a: PayloadAction<Task>) => {
+      const minPosition = _.sortBy(Object.values(s.entities), (t) =>
+        t && t.position ? parseInt(t.position) : 0
+      )[0]?.position;
+
+      const newPosition = minPosition
+        ? (parseInt(minPosition) - 1).toString()
+        : "0";
+
+      tasksAdaptor.addOne(s, {
+        ...a.payload,
+        position: newPosition,
+      });
+    },
     addTasks: tasksAdaptor.addMany,
   },
 });

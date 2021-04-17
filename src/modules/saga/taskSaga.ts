@@ -46,7 +46,7 @@ function* createTask({
     task
   );
 
-  yield put(tasksActions.addTask({ ...res.result, listId: task.listId }));
+  yield put(tasksActions.addTaskToTop({ ...res.result, listId: task.listId }));
 }
 
 function* completeTask({ payload: { id, listId } }: Action<Task>) {
