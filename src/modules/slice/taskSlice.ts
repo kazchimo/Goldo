@@ -6,7 +6,7 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import _ from "lodash";
-import { Task, UninitTask } from "../../lib/gapi";
+import { hasId, Task, UninitTask } from "../../lib/gapi";
 import { allRelates } from "../../lib/taskView/ops";
 import { TaskView } from "../../lib/taskView/TaskView";
 
@@ -48,7 +48,17 @@ const taskSlice = createSlice({
         position: newPosition,
       });
     },
-    addTasks: tasksAdaptor.addMany,
+    addTasks: (s, a: PayloadAction<Task[]>) => {
+      const listIds = _.uniq(a.payload.map((t) => t.listId));
+
+      tasksAdaptor.removeMany(
+        s,
+        Object.values(s.entities)
+          .filter((t) => t && listIds.includes(t.listId))
+          .map((t) => t!.id)
+      );
+      tasksAdaptor.addMany(s, a);
+    },
   },
 });
 
