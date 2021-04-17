@@ -1,9 +1,12 @@
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
 import EventNoteIcon from "@material-ui/icons/EventNote";
 import { differenceInCalendarDays, parseISO } from "date-fns";
 import React, { useCallback, useState } from "react";
 import { DueTaskView } from "../../lib/gapi";
+import { useBoundActions } from "../../lib/hooks/useBoundActions";
+import { tasksActions } from "../../modules/slice/taskSlice";
 import { TaskDatePickerDialog } from "../organisms/TaskDatePickerDialog";
+import ClearIcon from "@material-ui/icons/Clear";
 
 type Props = {
   task: DueTaskView;
@@ -29,12 +32,16 @@ const dayString = (day: number) => {
 export const TaskDue: React.FC<Props> = ({ task }) => {
   const diff = differenceInCalendarDays(parseISO(task.due), new Date());
   const [open, setOpen] = useState(false);
+  const [hover, setHover] = useState(false);
+  const enter = () => setHover(true);
+  const leave = () => setHover(false);
+  const { updateTask } = useBoundActions(tasksActions);
 
   const openPicker = useCallback(() => setOpen(true), [setOpen]);
   const closePicker = useCallback(() => setOpen(false), [setOpen]);
 
   return (
-    <div>
+    <div onMouseEnter={enter} onMouseLeave={leave}>
       <TaskDatePickerDialog task={task} open={open} close={closePicker} />
       <Button
         onClick={openPicker}
@@ -50,6 +57,14 @@ export const TaskDue: React.FC<Props> = ({ task }) => {
       >
         {dayString(diff)}
       </Button>
+      {hover && (
+        <IconButton
+          size={"small"}
+          onClick={() => updateTask({ ...task, due: undefined })}
+        >
+          <ClearIcon fontSize={"small"} />
+        </IconButton>
+      )}
     </div>
   );
 };
