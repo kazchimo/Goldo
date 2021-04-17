@@ -31,7 +31,6 @@ type Props = {
 
 const useStyles = makeStyles({
   container: {
-    width: 300,
     padding: 16,
   },
   taskForm: {
@@ -72,7 +71,7 @@ export const TaskEditModal: React.FC<Props> = ({
       }}
       validationSchema={schema}
     >
-      {({ errors, submitForm }) => (
+      {({ errors, submitForm, setFieldValue }) => (
         <Dialog
           open={open}
           onBackdropClick={(e) => {
@@ -119,7 +118,17 @@ export const TaskEditModal: React.FC<Props> = ({
                 </Field>
               </Grid>
               <Grid item>
-                <Field component={DatePicker} name={"due"} />
+                <Field name={"due"} label={"Due"}>
+                  {(props: FieldProps) => (
+                    <DatePicker
+                      {...props}
+                      onChange={(v) => setFieldValue("due", v)}
+                      disablePast
+                      disableToolbar
+                      variant={"static"}
+                    />
+                  )}
+                </Field>
               </Grid>
             </Grid>
           </Form>
