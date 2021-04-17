@@ -1,9 +1,11 @@
 import {
   Divider,
+  Grid,
   List,
   ListItem,
   ListSubheader,
   Paper,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
@@ -41,7 +43,11 @@ export const TodayPage: React.FC = () => {
 
   return (
     <Paper variant={"outlined"} className={classes.boardPaper}>
-      <List subheader={<ListSubheader>Today</ListSubheader>}>
+      <List
+        subheader={
+          <ListSubheader>Today - {new Date().toDateString()}</ListSubheader>
+        }
+      >
         {todayListIds.map((listId) => (
           <ListItem key={listId}>
             <List
