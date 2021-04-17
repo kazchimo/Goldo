@@ -68,11 +68,11 @@ export const TodayTaskAddForm: React.FC = () => {
                 </Field>
               </Grid>
               <Grid item xs={12}>
-                <Field
-                  name={"notes"}
-                  component={InputBase}
-                  placeholder={"detail"}
-                />
+                <Field name={"notes"}>
+                  {(props: FieldProps) => (
+                    <InputBase {...props} placeholder={"detail"} fullWidth />
+                  )}
+                </Field>
               </Grid>
               <Grid item container alignItems={"flex-end"}>
                 <Grid item>
@@ -105,6 +105,7 @@ export const TodayTaskAddForm: React.FC = () => {
                     variant={"outlined"}
                     color={"secondary"}
                     type={"submit"}
+                    size={"small"}
                   >
                     add new task
                   </Button>
