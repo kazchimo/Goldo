@@ -11,8 +11,9 @@ import { useSelectors } from "../../lib/hooks/useSelectors";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
 import { tasksSelector } from "../../modules/selector/taskSelector";
 import { TaskListItem } from "../molecules/TaskListItem";
+import { TodayTaskAddForm } from "../organisms/TodayTaskAddForm";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   boardPaper: {
     maxWidth: 800,
     marginLeft: "auto",
@@ -21,7 +22,10 @@ const useStyles = makeStyles({
   innerList: {
     width: "inherit",
   },
-});
+  formItem: {
+    padding: theme.spacing(4),
+  },
+}));
 
 export const TodayPage: React.FC = () => {
   const {
@@ -45,10 +49,15 @@ export const TodayPage: React.FC = () => {
         subheader={
           <ListSubheader>Today - {new Date().toDateString()}</ListSubheader>
         }
+        dense
       >
+        <ListItem className={classes.formItem}>
+          <TodayTaskAddForm />
+        </ListItem>
         {todayListIds.map((listId) => (
           <ListItem key={listId}>
             <List
+              dense
               className={classes.innerList}
               subheader={
                 <ListSubheader>

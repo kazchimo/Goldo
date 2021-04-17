@@ -4,6 +4,13 @@ import { Action } from "typescript-fsa";
 import { GResponse, hasId, Task, Tasks, UninitTask } from "../../lib/gapi";
 import { tasksActions } from "../slice/taskSlice";
 
+const handleApiTimestampDiscarding = <T extends { due?: string }>(task: T) => {
+  // NOTE: handle discarding of portion of timestamp by google api
+  const due = task.due !== "" && task.due !== undefined && parseISO(task.due);
+  due && due.setHours(9);
+  return due;
+};
+
 function* fetchTasks(p: Action<string>) {
   let tasks: Task[] = [];
   let nextToken: string | undefined = undefined;
@@ -36,6 +43,8 @@ function* fetchTasks(p: Action<string>) {
 function* createTask({
   payload: { task, previous },
 }: Action<{ task: UninitTask; previous?: string }>) {
+  const due = handleApiTimestampDiscarding(task);
+
   const res: GResponse<Task> = yield call(
     gapi.client.tasks.tasks.insert,
     {
@@ -43,7 +52,7 @@ function* createTask({
       parent: task.parent,
       previous,
     },
-    task
+    { ...task, due: due ? due.toISOString() : undefined }
   );
 
   yield put(tasksActions.addTaskToTop({ ...res.result, listId: task.listId }));
@@ -61,9 +70,7 @@ function* completeTask({ payload: { id, listId } }: Action<Task>) {
 }
 
 function* updateTask({ payload: task }: Action<Task>) {
-  // NOTE: handle discarding of portion of timestamp by google api
-  const due = task.due !== "" && task.due !== undefined && parseISO(task.due);
-  due && due.setHours(9);
+  const due = handleApiTimestampDiscarding(task);
 
   yield call(
     gapi.client.tasks.tasks.update,

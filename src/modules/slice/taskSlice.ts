@@ -6,7 +6,7 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import _ from "lodash";
-import { hasId, Task, UninitTask } from "../../lib/gapi";
+import { Task, UninitTask } from "../../lib/gapi";
 import { allRelates } from "../../lib/taskView/ops";
 import { TaskView } from "../../lib/taskView/TaskView";
 
