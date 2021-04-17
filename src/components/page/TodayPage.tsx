@@ -65,30 +65,32 @@ export const TodayPage: React.FC = () => {
           </ListItem>
         ))}
       </List>
-      <List subheader={<ListSubheader>Overdue</ListSubheader>}>
-        {overdueListIds.map((listId) => (
-          <ListItem key={listId}>
-            <List
-              className={classes.innerList}
-              subheader={
-                <ListSubheader>
-                  {taskLists.filter((l) => l.id === listId)[0].title}
-                  <Divider />
-                </ListSubheader>
-              }
-            >
-              {overdueTaskViewsByListId[listId].map((task, i) => (
-                <TaskListItem
-                  key={task.id}
-                  task={{ ...task, children: [] }}
-                  taskList={taskLists.filter((l) => l.id === listId)[0]}
-                  index={i}
-                />
-              ))}
-            </List>
-          </ListItem>
-        ))}
-      </List>
+      {overdueListIds.length > 0 && (
+        <List subheader={<ListSubheader>Overdue</ListSubheader>}>
+          {overdueListIds.map((listId) => (
+            <ListItem key={listId}>
+              <List
+                className={classes.innerList}
+                subheader={
+                  <ListSubheader>
+                    {taskLists.filter((l) => l.id === listId)[0].title}
+                    <Divider />
+                  </ListSubheader>
+                }
+              >
+                {overdueTaskViewsByListId[listId].map((task, i) => (
+                  <TaskListItem
+                    key={task.id}
+                    task={{ ...task, children: [] }}
+                    taskList={taskLists.filter((l) => l.id === listId)[0]}
+                    index={i}
+                  />
+                ))}
+              </List>
+            </ListItem>
+          ))}
+        </List>
+      )}
     </Paper>
   );
 };
