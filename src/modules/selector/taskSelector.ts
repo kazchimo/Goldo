@@ -49,9 +49,14 @@ const overdueTaskViewsByListId = createSelector(tasksByListId, (s) => {
   );
 });
 
+const dueTasksByDate = createSelector(selector.selectAll, (tasks) =>
+  _.groupBy(tasks.filter(hasDue), (t) => parseISO(t.due))
+);
+
 export const tasksSelector = {
   tasksByListId,
   tasksViewByListId,
   todayTaskViewByListId,
   overdueTaskViewsByListId,
+  dueTasksByDate,
 };
