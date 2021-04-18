@@ -1,8 +1,6 @@
 import { Dialog, Grid, makeStyles } from "@material-ui/core";
 import { parseISO } from "date-fns";
-import { Field, FieldProps, Form, Formik } from "formik";
-import { TextField } from "formik-material-ui";
-import { DatePicker } from "formik-material-ui-pickers";
+import { Form, Formik } from "formik";
 import React, { ReactEventHandler } from "react";
 import * as Yup from "yup";
 import { TaskList } from "../../lib/gapi";
@@ -10,6 +8,9 @@ import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { DeleteTaskButton } from "../atoms/DeleteTaskButton";
+import { TaskModalDueField } from "../atoms/TaskModalDueField";
+import { TaskModalNotesField } from "../atoms/TaskModalNotesField";
+import { TaskModalTitleField } from "../atoms/TaskModalTitleField";
 import { TaskModalSubTask } from "../molecules/TaskModalSubTask";
 
 type Props = {
@@ -79,44 +80,13 @@ export const TaskEditModal: React.FC<Props> = ({
                 <DeleteTaskButton task={task} />
               </Grid>
               <Grid item>
-                <Field name={"title"}>
-                  {(props: FieldProps) => (
-                    <TextField
-                      {...props}
-                      label={"title"}
-                      multiline
-                      fullWidth
-                      variant={"outlined"}
-                    />
-                  )}
-                </Field>{" "}
+                <TaskModalTitleField />
               </Grid>
               <Grid item>
-                <Field name={"notes"}>
-                  {(props: FieldProps) => (
-                    <TextField
-                      {...props}
-                      label={"detail"}
-                      multiline
-                      fullWidth
-                      variant={"outlined"}
-                      rows={2}
-                    />
-                  )}
-                </Field>
+                <TaskModalNotesField />
               </Grid>
               <Grid item>
-                <Field name={"due"} label={"Due"}>
-                  {(props: FieldProps) => (
-                    <DatePicker
-                      {...props}
-                      onChange={(v) => setFieldValue("due", v)}
-                      disablePast
-                      disableToolbar
-                      variant={"static"}
-                    />
-                  )}
-                </Field>
+                <TaskModalDueField setFieldValue={setFieldValue} />
               </Grid>
             </Grid>
           </Form>
