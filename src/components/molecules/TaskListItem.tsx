@@ -7,6 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   makeStyles,
+  Typography,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import ExpandLess from "@material-ui/icons/ExpandLess";
@@ -26,6 +27,7 @@ type Props = {
   task: TaskView;
   taskList: TaskList;
   index: number;
+  showListName?: boolean;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const TaskListItem: React.FC<Props> = memo(
-  ({ task, index, taskList }) => {
+  ({ task, index, taskList, showListName }) => {
     const [openSubtask, setOpenSubtask] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const classes = useStyles();
@@ -76,7 +78,22 @@ export const TaskListItem: React.FC<Props> = memo(
                 }}
               >
                 <TaskListItemText task={task} />
-                {hasDue(task) && <TaskDue task={task} />}
+                <Grid
+                  container
+                  alignItems={"flex-end"}
+                  justify={"space-between"}
+                >
+                  <Grid item xs={6}>
+                    {hasDue(task) && <TaskDue task={task} />}
+                  </Grid>
+                  {showListName && (
+                    <Grid item style={{ marginLeft: "auto" }}>
+                      <Typography variant={"body2"} color={"textSecondary"}>
+                        {taskList.title}
+                      </Typography>
+                    </Grid>
+                  )}
+                </Grid>
               </ListItemText>
             </Grid>
             <Grid item xs={1}>

@@ -15,6 +15,8 @@ export type Task = HasId<gapi.client.tasks.Task> & {
   listId: string;
 };
 
+export type DueTask = Task & { due: string };
+
 export type DueTaskView = TaskView & { due: string };
 
 export type UninitTask = gapi.client.tasks.Task & { listId: string };
@@ -23,7 +25,7 @@ export const isTaskList = (
   list: gapi.client.tasks.TaskList
 ): list is TaskList => !!list.id && !!list.updated;
 
-export const hasDue = (task: Task): task is DueTaskView => !!task.due;
+export const hasDue = (task: Task): task is DueTask => !!task.due;
 
 export const hasId = <T extends { id?: string }>(task: T): task is HasId<T> =>
   !!task.id;
