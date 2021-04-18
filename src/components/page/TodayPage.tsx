@@ -6,6 +6,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import _ from "lodash";
 import React from "react";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
@@ -40,8 +41,8 @@ export const TodayPage: React.FC = () => {
   );
   const classes = useStyles();
 
-  const todayListIds = Object.keys(todayTaskViewByListId);
-  const overdueListIds = Object.keys(overdueTaskViewsByListId);
+  const todayListIds = _.sortBy(Object.keys(todayTaskViewByListId));
+  const overdueListIds = _.sortBy(Object.keys(overdueTaskViewsByListId));
 
   return (
     <Paper variant={"outlined"} className={classes.boardPaper}>
