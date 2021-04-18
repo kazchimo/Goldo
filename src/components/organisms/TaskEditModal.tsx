@@ -1,17 +1,8 @@
-import {
-  Dialog,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { Dialog, Grid, makeStyles } from "@material-ui/core";
 import { parseISO } from "date-fns";
-import { DatePicker } from "formik-material-ui-pickers";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
-import _ from "lodash";
+import { DatePicker } from "formik-material-ui-pickers";
 import React, { ReactEventHandler } from "react";
 import * as Yup from "yup";
 import { TaskList } from "../../lib/gapi";
@@ -19,8 +10,7 @@ import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { DeleteTaskButton } from "../atoms/DeleteTaskButton";
-import { TaskAddForm } from "../molecules/TaskAddForm";
-import { TaskListItem } from "../molecules/TaskListItem";
+import { TaskModalSubTask } from "../molecules/TaskModalSubTask";
 
 type Props = {
   open: boolean;
@@ -60,26 +50,24 @@ export const TaskEditModal: React.FC<Props> = ({
       }}
       onSubmit={(v, { setSubmitting }) => {
         const updated = { ...task, ...v, due: v.due?.toISOString() };
-        const equal =
-          task.title === updated.title &&
-          task.notes === updated.notes &&
-          task.due === updated.due;
-        if (!equal) {
-          updateTask(updated);
-        }
+        updateTask(updated);
         setSubmitting(false);
       }}
       validationSchema={schema}
     >
-      {({ errors, submitForm, setFieldValue }) => (
+      {({ errors, submitForm, setFieldValue, dirty }) => (
         <Dialog
           open={open}
           onBackdropClick={(e) => {
-            submitForm().then(() => {
-              if (Object.values(errors).every((e) => !e)) {
-                onBackdropClick(e);
-              }
-            });
+            if (dirty) {
+              submitForm().then(() => {
+                if (Object.values(errors).every((e) => !e)) {
+                  onBackdropClick(e);
+                }
+              });
+            } else {
+              onBackdropClick(e);
+            }
           }}
           PaperProps={{
             className: classes.container,
@@ -101,7 +89,7 @@ export const TaskEditModal: React.FC<Props> = ({
                       variant={"outlined"}
                     />
                   )}
-                </Field>
+                </Field>{" "}
               </Grid>
               <Grid item>
                 <Field name={"notes"}>
@@ -132,26 +120,7 @@ export const TaskEditModal: React.FC<Props> = ({
               </Grid>
             </Grid>
           </Form>
-          <Typography>Sub Tasks</Typography>
-          <List dense>
-            {task.children.map((t, idx) => (
-              <TaskListItem
-                key={t.id}
-                task={t}
-                index={idx}
-                taskList={taskList}
-              />
-            ))}
-            <ListItem>
-              <ListItemText inset>
-                <TaskAddForm
-                  taskList={taskList}
-                  parentId={task.id}
-                  previous={_.last(task.children)?.id}
-                />
-              </ListItemText>
-            </ListItem>
-          </List>
+          <TaskModalSubTask task={task} taskList={taskList} />
         </Dialog>
       )}
     </Formik>
