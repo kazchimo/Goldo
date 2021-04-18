@@ -2,6 +2,7 @@ import { parseISO } from "date-fns";
 import { call, put, takeEvery } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
 import { GResponse, hasId, Task, Tasks, UninitTask } from "../../lib/gapi";
+import { loadingActions } from "../slice/loadingSlice";
 import { tasksActions } from "../slice/taskSlice";
 
 const handleApiTimestampDiscarding = <T extends { due?: string }>(task: T) => {
@@ -45,6 +46,7 @@ function* createTask({
 }: Action<{ task: UninitTask; previous?: string }>) {
   const due = handleApiTimestampDiscarding(task);
 
+  yield put(loadingActions.onLoading());
   const res: GResponse<Task> = yield call(
     gapi.client.tasks.tasks.insert,
     {
@@ -54,11 +56,13 @@ function* createTask({
     },
     { ...task, due: due ? due.toISOString() : undefined }
   );
+  yield put(loadingActions.offLoading());
 
   yield put(tasksActions.addTaskToTop({ ...res.result, listId: task.listId }));
 }
 
 function* completeTask({ payload: { id, listId } }: Action<Task>) {
+  yield put(loadingActions.onLoading());
   yield call(
     gapi.client.tasks.tasks.update,
     {
@@ -67,11 +71,13 @@ function* completeTask({ payload: { id, listId } }: Action<Task>) {
     },
     { id: id, status: "completed" }
   );
+  yield put(loadingActions.offLoading());
 }
 
 function* updateTask({ payload: task }: Action<Task>) {
   const due = handleApiTimestampDiscarding(task);
 
+  yield put(loadingActions.onLoading());
   yield call(
     gapi.client.tasks.tasks.update,
     {
@@ -80,6 +86,7 @@ function* updateTask({ payload: task }: Action<Task>) {
     },
     { ...task, due: due ? due.toISOString() : undefined }
   );
+  yield put(loadingActions.offLoading());
 }
 
 function* deleteTask({ payload: task }: Action<Task>) {
