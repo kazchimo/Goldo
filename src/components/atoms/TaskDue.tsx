@@ -41,11 +41,13 @@ export const TaskDue: React.FC<Props> = ({ task }) => {
   const closePicker = useCallback(() => setOpen(false), [setOpen]);
 
   return (
-    <div onMouseEnter={enter} onMouseLeave={leave}>
+    <>
       <TaskDatePickerDialog task={task} open={open} close={closePicker} />
       <Button
+        onMouseEnter={enter}
+        onMouseLeave={leave}
         onClick={openPicker}
-        style={{ maxWidth: "fit-content", padding: 2, textTransform: "none" }}
+        style={{ padding: 2, textTransform: "none" }}
         size={"small"}
         color={diff >= 0 ? "primary" : "secondary"}
         startIcon={
@@ -65,6 +67,6 @@ export const TaskDue: React.FC<Props> = ({ task }) => {
           <ClearIcon fontSize={"small"} />
         </IconButton>
       )}
-    </div>
+    </>
   );
 };

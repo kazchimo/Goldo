@@ -83,9 +83,7 @@ export const TaskListItem: React.FC<Props> = memo(
                   alignItems={"flex-end"}
                   justify={"space-between"}
                 >
-                  <Grid item xs={6}>
-                    {hasDue(task) && <TaskDue task={task} />}
-                  </Grid>
+                  <Grid item>{hasDue(task) && <TaskDue task={task} />}</Grid>
                   {showListName && (
                     <Grid item style={{ marginLeft: "auto" }}>
                       <Typography variant={"body2"} color={"textSecondary"}>
