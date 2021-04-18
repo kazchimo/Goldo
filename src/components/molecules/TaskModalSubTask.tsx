@@ -14,7 +14,7 @@ type Props = {
 
 const useStyles = makeStyles((theme) => ({
   list: {
-    height: 400,
+    height: 450,
     overflow: "auto",
     backgroundColor: theme.palette.background.paper,
   },
