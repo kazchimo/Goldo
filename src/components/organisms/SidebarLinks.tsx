@@ -4,7 +4,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import CalendarViewDayIcon from "@material-ui/icons/CalendarViewDay";
-import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import TodayIcon from "@material-ui/icons/Today";
 import ViewColumnIcon from "@material-ui/icons/ViewColumn";
 import React from "react";
@@ -36,12 +35,6 @@ export const SidebarLinks: React.FC = () => {
             <CalendarViewDayIcon />
           </ListItemIcon>
           <ListItemText primary={"Timeline"} />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <FormatListBulletedIcon />
-          </ListItemIcon>
-          <ListItemText primary={"TaskLists"} />
         </ListItem>
       </List>
       <Divider />
