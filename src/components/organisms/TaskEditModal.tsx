@@ -1,6 +1,6 @@
-import { Dialog, Grid, makeStyles } from "@material-ui/core";
+import { Dialog, Grid, makeStyles, ModalProps } from "@material-ui/core";
 import { parseISO } from "date-fns";
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import React, { ReactEventHandler } from "react";
 import * as Yup from "yup";
 import { TaskList } from "../../lib/gapi";
@@ -42,34 +42,46 @@ export const TaskEditModal: React.FC<Props> = ({
   const classes = useStyles();
   const { updateTask } = useBoundActions(tasksActions);
 
+  const initialValues = {
+    title: task.title,
+    notes: task.notes,
+    due: task.due ? parseISO(task.due) : undefined,
+  };
+
+  type Values = typeof initialValues;
+
+  const onSubmit = (v: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    const updated = { ...task, ...v, due: v.due?.toISOString() };
+    updateTask(updated);
+    setSubmitting(false);
+  };
+
+  const submit = ({
+    submitForm,
+    errors,
+    dirty,
+  }: FormikProps<Values>): ReactEventHandler<{}> => (e) => {
+    if (dirty) {
+      submitForm().then(() => {
+        if (Object.values(errors).every((e) => !e)) {
+          onBackdropClick(e);
+        }
+      });
+    } else {
+      onBackdropClick(e);
+    }
+  };
+
   return (
     <Formik
-      initialValues={{
-        title: task.title,
-        notes: task.notes,
-        due: task.due ? parseISO(task.due) : undefined,
-      }}
-      onSubmit={(v, { setSubmitting }) => {
-        const updated = { ...task, ...v, due: v.due?.toISOString() };
-        updateTask(updated);
-        setSubmitting(false);
-      }}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
       validationSchema={schema}
     >
-      {({ errors, submitForm, setFieldValue, dirty }) => (
+      {(props) => (
         <Dialog
           open={open}
-          onBackdropClick={(e) => {
-            if (dirty) {
-              submitForm().then(() => {
-                if (Object.values(errors).every((e) => !e)) {
-                  onBackdropClick(e);
-                }
-              });
-            } else {
-              onBackdropClick(e);
-            }
-          }}
+          onBackdropClick={submit(props)}
           PaperProps={{
             className: classes.container,
           }}
@@ -86,7 +98,7 @@ export const TaskEditModal: React.FC<Props> = ({
                 <TaskModalNotesField />
               </Grid>
               <Grid item>
-                <TaskModalDueField setFieldValue={setFieldValue} />
+                <TaskModalDueField setFieldValue={props.setFieldValue} />
               </Grid>
             </Grid>
           </Form>
