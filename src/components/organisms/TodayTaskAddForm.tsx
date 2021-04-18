@@ -50,9 +50,10 @@ export const TodayTaskAddForm: React.FC = () => {
           due: new Date(),
           listId: taskLists[0]?.id || "",
         }}
-        onSubmit={(v, { setSubmitting }) => {
+        onSubmit={(v, { setSubmitting, resetForm }) => {
           createTask({ task: { ...v, due: v.due.toISOString() } });
           setSubmitting(false);
+          resetForm();
         }}
         enableReinitialize
         validationSchema={schema}
