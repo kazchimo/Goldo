@@ -23,7 +23,11 @@ export const TaskListItemText: React.FC<Props> = ({ task }) => {
       validationSchema={schema}
       onSubmit={(v, { setSubmitting }) => {
         if (task.title !== v.title) {
-          updateTask({ ...task, title: v.title });
+          updateTask({
+            task: { ...task, title: v.title },
+            taskId: task.id,
+            listId: task.listId,
+          });
         }
         setSubmitting(false);
       }}

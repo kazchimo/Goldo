@@ -60,7 +60,13 @@ export const TaskDue: React.FC<Props> = ({ task }) => {
       {hover && (
         <IconButton
           size={"small"}
-          onClick={() => updateTask({ ...task, due: undefined })}
+          onClick={() =>
+            updateTask({
+              task: { ...task, due: undefined },
+              taskId: task.id,
+              listId: task.listId,
+            })
+          }
         >
           <ClearIcon fontSize={"small"} />
         </IconButton>

@@ -18,6 +18,8 @@ export const tasksAdaptor = createEntityAdapter<Task>({
 
 type State = EntityState<Task>;
 
+export type UpdatePayload = { task: Task; taskId: string; listId: string };
+
 const initialState: State = tasksAdaptor.getInitialState();
 
 const taskSlice = createSlice({
@@ -26,8 +28,11 @@ const taskSlice = createSlice({
   reducers: {
     deleteTask: (s, t: PayloadAction<Task>) =>
       tasksAdaptor.removeOne(s, t.payload.id),
-    updateTask: (s, t: PayloadAction<Task>) =>
-      tasksAdaptor.updateOne(s, { id: t.payload.id, changes: t.payload }),
+    updateTask: (s, t: PayloadAction<UpdatePayload>) =>
+      tasksAdaptor.updateOne(s, {
+        id: t.payload.taskId,
+        changes: t.payload.task,
+      }),
     completeTask: (s, t: PayloadAction<TaskView>) =>
       tasksAdaptor.removeMany(
         s,

@@ -1,9 +1,9 @@
 import { parseISO } from "date-fns";
-import { call, put, takeEvery } from "redux-saga/effects";
+import { fork, call, put, takeEvery } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
 import { GResponse, hasId, Task, Tasks, UninitTask } from "../../lib/gapi";
 import { loadingActions } from "../slice/loadingSlice";
-import { tasksActions } from "../slice/taskSlice";
+import { tasksActions, UpdatePayload } from "../slice/taskSlice";
 
 const handleApiTimestampDiscarding = <T extends { due?: string }>(task: T) => {
   // NOTE: handle discarding of portion of timestamp by google api
@@ -74,18 +74,33 @@ function* completeTask({ payload: { id, listId } }: Action<Task>) {
   yield put(loadingActions.offLoading());
 }
 
-function* updateTask({ payload: task }: Action<Task>) {
+function* updateTask({
+  payload: { task, taskId, listId },
+}: Action<UpdatePayload>) {
   const due = handleApiTimestampDiscarding(task);
 
   yield put(loadingActions.onLoading());
-  yield call(
-    gapi.client.tasks.tasks.update,
-    {
-      tasklist: task.listId,
-      task: task.id,
-    },
-    { ...task, due: due ? due.toISOString() : undefined }
-  );
+
+  if (task.listId !== listId) {
+    yield fork(createTask, {
+      payload: { task },
+      type: tasksActions.createTask.type,
+    });
+    yield fork(deleteTask, {
+      payload: task,
+      type: tasksActions.deleteTask.type,
+    });
+  } else {
+    yield call(
+      gapi.client.tasks.tasks.update,
+      {
+        tasklist: listId,
+        task: taskId,
+      },
+      { ...task, due: due ? due.toISOString() : undefined }
+    );
+  }
+
   yield put(loadingActions.offLoading());
 }
 

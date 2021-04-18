@@ -1,11 +1,21 @@
-import { Dialog, Grid, makeStyles } from "@material-ui/core";
+import { MenuItem } from "@material-ui/core";
+import {
+  Dialog,
+  FormControl,
+  Grid,
+  InputLabel,
+  makeStyles,
+} from "@material-ui/core";
 import { parseISO } from "date-fns";
-import { Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { Select } from "formik-material-ui";
 import React, { ReactEventHandler } from "react";
 import * as Yup from "yup";
 import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
+import { useSelectors } from "../../lib/hooks/useSelectors";
 import { TaskView } from "../../lib/taskView/TaskView";
+import { taskListsSelector } from "../../modules/selector/taskListsSelector";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { DeleteTaskButton } from "../atoms/DeleteTaskButton";
 import { TaskModalDueField } from "../atoms/TaskModalDueField";
@@ -24,9 +34,6 @@ const useStyles = makeStyles({
   container: {
     padding: 16,
   },
-  taskForm: {
-    marginBottom: 32,
-  },
 });
 
 const schema = Yup.object().shape({
@@ -41,18 +48,20 @@ export const TaskEditModal: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const { updateTask } = useBoundActions(tasksActions);
+  const { taskLists } = useSelectors(taskListsSelector, "taskLists");
 
   const initialValues = {
     title: task.title,
     notes: task.notes,
     due: task.due ? parseISO(task.due) : undefined,
+    listId: task.listId,
   };
 
   type Values = typeof initialValues;
 
   const onSubmit = (v: Values, { setSubmitting }: FormikHelpers<Values>) => {
     const updated = { ...task, ...v, due: v.due?.toISOString() };
-    updateTask(updated);
+    updateTask({ task: updated, taskId: task.id, listId: task.listId });
     setSubmitting(false);
   };
 
@@ -86,8 +95,8 @@ export const TaskEditModal: React.FC<Props> = ({
             className: classes.container,
           }}
         >
-          <Form className={classes.taskForm}>
-            <Grid container spacing={2}>
+          <Form>
+            <Grid container spacing={4}>
               <Grid item xs={12}>
                 <DeleteTaskButton task={task} />
               </Grid>
@@ -98,6 +107,18 @@ export const TaskEditModal: React.FC<Props> = ({
                   </Grid>
                   <Grid item>
                     <TaskModalNotesField />
+                  </Grid>
+                  <Grid item>
+                    <FormControl style={{ width: "100%" }}>
+                      <InputLabel>Task List</InputLabel>
+                      <Field component={Select} name={"listId"}>
+                        {taskLists.map((list) => (
+                          <MenuItem key={list.id} value={list.id}>
+                            {list.title}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    </FormControl>
                   </Grid>
                   <Grid item>
                     <TaskModalDueField setFieldValue={props.setFieldValue} />

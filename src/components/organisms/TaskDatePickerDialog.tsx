@@ -29,7 +29,11 @@ export const TaskDatePickerDialog: React.FC<Props> = ({
       onBackdropClick={() => {
         close();
         if (due?.toISOString() !== task.due) {
-          updateTask({ ...task, due: due?.toISOString() });
+          updateTask({
+            task: { ...task, due: due?.toISOString() },
+            taskId: task.id,
+            listId: task.listId,
+          });
         }
       }}
     >
