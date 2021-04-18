@@ -82,14 +82,18 @@ function* updateTask({
   yield put(loadingActions.onLoading());
 
   if (task.listId !== listId) {
-    yield fork(createTask, {
-      payload: { task },
-      type: tasksActions.createTask.type,
-    });
     yield fork(deleteTask, {
       payload: task,
       type: tasksActions.deleteTask.type,
     });
+    yield call(
+      gapi.client.tasks.tasks.insert,
+      {
+        tasklist: task.listId,
+        parent: task.parent,
+      },
+      { ...task, due: due ? due.toISOString() : undefined }
+    );
   } else {
     yield call(
       gapi.client.tasks.tasks.update,
