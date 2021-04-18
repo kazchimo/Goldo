@@ -94,7 +94,7 @@ export const TaskListItem: React.FC<Props> = memo(
                 </Grid>
               </ListItemText>
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={1} style={{ textAlign: "center" }}>
               {mouseEnter && (
                 <IconButton
                   size={"small"}
