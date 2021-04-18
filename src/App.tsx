@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { TaskBoardPage } from "./components/page/TaskBoardPage";
+import { TimelinePage } from "./components/page/TimelinePage";
 import { TodayPage } from "./components/page/TodayPage";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
 import { useSelectors } from "./lib/hooks/useSelectors";
@@ -115,6 +116,9 @@ function App() {
           </Route>
           <Route path={["/today"]}>
             <TodayPage />
+          </Route>
+          <Route path={["/timeline"]}>
+            <TimelinePage />
           </Route>
         </Switch>
       )}

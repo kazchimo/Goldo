@@ -6,6 +6,7 @@ import ViewColumnIcon from "@material-ui/icons/ViewColumn";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import TodayIcon from "@material-ui/icons/Today";
+import CalendarViewDayIcon from "@material-ui/icons/CalendarViewDay";
 
 export const SidebarLinks: React.FC = () => {
   const history = useHistory();
@@ -23,6 +24,12 @@ export const SidebarLinks: React.FC = () => {
           <ViewColumnIcon />
         </ListItemIcon>
         <ListItemText primary={"Kanban Board"} />
+      </ListItem>
+      <ListItem button onClick={() => history.push("/timeline")}>
+        <ListItemIcon>
+          <CalendarViewDayIcon />
+        </ListItemIcon>
+        <ListItemText primary={"Timeline"} />
       </ListItem>
     </List>
   );
