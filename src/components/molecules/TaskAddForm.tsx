@@ -39,19 +39,15 @@ export const TaskAddForm: React.FC<Props> = ({
 
   const submit = useCallback(
     (v: Values, { setSubmitting, resetForm }: FormikHelpers<Values>) => {
-      if (taskList.id) {
-        resetForm();
-        createTask({
-          task: {
-            title: v.title,
-            listId: taskList.id,
-            parent: parentId,
-          },
-          previous,
-        });
-      } else {
-        console.error("doesn't have a taskList id");
-      }
+      resetForm();
+      createTask({
+        task: {
+          title: v.title,
+          listId: taskList.id,
+          parent: parentId,
+        },
+        previous,
+      });
 
       setSubmitting(false);
       ref.current?.focus();
