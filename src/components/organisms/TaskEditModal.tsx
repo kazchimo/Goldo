@@ -1,4 +1,4 @@
-import { Dialog, Grid, makeStyles, ModalProps } from "@material-ui/core";
+import { Dialog, Grid, makeStyles } from "@material-ui/core";
 import { parseISO } from "date-fns";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import React, { ReactEventHandler } from "react";
@@ -87,22 +87,28 @@ export const TaskEditModal: React.FC<Props> = ({
           }}
         >
           <Form className={classes.taskForm}>
-            <Grid container direction="column" spacing={2}>
-              <Grid item>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
                 <DeleteTaskButton task={task} />
               </Grid>
-              <Grid item>
-                <TaskModalTitleField />
+              <Grid item xs>
+                <Grid container direction="column" spacing={2}>
+                  <Grid item>
+                    <TaskModalTitleField />
+                  </Grid>
+                  <Grid item>
+                    <TaskModalNotesField />
+                  </Grid>
+                  <Grid item>
+                    <TaskModalDueField setFieldValue={props.setFieldValue} />
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item>
-                <TaskModalNotesField />
-              </Grid>
-              <Grid item>
-                <TaskModalDueField setFieldValue={props.setFieldValue} />
+              <Grid item xs>
+                <TaskModalSubTask task={task} taskList={taskList} />
               </Grid>
             </Grid>
           </Form>
-          <TaskModalSubTask task={task} taskList={taskList} />
         </Dialog>
       )}
     </Formik>

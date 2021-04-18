@@ -1,4 +1,5 @@
-import { List, ListItem, ListItemText, Typography } from "@material-ui/core";
+import { List, ListSubheader, Paper } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import React from "react";
 import { TaskList } from "../../lib/gapi";
@@ -11,24 +12,40 @@ type Props = {
   taskList: TaskList;
 };
 
+const useStyles = makeStyles((theme) => ({
+  list: {
+    height: 400,
+    overflow: "auto",
+    backgroundColor: theme.palette.background.paper,
+  },
+  form: {
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+}));
+
 export const TaskModalSubTask: React.FC<Props> = ({ task, taskList }) => {
+  const classes = useStyles();
+
   return (
-    <>
-      <Typography>Sub Tasks</Typography>
-      <List dense>
+    <Paper elevation={0} variant={"outlined"}>
+      <List
+        dense
+        subheader={<ListSubheader>Sub Tasks</ListSubheader>}
+        className={classes.list}
+      >
         {task.children.map((t, idx) => (
           <TaskListItem key={t.id} task={t} index={idx} taskList={taskList} />
         ))}
-        <ListItem>
-          <ListItemText inset>
-            <TaskAddForm
-              taskList={taskList}
-              parentId={task.id}
-              previous={_.last(task.children)?.id}
-            />
-          </ListItemText>
-        </ListItem>
       </List>
-    </>
+      <div className={classes.form}>
+        <TaskAddForm
+          taskList={taskList}
+          parentId={task.id}
+          previous={_.last(task.children)?.id}
+        />
+      </div>
+    </Paper>
   );
 };
