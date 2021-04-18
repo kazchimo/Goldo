@@ -106,6 +106,7 @@ export const TodayTaskAddForm: React.FC = () => {
                     color={"secondary"}
                     type={"submit"}
                     size={"small"}
+                    style={{ textTransform: "none" }}
                   >
                     add new task
                   </Button>

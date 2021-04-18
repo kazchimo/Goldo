@@ -45,7 +45,7 @@ export const TaskDue: React.FC<Props> = ({ task }) => {
       <TaskDatePickerDialog task={task} open={open} close={closePicker} />
       <Button
         onClick={openPicker}
-        style={{ maxWidth: "fit-content", padding: 2 }}
+        style={{ maxWidth: "fit-content", padding: 2, textTransform: "none" }}
         size={"small"}
         color={diff >= 0 ? "primary" : "secondary"}
         startIcon={
