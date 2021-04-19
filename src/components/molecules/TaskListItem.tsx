@@ -63,7 +63,6 @@ export const TaskListItem: React.FC<Props> = memo(
         <ListItem
           onMouseEnter={() => setMouseEnter(true)}
           onMouseLeave={() => setMouseEnter(false)}
-          onClick={hasChildren ? () => setOpenSubtask((a) => !a) : () => {}}
         >
           <ListItemIcon>
             <TaskCompleteButton onClick={finishTask} />
@@ -77,7 +76,11 @@ export const TaskListItem: React.FC<Props> = memo(
                 }}
               >
                 <TaskListItemText task={task} />
-                <TaskListItemMetas task={task} taskList={taskList} />
+                <TaskListItemMetas
+                  task={task}
+                  taskList={taskList}
+                  showListName={showListName}
+                />
               </ListItemText>
             </Grid>
             <Grid item xs={1} style={{ textAlign: "center" }}>
@@ -92,7 +95,10 @@ export const TaskListItem: React.FC<Props> = memo(
             </Grid>
           </Grid>
           {hasChildren && (
-            <IconButton size={"small"}>
+            <IconButton
+              size={"small"}
+              onClick={() => setOpenSubtask((a) => !a)}
+            >
               {openSubtask ? <ExpandLess /> : <ExpandMore />}
             </IconButton>
           )}
