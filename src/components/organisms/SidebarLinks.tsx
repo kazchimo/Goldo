@@ -3,6 +3,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import { makeStyles } from "@material-ui/core/styles";
 import CalendarViewDayIcon from "@material-ui/icons/CalendarViewDay";
 import TodayIcon from "@material-ui/icons/Today";
 import ViewColumnIcon from "@material-ui/icons/ViewColumn";
@@ -11,9 +12,16 @@ import { useHistory } from "react-router-dom";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
 
+const useStyles = makeStyles((theme) => ({
+  taskListItemText: {
+    marginLeft: theme.spacing(2),
+  },
+}));
+
 export const SidebarLinks: React.FC = () => {
   const history = useHistory();
   const { taskLists } = useSelectors(taskListsSelector, "taskLists");
+  const classes = useStyles();
 
   return (
     <>
@@ -49,7 +57,10 @@ export const SidebarLinks: React.FC = () => {
             key={list.id}
             onClick={() => history.push("/taskList/" + list.id)}
           >
-            <ListItemText primary={list.title} />
+            <ListItemText
+              className={classes.taskListItemText}
+              primary={list.title}
+            />
           </ListItem>
         ))}
       </List>
