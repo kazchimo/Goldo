@@ -4,6 +4,7 @@ import _ from "lodash";
 import { hasDue } from "../../lib/gapi";
 import { insertTask } from "../../lib/taskView/ops";
 import { RootState } from "../reducers";
+import { selectSelf } from "../selectors";
 import { tasksAdaptor } from "../slice/taskSlice";
 
 const selector = tasksAdaptor.getSelectors<RootState>((s) => s.tasks);
@@ -54,6 +55,7 @@ const dueTasksByDate = createSelector(selector.selectAll, (tasks) =>
 );
 
 export const tasksSelector = {
+  taskEntities: createSelector(selectSelf, selector.selectEntities),
   tasksByListId,
   tasksViewByListId,
   todayTaskViewByListId,
