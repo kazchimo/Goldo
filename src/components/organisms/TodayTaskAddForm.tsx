@@ -7,6 +7,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { isToday } from "date-fns";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { InputBase, Select } from "formik-material-ui";
 import { DatePicker } from "formik-material-ui-pickers";
@@ -81,6 +82,9 @@ export const TodayTaskAddForm: React.FC = () => {
                     {(props: FieldProps<Date>) => (
                       <DatePicker
                         {...props}
+                        labelFunc={(d) =>
+                          d ? (isToday(d) ? "Today" : d?.toDateString()) : ""
+                        }
                         disablePast
                         disableToolbar
                         variant={"inline"}
