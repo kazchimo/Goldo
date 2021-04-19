@@ -28,6 +28,7 @@ export const TimelinePage: React.FC = () => {
           >
             {dueTasksByDate[due].map((task, i) => (
               <TaskListItem
+                invertColor
                 showListName
                 key={task.id}
                 task={{ ...task, children: [] }}

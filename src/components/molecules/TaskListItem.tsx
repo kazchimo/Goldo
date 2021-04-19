@@ -7,6 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   makeStyles,
+  Paper,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import ExpandLess from "@material-ui/icons/ExpandLess";
@@ -27,6 +28,7 @@ type Props = {
   taskList: TaskList;
   index: number;
   showListName?: boolean;
+  invertColor?: boolean;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -36,15 +38,25 @@ const useStyles = makeStyles((theme) => ({
   secondaryText: {
     overflowWrap: "anywhere",
   },
+  paper: {
+    backgroundColor: (props: { onMouseOver: boolean; invertColor?: boolean }) =>
+      !props.invertColor
+        ? props.onMouseOver
+          ? theme.palette.background.default
+          : theme.palette.background.paper
+        : props.onMouseOver
+        ? theme.palette.background.paper
+        : theme.palette.background.default,
+  },
 }));
 
 export const TaskListItem: React.FC<Props> = memo(
-  ({ task, index, taskList, showListName }) => {
+  ({ task, index, taskList, showListName, invertColor }) => {
     const [openSubtask, setOpenSubtask] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
-    const classes = useStyles();
     const { completeTask } = useBoundActions(tasksActions);
     const [mouseEnter, setMouseEnter] = useState(false);
+    const classes = useStyles({ onMouseOver: mouseEnter, invertColor });
 
     const hasChildren = task.children.length > 0;
 
@@ -53,7 +65,7 @@ export const TaskListItem: React.FC<Props> = memo(
     }, [task]);
 
     return (
-      <>
+      <Paper className={classes.paper} elevation={0} square>
         <TaskEditModal
           taskList={taskList}
           open={openEditModal}
@@ -119,7 +131,7 @@ export const TaskListItem: React.FC<Props> = memo(
             )}
           </Collapse>
         )}
-      </>
+      </Paper>
     );
   },
   (a, b) =>
