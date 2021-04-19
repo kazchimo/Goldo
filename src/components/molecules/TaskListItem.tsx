@@ -7,21 +7,20 @@ import {
   ListItemIcon,
   ListItemText,
   makeStyles,
-  Typography,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import React, { memo, useCallback, useState } from "react";
-import { hasDue, TaskList } from "../../lib/gapi";
+import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { TaskCompleteButton } from "../atoms/TaskCompleteButton";
-import { TaskDue } from "../atoms/TaskDue";
 import { TaskListItemText } from "../atoms/TaskListItemText";
 import { TaskEditModal } from "../organisms/TaskEditModal";
+import { TaskListItemMetas } from "./TaskListItemMetas";
 
 type Props = {
   task: TaskView;
@@ -78,20 +77,7 @@ export const TaskListItem: React.FC<Props> = memo(
                 }}
               >
                 <TaskListItemText task={task} />
-                <Grid
-                  container
-                  alignItems={"flex-end"}
-                  justify={"space-between"}
-                >
-                  <Grid item>{hasDue(task) && <TaskDue task={task} />}</Grid>
-                  {showListName && (
-                    <Grid item style={{ marginLeft: "auto" }}>
-                      <Typography variant={"body2"} color={"textSecondary"}>
-                        {taskList.title}
-                      </Typography>
-                    </Grid>
-                  )}
-                </Grid>
+                <TaskListItemMetas task={task} taskList={taskList} />
               </ListItemText>
             </Grid>
             <Grid item xs={1} style={{ textAlign: "center" }}>
