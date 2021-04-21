@@ -1,6 +1,5 @@
 import { List, makeStyles, Paper } from "@material-ui/core";
 import React from "react";
-import { Droppable } from "react-beautiful-dnd";
 import { TaskList, taskListHasId } from "../../lib/gapi";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { tasksSelector } from "../../modules/selector/taskSelector";
