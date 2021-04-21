@@ -31,28 +31,18 @@ export const TaskBoard: React.FC<Props> = ({ taskList }) => {
   return (
     <>
       {taskListHasId(taskList) && (
-        <Droppable droppableId={"taskBoard-" + taskList.id}>
-          {(provided) => (
-            <Paper className={classes.board} elevation={0} variant={"outlined"}>
-              <List
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                subheader={<TaskListHeader taskList={taskList} />}
-                dense
-              >
-                {provided.placeholder}
-                {tasks.map((t, idx) => (
-                  <TaskListItem
-                    key={t.id}
-                    task={t}
-                    index={idx}
-                    taskList={taskList}
-                  />
-                ))}
-              </List>
-            </Paper>
-          )}
-        </Droppable>
+        <Paper className={classes.board} elevation={0} variant={"outlined"}>
+          <List subheader={<TaskListHeader taskList={taskList} />} dense>
+            {tasks.map((t, idx) => (
+              <TaskListItem
+                key={t.id}
+                task={t}
+                index={idx}
+                taskList={taskList}
+              />
+            ))}
+          </List>
+        </Paper>
       )}
     </>
   );
