@@ -1,4 +1,4 @@
-import { MenuItem } from "@material-ui/core";
+import { Divider, MenuItem } from "@material-ui/core";
 import {
   Dialog,
   FormControl,
@@ -118,6 +118,9 @@ export const TaskEditModal: React.FC<Props> = ({
                       ))}
                     </Field>
                   </FormControl>
+                </Grid>
+                <Grid item>
+                  <Divider />
                 </Grid>
                 <Grid item>
                   <TaskModalDueField setFieldValue={props.setFieldValue} />
