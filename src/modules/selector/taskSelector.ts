@@ -17,9 +17,12 @@ const tasksViewByListId = createSelector(selector.selectAll, (s) =>
   _.mapValues(
     _.groupBy(s, (t) => t.listId),
     (ts) =>
-      insertTask(
-        ts.map((t) => ({ ...t, children: [] })),
-        []
+      _.sortBy(
+        insertTask(
+          ts.map((t) => ({ ...t, children: [] })),
+          []
+        ),
+        (t) => Number(t.position)
       )
   )
 );

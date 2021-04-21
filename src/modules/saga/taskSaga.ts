@@ -1,5 +1,5 @@
 import { parseISO } from "date-fns";
-import { fork, call, put, takeEvery } from "redux-saga/effects";
+import { call, fork, put, takeEvery } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
 import { GResponse, hasId, Task, Tasks, UninitTask } from "../../lib/gapi";
 import { loadingActions } from "../slice/loadingSlice";
@@ -115,10 +115,21 @@ function* deleteTask({ payload: task }: Action<Task>) {
   });
 }
 
+function* move({
+  payload: { task, previous },
+}: Action<{ task: Task; previous?: string }>) {
+  yield call(gapi.client.tasks.tasks.move, {
+    task: task.id,
+    tasklist: task.listId,
+    previous,
+  });
+}
+
 export const taskSaga = [
   takeEvery(tasksActions.fetchTasks, fetchTasks),
   takeEvery(tasksActions.createTask, createTask),
   takeEvery(tasksActions.completeTask, completeTask),
   takeEvery(tasksActions.updateTask, updateTask),
   takeEvery(tasksActions.deleteTask, deleteTask),
+  takeEvery(tasksActions.moveTask, move),
 ];

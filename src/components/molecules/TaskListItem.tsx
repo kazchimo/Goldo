@@ -14,6 +14,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import React, { memo, useCallback, useState } from "react";
+import { DraggableProvided } from "react-beautiful-dnd";
 import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
@@ -29,6 +30,7 @@ type Props = {
   index: number;
   showListName?: boolean;
   invertColor?: boolean;
+  innerRef?: DraggableProvided["innerRef"];
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const TaskListItem: React.FC<Props> = memo(
-  ({ task, index, taskList, showListName, invertColor }) => {
+  ({ task, index, taskList, showListName, invertColor, innerRef }) => {
     const [openSubtask, setOpenSubtask] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const { completeTask } = useBoundActions(tasksActions);
@@ -65,7 +67,7 @@ export const TaskListItem: React.FC<Props> = memo(
     }, [task]);
 
     return (
-      <Paper className={classes.paper} elevation={0} square>
+      <Paper className={classes.paper} elevation={0} square ref={innerRef}>
         <TaskEditModal
           taskList={taskList}
           open={openEditModal}

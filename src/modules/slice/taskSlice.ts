@@ -2,6 +2,7 @@ import {
   createAction,
   createEntityAdapter,
   createSlice,
+  Dictionary,
   EntityState,
   PayloadAction,
 } from "@reduxjs/toolkit";
@@ -9,6 +10,7 @@ import _ from "lodash";
 import { Task, UninitTask } from "../../lib/gapi";
 import { allRelates } from "../../lib/taskView/ops";
 import { TaskView } from "../../lib/taskView/TaskView";
+import { notUndef } from "../../lib/typeGuards";
 
 export const tasksAdaptor = createEntityAdapter<Task>({
   selectId: (t) => t.id,
@@ -21,6 +23,13 @@ type State = EntityState<Task>;
 export type UpdatePayload = { task: Task; taskId: string; listId: string };
 
 const initialState: State = tasksAdaptor.getInitialState();
+
+let moveCount = 0;
+
+const findMinPosition = (tasks: Dictionary<Task>) =>
+  _.sortBy(Object.values(tasks), (t) =>
+    t && t.position ? parseInt(t.position) : 0
+  )[0]?.position;
 
 const taskSlice = createSlice({
   name: "tasks",
@@ -40,9 +49,7 @@ const taskSlice = createSlice({
       ),
     addTask: tasksAdaptor.addOne,
     addTaskToTop: (s, a: PayloadAction<Task>) => {
-      const minPosition = _.sortBy(Object.values(s.entities), (t) =>
-        t && t.position ? parseInt(t.position) : 0
-      )[0]?.position;
+      const minPosition = findMinPosition(s.entities);
 
       const newPosition = minPosition
         ? (parseInt(minPosition) - 1).toString()
@@ -63,6 +70,26 @@ const taskSlice = createSlice({
           .map((t) => t!.id)
       );
       tasksAdaptor.addMany(s, a);
+    },
+    moveTask: (
+      s,
+      {
+        payload: { task, previous },
+      }: PayloadAction<{ task: Task; previous?: string }>
+    ) => {
+      const position = previous && s.entities[previous]?.position;
+      const minPos = findMinPosition(s.entities);
+
+      tasksAdaptor.updateOne(s, {
+        id: task.id,
+        changes: {
+          position: position
+            ? (Number(position) + 0.1 - moveCount * 0.001).toString()
+            : ((notUndef(minPos) ? Number(minPos) : 0) - 1).toString(),
+        },
+      });
+
+      moveCount = moveCount + 1;
     },
   },
 });

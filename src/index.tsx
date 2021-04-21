@@ -4,7 +4,6 @@ import "date-fns";
 import { ConfirmProvider } from "material-ui-confirm";
 import { SnackbarProvider } from "notistack";
 import React from "react";
-import { DragDropContext } from "react-beautiful-dnd";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
@@ -36,18 +35,16 @@ ReactDOM.render(
     <Provider store={store}>
       <ThemeProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <DragDropContext onDragEnd={console.log}>
-            <SnackbarProvider maxSnack={3}>
-              <BrowserRouter>
-                <ConfirmProvider>
-                  <AppTemplate>
-                    <Notifier />
-                    <App />
-                  </AppTemplate>
-                </ConfirmProvider>
-              </BrowserRouter>
-            </SnackbarProvider>
-          </DragDropContext>
+          <SnackbarProvider maxSnack={3}>
+            <BrowserRouter>
+              <ConfirmProvider>
+                <AppTemplate>
+                  <Notifier />
+                  <App />
+                </AppTemplate>
+              </ConfirmProvider>
+            </BrowserRouter>
+          </SnackbarProvider>
         </MuiPickersUtilsProvider>
       </ThemeProvider>
     </Provider>

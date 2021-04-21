@@ -15,6 +15,8 @@ export type Task = HasId<gapi.client.tasks.Task> & {
   listId: string;
 };
 
+export type ChildTask = Task & { parent: string };
+
 export type DueTask = Task & { due: string };
 
 export type DueTaskView = TaskView & { due: string };
