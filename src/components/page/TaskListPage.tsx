@@ -31,13 +31,10 @@ export const TaskListPage: React.FC = () => {
 
   const taskList = taskListEntities[listId];
   const tasks = tasksViewByListId[listId] || [];
-  console.log(tasks.map((t) => t.position));
 
   return (
     <DragDropContext
       onDragEnd={(v) => {
-        console.log(v.source);
-        console.log(v.destination);
         const task = tasks[v.source.index];
         const destinationId =
           v.destination && v.destination.index > 0

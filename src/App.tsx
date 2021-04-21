@@ -96,7 +96,6 @@ function App() {
 
   useEffect(() => {
     window.addEventListener("focus", () => {
-      console.log("focus");
       setShouldReload(true);
     });
 
