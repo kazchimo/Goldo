@@ -14,7 +14,6 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import React, { memo, useCallback, useState } from "react";
-import { DraggableProvided } from "react-beautiful-dnd";
 import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
@@ -29,7 +28,7 @@ type Props = {
   taskList: TaskList;
   showListName?: boolean;
   invertColor?: boolean;
-  innerRef?: DraggableProvided["innerRef"];
+  hoverComplete?: boolean;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -52,11 +51,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const TaskListItem: React.FC<Props> = memo(
-  ({ task, taskList, showListName, invertColor, innerRef }) => {
+  ({ task, taskList, showListName, invertColor, hoverComplete }) => {
     const [openSubtask, setOpenSubtask] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const { completeTask } = useBoundActions(tasksActions);
     const [mouseEnter, setMouseEnter] = useState(false);
+    const [isCompleteHover, setIsCompleteHover] = useState(false);
     const classes = useStyles({ onMouseOver: mouseEnter, invertColor });
 
     const hasChildren = task.children.length > 0;
@@ -65,20 +65,28 @@ export const TaskListItem: React.FC<Props> = memo(
       completeTask(task);
     }, [task]);
 
+    const closeModal = useCallback(() => setOpenEditModal(false), []);
+    const openModal = useCallback(() => setOpenEditModal(true), []);
+
     return (
-      <Paper className={classes.paper} elevation={0} square ref={innerRef}>
+      <Paper className={classes.paper} elevation={0} square>
         <TaskEditModal
           taskList={taskList}
           open={openEditModal}
           task={task}
-          onBackdropClick={() => setOpenEditModal(false)}
+          onBackdropClick={closeModal}
         />
         <ListItem
           onMouseEnter={() => setMouseEnter(true)}
           onMouseLeave={() => setMouseEnter(false)}
         >
           <ListItemIcon>
-            <TaskCompleteButton onClick={finishTask} />
+            <TaskCompleteButton
+              onClick={finishTask}
+              isHover={hoverComplete}
+              onHoverOut={() => setIsCompleteHover(false)}
+              onHover={() => setIsCompleteHover(true)}
+            />
           </ListItemIcon>
           <Grid container alignItems={"center"}>
             <Grid item xs={11}>
@@ -98,10 +106,7 @@ export const TaskListItem: React.FC<Props> = memo(
             </Grid>
             <Grid item xs={1} style={{ textAlign: "center" }}>
               {mouseEnter && (
-                <IconButton
-                  size={"small"}
-                  onClick={() => setOpenEditModal(true)}
-                >
+                <IconButton size={"small"} onClick={openModal}>
                   <EditIcon fontSize={"small"} />
                 </IconButton>
               )}
@@ -120,8 +125,9 @@ export const TaskListItem: React.FC<Props> = memo(
           <Collapse in={openSubtask}>
             {openSubtask && (
               <List dense className={classes.nested}>
-                {task.children.map((child, idx) => (
+                {task.children.map((child) => (
                   <TaskListItem
+                    hoverComplete={isCompleteHover}
                     task={child}
                     key={child.id}
                     taskList={taskList}
@@ -140,5 +146,6 @@ export const TaskListItem: React.FC<Props> = memo(
     a.task.title === b.task.title &&
     a.task.parent === b.task.parent &&
     a.task.notes === b.task.notes &&
-    a.task.due === b.task.due
+    a.task.due === b.task.due &&
+    a.hoverComplete === b.hoverComplete
 );
