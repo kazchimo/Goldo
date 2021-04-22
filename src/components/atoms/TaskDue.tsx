@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@material-ui/core";
+import { Button, IconButton, PropTypes } from "@material-ui/core";
 import EventNoteIcon from "@material-ui/icons/EventNote";
 import { differenceInCalendarDays, parseISO } from "date-fns";
 import React, { useCallback, useState } from "react";
@@ -39,6 +39,7 @@ export const TaskDue: React.FC<Props> = ({ task }) => {
 
   const openPicker = useCallback(() => setOpen(true), [setOpen]);
   const closePicker = useCallback(() => setOpen(false), [setOpen]);
+  const color = diff === 0 ? "primary" : diff === 1 ? "inherit" : "secondary";
 
   return (
     <div onMouseEnter={enter} onMouseLeave={leave}>
@@ -47,13 +48,8 @@ export const TaskDue: React.FC<Props> = ({ task }) => {
         onClick={openPicker}
         style={{ padding: 2, textTransform: "none" }}
         size={"small"}
-        color={diff >= 0 ? "primary" : "secondary"}
-        startIcon={
-          <EventNoteIcon
-            fontSize={"small"}
-            color={diff >= 0 ? "primary" : "secondary"}
-          />
-        }
+        color={color}
+        startIcon={<EventNoteIcon fontSize={"small"} color={color} />}
       >
         {dayString(diff)}
       </Button>
