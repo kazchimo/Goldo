@@ -66,11 +66,7 @@ export const TaskListPage: React.FC = () => {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <TaskListItem
-                            task={task}
-                            taskList={taskList}
-                            index={i}
-                          />
+                          <TaskListItem task={task} taskList={taskList} />
                         </div>
                       )}
                     </Draggable>

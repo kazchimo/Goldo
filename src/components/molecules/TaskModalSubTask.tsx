@@ -35,8 +35,8 @@ export const TaskModalSubTask: React.FC<Props> = ({ task, taskList }) => {
         subheader={<ListSubheader>Sub Tasks</ListSubheader>}
         className={classes.list}
       >
-        {task.children.map((t, idx) => (
-          <TaskListItem key={t.id} task={t} index={idx} taskList={taskList} />
+        {task.children.map((t) => (
+          <TaskListItem key={t.id} task={t} taskList={taskList} />
         ))}
       </List>
       <div className={classes.form}>

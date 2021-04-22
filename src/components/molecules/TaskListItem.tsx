@@ -27,7 +27,6 @@ import { TaskListItemMetas } from "./TaskListItemMetas";
 type Props = {
   task: TaskView;
   taskList: TaskList;
-  index: number;
   showListName?: boolean;
   invertColor?: boolean;
   innerRef?: DraggableProvided["innerRef"];
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const TaskListItem: React.FC<Props> = memo(
-  ({ task, index, taskList, showListName, invertColor, innerRef }) => {
+  ({ task, taskList, showListName, invertColor, innerRef }) => {
     const [openSubtask, setOpenSubtask] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const { completeTask } = useBoundActions(tasksActions);
@@ -124,7 +123,6 @@ export const TaskListItem: React.FC<Props> = memo(
                 {task.children.map((child, idx) => (
                   <TaskListItem
                     task={child}
-                    index={idx}
                     key={child.id}
                     taskList={taskList}
                   />

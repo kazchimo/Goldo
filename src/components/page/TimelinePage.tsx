@@ -26,7 +26,7 @@ export const TimelinePage: React.FC = () => {
               </ListSubheader>
             }
           >
-            {dueTasksByDate[due].map((task, i) => (
+            {dueTasksByDate[due].map((task) => (
               <TaskListItem
                 invertColor
                 showListName
@@ -35,7 +35,6 @@ export const TimelinePage: React.FC = () => {
                 taskList={
                   taskLists.filter((list) => list.id === task.listId)[0]
                 }
-                index={i}
               />
             ))}
           </List>

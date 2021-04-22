@@ -32,13 +32,8 @@ export const TaskBoard: React.FC<Props> = ({ taskList }) => {
       {taskListHasId(taskList) && (
         <Paper className={classes.board} elevation={0} variant={"outlined"}>
           <List subheader={<TaskListHeader taskList={taskList} />} dense>
-            {tasks.map((t, idx) => (
-              <TaskListItem
-                key={t.id}
-                task={t}
-                index={idx}
-                taskList={taskList}
-              />
+            {tasks.map((t) => (
+              <TaskListItem key={t.id} task={t} taskList={taskList} />
             ))}
           </List>
         </Paper>

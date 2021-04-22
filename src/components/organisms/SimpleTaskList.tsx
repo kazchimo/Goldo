@@ -29,12 +29,11 @@ export const SimpleTaskList: React.FC<Props> = ({ taskList, tasks }) => {
         </ListSubheader>
       }
     >
-      {tasks.map((task, i) => (
+      {tasks.map((task) => (
         <TaskListItem
           key={task.id}
           task={{ ...task, children: [] }}
           taskList={taskList}
-          index={i}
         />
       ))}
     </List>
