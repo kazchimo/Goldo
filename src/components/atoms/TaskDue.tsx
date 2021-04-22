@@ -1,4 +1,5 @@
-import { Button, IconButton, PropTypes } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
+import ClearIcon from "@material-ui/icons/Clear";
 import EventNoteIcon from "@material-ui/icons/EventNote";
 import { differenceInCalendarDays, parseISO } from "date-fns";
 import React, { useCallback, useState } from "react";
@@ -6,7 +7,6 @@ import { DueTaskView } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { TaskDatePickerDialog } from "../organisms/TaskDatePickerDialog";
-import ClearIcon from "@material-ui/icons/Clear";
 
 type Props = {
   task: DueTaskView;
@@ -39,7 +39,7 @@ export const TaskDue: React.FC<Props> = ({ task }) => {
 
   const openPicker = useCallback(() => setOpen(true), [setOpen]);
   const closePicker = useCallback(() => setOpen(false), [setOpen]);
-  const color = diff === 0 ? "primary" : diff === 1 ? "inherit" : "secondary";
+  const color = diff === 0 ? "primary" : diff >= 1 ? "inherit" : "secondary";
 
   return (
     <div onMouseEnter={enter} onMouseLeave={leave}>
