@@ -33,6 +33,10 @@ type Props = {
 const useStyles = makeStyles({
   container: {
     padding: 16,
+    minWidth: "fit-content",
+  },
+  form: {
+    width: 340,
   },
 });
 
@@ -95,40 +99,42 @@ export const TaskEditModal: React.FC<Props> = ({
             className: classes.container,
           }}
         >
-          <Grid container spacing={4}>
+          <Grid container spacing={4} justify={"space-between"}>
             <Grid item xs={12}>
               <DeleteTaskButton task={task} />
             </Grid>
-            <Grid item xs>
-              <Grid container direction="column" spacing={2} component={Form}>
-                <Grid item>
-                  <TaskModalTitleField />
-                </Grid>
-                <Grid item>
-                  <TaskModalNotesField />
-                </Grid>
-                <Grid item>
-                  <FormControl style={{ width: "100%" }}>
-                    <InputLabel>Task List</InputLabel>
-                    <Field component={Select} name={"listId"}>
-                      {taskLists.map((list) => (
-                        <MenuItem key={list.id} value={list.id}>
-                          {list.title}
-                        </MenuItem>
-                      ))}
-                    </Field>
-                  </FormControl>
-                </Grid>
-                <Grid item>
-                  <Divider />
-                </Grid>
-                <Grid item>
-                  <TaskModalDueField setFieldValue={props.setFieldValue} />
+            <Grid container item xs={12} justify={"space-between"}>
+              <Grid item className={classes.form} xs={5}>
+                <Grid container direction="column" spacing={2} component={Form}>
+                  <Grid item>
+                    <TaskModalTitleField />
+                  </Grid>
+                  <Grid item>
+                    <TaskModalNotesField />
+                  </Grid>
+                  <Grid item>
+                    <FormControl style={{ width: "100%" }}>
+                      <InputLabel>Task List</InputLabel>
+                      <Field component={Select} name={"listId"}>
+                        {taskLists.map((list) => (
+                          <MenuItem key={list.id} value={list.id}>
+                            {list.title}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    </FormControl>
+                  </Grid>
+                  <Grid item>
+                    <Divider />
+                  </Grid>
+                  <Grid item>
+                    <TaskModalDueField setFieldValue={props.setFieldValue} />
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item xs>
-              <TaskModalSubTask task={task} taskList={taskList} />
+              <Grid item xs={5}>
+                <TaskModalSubTask task={task} taskList={taskList} />
+              </Grid>
             </Grid>
           </Grid>
         </Dialog>
