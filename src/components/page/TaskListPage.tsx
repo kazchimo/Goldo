@@ -10,6 +10,7 @@ import { tasksSelector } from "../../modules/selector/taskSelector";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { TaskAddForm } from "../molecules/TaskAddForm";
 import { TaskListItem } from "../molecules/TaskListItem";
+import { TaskMindMap } from "../organisms/TaskMindMap";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -55,6 +56,7 @@ export const TaskListPage: React.FC = () => {
               </ListSubheader>
             }
           >
+            <TaskMindMap taskList={taskList} />
             <Droppable droppableId={"taskList"}>
               {(provided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
