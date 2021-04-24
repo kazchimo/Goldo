@@ -13,14 +13,11 @@ import { TaskListItem } from "../molecules/TaskListItem";
 import { TaskMindMap } from "../organisms/TaskMindMap";
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    maxWidth: 800,
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
   mapPaper: {
-    maxWidth: 800,
     marginTop: theme.spacing(4),
+  },
+  container: {
+    maxWidth: 800,
     marginLeft: "auto",
     marginRight: "auto",
   },
@@ -53,8 +50,8 @@ export const TaskListPage: React.FC = () => {
       }}
     >
       {taskList && (
-        <Grid>
-          <Paper className={classes.paper}>
+        <Grid className={classes.container}>
+          <Paper>
             <List
               subheader={
                 <ListSubheader>
