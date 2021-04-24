@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     marginRight: "auto",
   },
+  mapPaper: {
+    backgroundColor: theme.palette.background.default,
+  },
 }));
 
 export const TaskListPage: React.FC = () => {
@@ -89,7 +92,7 @@ export const TaskListPage: React.FC = () => {
             </List>
           </Paper>
           <Typography variant={"h5"}>Task Map</Typography>
-          <Paper>
+          <Paper className={classes.mapPaper} variant={"outlined"}>
             <TaskMindMap taskList={taskList} />
           </Paper>
         </Grid>

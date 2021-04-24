@@ -36,6 +36,7 @@ const taskToNode = (source: TaskView): Node => ({
   position: { x: 0, y: 0 },
   sourcePosition: Position.Right,
   targetPosition: Position.Left,
+  connectable: false,
 });
 
 const taskListToNode = (source: TaskList): Node => ({
@@ -107,7 +108,7 @@ export const TaskMindMap: VFC<Props> = ({ taskList }) => {
       el.style = {
         ...el.style,
         background: palette.background.paper,
-        borderColor: palette.text.primary,
+        // borderColor: palette.text.primary,
         width: nodeWidth,
       };
 
