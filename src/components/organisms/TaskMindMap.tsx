@@ -92,7 +92,7 @@ export const TaskMindMap: VFC<Props> = ({ taskList }) => {
 
   return (
     <div style={{ height: 800 }}>
-      <ReactFlow elements={layouted} />
+      <ReactFlow elements={layouted} nodesDraggable={false} />
     </div>
   );
 };
