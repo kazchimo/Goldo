@@ -27,6 +27,7 @@ const mkEdge = (source: { id: string }, target: { id: string }) => ({
   id: source.id + target.id,
   source: source.id,
   target: target.id,
+  type: "step",
 });
 
 const taskViewToElement = (task: TaskView): Elements => {
