@@ -6,8 +6,8 @@ import { useBool } from "../../lib/hooks/useBool";
 
 type Props = {
   isHover?: boolean;
-  onHover: () => void;
-  onHoverOut: () => void;
+  onHover?: () => void;
+  onHoverOut?: () => void;
 } & IconButtonProps;
 
 export const TaskCompleteButton: React.FC<Props> = ({
@@ -18,11 +18,11 @@ export const TaskCompleteButton: React.FC<Props> = ({
 }) => {
   const [mouseEnter, onMouseEnter, onMouseLeave] = useBool();
   const enter = () => {
-    onHover();
+    onHover && onHover();
     onMouseEnter();
   };
   const leave = () => {
-    onHoverOut();
+    onHoverOut && onHoverOut();
     onMouseLeave();
   };
 

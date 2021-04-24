@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import dagre from "dagre";
 import React, { VFC } from "react";
@@ -12,15 +12,27 @@ import { TaskList } from "../../lib/gapi";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksSelector } from "../../modules/selector/taskSelector";
+import { TaskCompleteButton } from "../atoms/TaskCompleteButton";
 import { TaskListItemText } from "../atoms/TaskListItemText";
 
-const nodeWidth = 200;
+const nodeWidth = 300;
 const nodeHeight = 36;
 
 const taskToNode = (source: TaskView): Node => ({
   id: source.id,
   type: "default",
-  data: { label: <TaskListItemText task={source} /> },
+  data: {
+    label: (
+      <Grid container alignItems={"center"}>
+        <Grid item xs={3}>
+          <TaskCompleteButton />
+        </Grid>
+        <Grid item xs={9}>
+          <TaskListItemText task={source} />
+        </Grid>
+      </Grid>
+    ),
+  },
   position: { x: 0, y: 0 },
   sourcePosition: Position.Right,
   targetPosition: Position.Left,
@@ -96,6 +108,7 @@ export const TaskMindMap: VFC<Props> = ({ taskList }) => {
         ...el.style,
         background: palette.background.paper,
         borderColor: palette.text.primary,
+        width: nodeWidth,
       };
 
       el.position = {
