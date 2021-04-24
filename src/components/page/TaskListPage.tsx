@@ -1,4 +1,10 @@
-import { Grid, List, ListSubheader, Paper } from "@material-ui/core";
+import {
+  Grid,
+  List,
+  ListSubheader,
+  Paper,
+  Typography,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -13,8 +19,8 @@ import { TaskListItem } from "../molecules/TaskListItem";
 import { TaskMindMap } from "../organisms/TaskMindMap";
 
 const useStyles = makeStyles((theme) => ({
-  mapPaper: {
-    marginTop: theme.spacing(4),
+  paper: {
+    marginBottom: theme.spacing(4),
   },
   container: {
     maxWidth: 800,
@@ -51,7 +57,7 @@ export const TaskListPage: React.FC = () => {
     >
       {taskList && (
         <Grid className={classes.container}>
-          <Paper>
+          <Paper className={classes.paper}>
             <List
               subheader={
                 <ListSubheader>
@@ -82,7 +88,8 @@ export const TaskListPage: React.FC = () => {
               </Droppable>
             </List>
           </Paper>
-          <Paper className={classes.mapPaper}>
+          <Typography variant={"h5"}>Task Map</Typography>
+          <Paper>
             <TaskMindMap taskList={taskList} />
           </Paper>
         </Grid>
