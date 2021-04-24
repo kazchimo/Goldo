@@ -9,6 +9,7 @@ import {
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import React, { useCallback, useState } from "react";
 import { TaskList } from "../../lib/gapi";
+import { useBool } from "../../lib/hooks/useBool";
 import { TaskAddForm } from "./TaskAddForm";
 import { TaskListOptions } from "./TaskListOptions";
 import { TaskListTitleForm } from "./TaskListTitleForm";
@@ -29,17 +30,17 @@ const useStyles = makeStyles((theme) => ({
 
 export const TaskListHeader: React.FC<Props> = ({ taskList }) => {
   const classes = useStyles();
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, toOpenModal, closeModal] = useBool();
   const [anchor, setAnchor] = useState<Element | null>(null);
 
   const open = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       setAnchor(e.currentTarget);
-      setOpenModal(true);
+      toOpenModal();
     },
-    [setOpenModal]
+    [openModal]
   );
-  const close = useCallback(() => setOpenModal(false), [setOpenModal]);
+  const close = useCallback(closeModal, [closeModal]);
 
   return (
     <ListSubheader className={classes.subHeader}>

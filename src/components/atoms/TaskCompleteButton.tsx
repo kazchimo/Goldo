@@ -1,7 +1,8 @@
 import { IconButton, IconButtonProps } from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
-import React, { useState } from "react";
+import React from "react";
+import { useBool } from "../../lib/hooks/useBool";
 
 type Props = {
   isHover?: boolean;
@@ -15,14 +16,14 @@ export const TaskCompleteButton: React.FC<Props> = ({
   onHoverOut,
   ...props
 }) => {
-  const [hover, setHover] = useState(false);
+  const [mouseEnter, onMouseEnter, onMouseLeave] = useBool();
   const enter = () => {
     onHover();
-    setHover(true);
+    onMouseEnter();
   };
   const leave = () => {
     onHoverOut();
-    setHover(false);
+    onMouseLeave();
   };
 
   return (
@@ -32,7 +33,7 @@ export const TaskCompleteButton: React.FC<Props> = ({
       onMouseEnter={enter}
       onMouseLeave={leave}
     >
-      {isHover || hover ? (
+      {isHover || mouseEnter ? (
         <DoneIcon
           fontSize={"small"}
           color={"primary"}

@@ -1,10 +1,11 @@
 import { makeStyles } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { TaskBoardPage } from "./components/page/TaskBoardPage";
 import { TaskListPage } from "./components/page/TaskListPage";
 import { TimelinePage } from "./components/page/TimelinePage";
 import { TodayPage } from "./components/page/TodayPage";
+import { useBool } from "./lib/hooks/useBool";
 import { useBoundActions } from "./lib/hooks/useBoundActions";
 import { useSelectors } from "./lib/hooks/useSelectors";
 import { appSelector } from "./modules/selector/appSelector";
@@ -55,7 +56,7 @@ function App() {
     "taskLists"
   );
   const classes = useStyles();
-  const [shouldReload, setShouldReload] = useState(true);
+  const [shouldReload, toShouldReload, toShouldNotReload] = useBool(true);
 
   useEffect(() => {
     initGapi();
@@ -79,7 +80,7 @@ function App() {
   useEffect(() => {
     if (finishInitialLoading) {
       offLoading();
-      setShouldReload(false);
+      toShouldNotReload();
       resetInitialLoading();
     }
   }, [finishInitialLoading]);
@@ -96,11 +97,11 @@ function App() {
 
   useEffect(() => {
     window.addEventListener("focus", () => {
-      setShouldReload(true);
+      toShouldReload();
     });
 
     return () => {
-      window.removeEventListener("focus", () => setShouldReload(true));
+      window.removeEventListener("focus", toShouldReload);
     };
   });
 

@@ -18,6 +18,7 @@ import clsx from "clsx";
 import React, { ReactNode } from "react";
 import { useSelector } from "react-redux";
 import logo from "../../assets/logo.png";
+import { useBool } from "../../lib/hooks/useBool";
 import { loadingSelectors } from "../../modules/selector/loadingSelector";
 import { ThemeSwitchButton } from "../atoms/ThemeSwitchButton";
 import { SidebarLinks } from "../organisms/SidebarLinks";
@@ -95,16 +96,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export const AppTemplate: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, handleDrawerOpen, handleDrawerClose] = useBool();
   const loading = useSelector(loadingSelectors.loading);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   return (
     <div className={classes.root}>
