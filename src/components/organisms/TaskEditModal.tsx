@@ -94,7 +94,7 @@ export const TaskEditModal: React.FC<Props> = ({
               <DeleteTaskButton task={task} />
             </Grid>
             <Grid container item xs={12} justify={"space-between"}>
-              <Grid item className={classes.form} xs={5}>
+              <Grid item className={classes.form}>
                 <Grid container direction="column" spacing={2} component={Form}>
                   <Grid item>
                     <TaskModalTitleField />
@@ -113,7 +113,7 @@ export const TaskEditModal: React.FC<Props> = ({
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={5}>
+              <Grid item>
                 <TaskModalSubTask task={task} taskList={taskList} />
               </Grid>
             </Grid>

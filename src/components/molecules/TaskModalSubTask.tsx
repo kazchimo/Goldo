@@ -23,13 +23,16 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
+  paper: {
+    width: 300,
+  },
 }));
 
 export const TaskModalSubTask: React.FC<Props> = ({ task, taskList }) => {
   const classes = useStyles();
 
   return (
-    <Paper elevation={0} variant={"outlined"}>
+    <Paper elevation={0} variant={"outlined"} className={classes.paper}>
       <List
         dense
         subheader={<ListSubheader>Sub Tasks</ListSubheader>}
