@@ -1,26 +1,17 @@
-import { Divider, MenuItem } from "@material-ui/core";
-import {
-  Dialog,
-  FormControl,
-  Grid,
-  InputLabel,
-  makeStyles,
-} from "@material-ui/core";
+import { Dialog, Divider, Grid, makeStyles } from "@material-ui/core";
 import { parseISO } from "date-fns";
-import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
-import { Select } from "formik-material-ui";
+import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import React, { ReactEventHandler } from "react";
 import * as Yup from "yup";
 import { TaskList } from "../../lib/gapi";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
-import { useSelectors } from "../../lib/hooks/useSelectors";
 import { TaskView } from "../../lib/taskView/TaskView";
-import { taskListsSelector } from "../../modules/selector/taskListsSelector";
 import { tasksActions } from "../../modules/slice/taskSlice";
 import { DeleteTaskButton } from "../atoms/DeleteTaskButton";
 import { TaskModalDueField } from "../atoms/TaskModalDueField";
 import { TaskModalNotesField } from "../atoms/TaskModalNotesField";
 import { TaskModalTitleField } from "../atoms/TaskModalTitleField";
+import { TaskListsSelect } from "../molecules/TaskListsSelect";
 import { TaskModalSubTask } from "../molecules/TaskModalSubTask";
 
 type Props = {
@@ -52,7 +43,6 @@ export const TaskEditModal: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const { updateTask } = useBoundActions(tasksActions);
-  const { taskLists } = useSelectors(taskListsSelector, "taskLists");
 
   const initialValues = {
     title: task.title,
@@ -113,16 +103,7 @@ export const TaskEditModal: React.FC<Props> = ({
                     <TaskModalNotesField />
                   </Grid>
                   <Grid item>
-                    <FormControl style={{ width: "100%" }}>
-                      <InputLabel>Task List</InputLabel>
-                      <Field component={Select} name={"listId"}>
-                        {taskLists.map((list) => (
-                          <MenuItem key={list.id} value={list.id}>
-                            {list.title}
-                          </MenuItem>
-                        ))}
-                      </Field>
-                    </FormControl>
+                    <TaskListsSelect />
                   </Grid>
                   <Grid item>
                     <Divider />
