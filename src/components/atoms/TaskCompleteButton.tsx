@@ -1,20 +1,24 @@
-import { IconButton, IconButtonProps } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
-import React from "react";
+import React, { useCallback } from "react";
 import { useBool } from "../../lib/hooks/useBool";
+import { useBoundActions } from "../../lib/hooks/useBoundActions";
+import { TaskView } from "../../lib/taskView/TaskView";
+import { tasksActions } from "../../modules/slice/taskSlice";
 
 type Props = {
+  task: TaskView;
   isHover?: boolean;
   onHover?: () => void;
   onHoverOut?: () => void;
-} & IconButtonProps;
+};
 
 export const TaskCompleteButton: React.FC<Props> = ({
+  task,
   isHover,
   onHover,
   onHoverOut,
-  ...props
 }) => {
   const [mouseEnter, onMouseEnter, onMouseLeave] = useBool();
   const enter = () => {
@@ -25,10 +29,15 @@ export const TaskCompleteButton: React.FC<Props> = ({
     onHoverOut && onHoverOut();
     onMouseLeave();
   };
+  const { completeTask } = useBoundActions(tasksActions);
+
+  const finishTask = useCallback(() => {
+    completeTask(task);
+  }, [task]);
 
   return (
     <IconButton
-      {...props}
+      onClick={finishTask}
       size={"small"}
       onMouseEnter={enter}
       onMouseLeave={leave}

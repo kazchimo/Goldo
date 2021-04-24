@@ -13,12 +13,10 @@ import EditIcon from "@material-ui/icons/Edit";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
-import React, { memo, useCallback } from "react";
+import React, { memo } from "react";
 import { TaskList } from "../../lib/gapi";
 import { useBool } from "../../lib/hooks/useBool";
-import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
-import { tasksActions } from "../../modules/slice/taskSlice";
 import { TaskCompleteButton } from "../atoms/TaskCompleteButton";
 import { TaskListItemText } from "../atoms/TaskListItemText";
 import { TaskEditModal } from "../organisms/TaskEditModal";
@@ -55,7 +53,6 @@ export const TaskListItem: React.FC<Props> = memo(
   ({ task, taskList, showListName, invertColor, hoverComplete }) => {
     const [openSubtask, , , invertOpenSubtask] = useBool();
     const [openEditModal, openModal, closeModal] = useBool();
-    const { completeTask } = useBoundActions(tasksActions);
     const [mouseEnter, onMouseEnter, onMouseLeave] = useBool();
     const [
       isCompleteHover,
@@ -65,10 +62,6 @@ export const TaskListItem: React.FC<Props> = memo(
     const classes = useStyles({ onMouseOver: mouseEnter, invertColor });
 
     const hasChildren = task.children.length > 0;
-
-    const finishTask = useCallback(() => {
-      completeTask(task);
-    }, [task]);
 
     return (
       <Paper className={classes.paper} elevation={0} square>
@@ -81,7 +74,7 @@ export const TaskListItem: React.FC<Props> = memo(
         <ListItem onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
           <ListItemIcon>
             <TaskCompleteButton
-              onClick={finishTask}
+              task={task}
               isHover={hoverComplete}
               onHoverOut={isCompleteHoverToFalse}
               onHover={isCompleteHoverToTrue}

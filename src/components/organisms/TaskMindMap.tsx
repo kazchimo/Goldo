@@ -25,7 +25,7 @@ const taskToNode = (source: TaskView): Node => ({
     label: (
       <Grid container alignItems={"center"}>
         <Grid item xs={3}>
-          <TaskCompleteButton />
+          <TaskCompleteButton task={source} />
         </Grid>
         <Grid item xs={9}>
           <TaskListItemText task={source} />
