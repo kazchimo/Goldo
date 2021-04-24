@@ -53,7 +53,7 @@ export const TaskMindMap: VFC<Props> = ({ taskList }) => {
   );
   const tasks = tasksViewByListId[taskList.id] || [];
   const graph = new dagre.graphlib.Graph();
-  graph.setGraph({ rankdir: "LR" });
+  graph.setGraph({ rankdir: "LR", align: "DL" });
   graph.setDefaultEdgeLabel(() => ({}));
 
   const elems = [
@@ -78,11 +78,8 @@ export const TaskMindMap: VFC<Props> = ({ taskList }) => {
       el.targetPosition = Position.Left;
       el.sourcePosition = Position.Right;
 
-      // unfortunately we need this little hack to pass a slighltiy different position
-      // to notify react flow about the change. More over we are shifting the dagre node position
-      // (anchor=center center) to the top left so it matches the react flow node anchor point (top left).
       el.position = {
-        x: nodeWithPosition.x - nodeWidth / 2 + Math.random() / 1000,
+        x: nodeWithPosition.x - nodeWidth / 2,
         y: nodeWithPosition.y - nodeHeight / 2,
       };
     }
