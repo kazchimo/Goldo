@@ -11,7 +11,7 @@ import { useSelectors } from "../../lib/hooks/useSelectors";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksSelector } from "../../modules/selector/taskSelector";
 
-const nodeWidth = 172;
+const nodeWidth = 200;
 const nodeHeight = 36;
 
 const toNode = (source: { id: string; title?: string }): Node => ({

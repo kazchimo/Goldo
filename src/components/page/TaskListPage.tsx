@@ -1,4 +1,4 @@
-import { List, ListSubheader, Paper } from "@material-ui/core";
+import { Grid, List, ListSubheader, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -15,6 +15,12 @@ import { TaskMindMap } from "../organisms/TaskMindMap";
 const useStyles = makeStyles((theme) => ({
   paper: {
     maxWidth: 800,
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  mapPaper: {
+    maxWidth: 800,
+    marginTop: theme.spacing(4),
     marginLeft: "auto",
     marginRight: "auto",
   },
@@ -47,38 +53,42 @@ export const TaskListPage: React.FC = () => {
       }}
     >
       {taskList && (
-        <Paper className={classes.paper}>
-          <List
-            subheader={
-              <ListSubheader>
-                {taskList.title}
-                <TaskAddForm taskList={taskList} />
-              </ListSubheader>
-            }
-          >
+        <Grid>
+          <Paper className={classes.paper}>
+            <List
+              subheader={
+                <ListSubheader>
+                  {taskList.title}
+                  <TaskAddForm taskList={taskList} />
+                </ListSubheader>
+              }
+            >
+              <Droppable droppableId={"taskList"}>
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {tasks.map((task, i) => (
+                      <Draggable key={task.id} draggableId={task.id} index={i}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <TaskListItem task={task} taskList={taskList} />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </List>
+          </Paper>
+          <Paper className={classes.mapPaper}>
             <TaskMindMap taskList={taskList} />
-            <Droppable droppableId={"taskList"}>
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  {tasks.map((task, i) => (
-                    <Draggable key={task.id} draggableId={task.id} index={i}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <TaskListItem task={task} taskList={taskList} />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </List>
-        </Paper>
+          </Paper>
+        </Grid>
       )}
     </DragDropContext>
   );
