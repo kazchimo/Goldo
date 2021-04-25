@@ -11,6 +11,7 @@ type State = {
     [listId: string]: string[];
   };
   sideBarOpen: boolean;
+  defaultListId?: string;
 };
 
 const initialState: State = {
@@ -26,6 +27,10 @@ const slice = createSlice({
   name: "app",
   initialState,
   reducers: {
+    setDefaultListId: (s, a: PayloadAction<string | undefined>) => ({
+      ...s,
+      defaultListId: a.payload,
+    }),
     openSidebar: (s) => ({ ...s, sideBarOpen: true }),
     closeSidebar: (s) => ({ ...s, sideBarOpen: false }),
     resetInitialLoading: (s) => ({
