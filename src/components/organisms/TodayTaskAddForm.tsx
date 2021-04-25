@@ -113,7 +113,7 @@ export const TodayTaskAddForm: React.FC = () => {
                 <Grid item className={classes.addButtonContainer}>
                   <Button
                     variant={"outlined"}
-                    color={"secondary"}
+                    color={"primary"}
                     type={"submit"}
                     size={"small"}
                     style={{ textTransform: "none" }}
