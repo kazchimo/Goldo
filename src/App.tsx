@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import { SettingsPage } from "./components/page/SettingsPage";
 import { TaskBoardPage } from "./components/page/TaskBoardPage";
 import { TaskListPage } from "./components/page/TaskListPage";
 import { TimelinePage } from "./components/page/TimelinePage";
@@ -123,6 +124,9 @@ function App() {
           </Route>
           <Route path={["/taskList/:listId"]}>
             <TaskListPage />
+          </Route>
+          <Route path={["/settings"]}>
+            <SettingsPage />
           </Route>
         </Switch>
       )}

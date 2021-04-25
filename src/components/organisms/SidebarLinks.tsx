@@ -11,10 +11,18 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const useStyles = makeStyles((theme) => ({
   taskListItemText: {
     marginLeft: theme.spacing(2),
+  },
+  settingsContainer: {
+    marginBottom: theme.spacing(1),
+    marginTop: "auto",
+  },
+  bottomDivider: {
+    marginBottom: theme.spacing(1),
   },
 }));
 
@@ -64,6 +72,15 @@ export const SidebarLinks: React.FC = () => {
           </ListItem>
         ))}
       </List>
+      <div className={classes.settingsContainer}>
+        <Divider className={classes.bottomDivider} />
+        <ListItem button onClick={() => history.push("/settings")}>
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary={"Settings"} />
+        </ListItem>
+      </div>
     </>
   );
 };
