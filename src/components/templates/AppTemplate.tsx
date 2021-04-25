@@ -18,8 +18,11 @@ import clsx from "clsx";
 import React, { ReactNode } from "react";
 import { useSelector } from "react-redux";
 import logo from "../../assets/logo.png";
-import { useBool } from "../../lib/hooks/useBool";
+import { useBoundActions } from "../../lib/hooks/useBoundActions";
+import { useSelectors } from "../../lib/hooks/useSelectors";
+import { appSelector } from "../../modules/selector/appSelector";
 import { loadingSelectors } from "../../modules/selector/loadingSelector";
+import { appActions } from "../../modules/slice/appSlice";
 import { ThemeSwitchButton } from "../atoms/ThemeSwitchButton";
 import { SidebarLinks } from "../organisms/SidebarLinks";
 
@@ -96,7 +99,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export const AppTemplate: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, handleDrawerOpen, handleDrawerClose] = useBool();
+  const { sideBarOpen } = useSelectors(appSelector, "sideBarOpen");
+  const { openSidebar, closeSidebar } = useBoundActions(appActions);
   const loading = useSelector(loadingSelectors.loading);
 
   return (
@@ -105,7 +109,7 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: sideBarOpen,
         })}
       >
         {loading && <LinearProgress className={classes.linearProgress} />}
@@ -113,9 +117,9 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={openSidebar}
             edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
+            className={clsx(classes.menuButton, sideBarOpen && classes.hide)}
           >
             <MenuIcon />
           </IconButton>
@@ -129,13 +133,13 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
         className={classes.drawer}
         variant="persistent"
         anchor="left"
-        open={open}
+        open={sideBarOpen}
         classes={{
           paper: classes.drawerPaper,
         }}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={closeSidebar}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
@@ -148,7 +152,7 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
       </Drawer>
       <main
         className={clsx(classes.content, {
-          [classes.contentShift]: open,
+          [classes.contentShift]: sideBarOpen,
         })}
       >
         <div className={classes.drawerHeader} />

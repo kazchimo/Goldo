@@ -10,10 +10,12 @@ type State = {
   openTasks: {
     [listId: string]: string[];
   };
+  sideBarOpen: boolean;
 };
 
 const initialState: State = {
   openTasks: {},
+  sideBarOpen: false,
 };
 
 const fetchTaskListsCountLens = Lens.fromPath<State>()(["fetchTaskListsCount"]);
@@ -24,6 +26,8 @@ const slice = createSlice({
   name: "app",
   initialState,
   reducers: {
+    openSidebar: (s) => ({ ...s, sideBarOpen: true }),
+    closeSidebar: (s) => ({ ...s, sideBarOpen: false }),
     resetInitialLoading: (s) => ({
       ...s,
       fetchTaskListsCount: undefined,
