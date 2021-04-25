@@ -15,6 +15,7 @@ import React from "react";
 import * as Yup from "yup";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSelectors } from "../../lib/hooks/useSelectors";
+import { appSelector } from "../../modules/selector/appSelector";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
 import { tasksActions } from "../../modules/slice/taskSlice";
 
@@ -39,7 +40,11 @@ const schema = Yup.object().shape({
 
 export const TodayTaskAddForm: React.FC = () => {
   const classes = useStyles();
-  const { taskLists } = useSelectors(taskListsSelector, "taskLists");
+  const { taskLists, defaultListId } = useSelectors(
+    { ...taskListsSelector, ...appSelector },
+    "taskLists",
+    "defaultListId"
+  );
   const { createTask } = useBoundActions(tasksActions);
 
   return (
@@ -49,7 +54,7 @@ export const TodayTaskAddForm: React.FC = () => {
           title: "",
           notes: "",
           due: new Date(),
-          listId: taskLists[0]?.id || "",
+          listId: defaultListId || "",
         }}
         onSubmit={(v, { setSubmitting, resetForm }) => {
           createTask({ task: { ...v, due: v.due.toISOString() } });
