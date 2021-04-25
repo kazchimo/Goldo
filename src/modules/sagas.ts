@@ -1,4 +1,5 @@
 import { all } from "redux-saga/effects";
+import { appSaga } from "./saga/appSaga";
 import { authSaga } from "./saga/authSaga";
 import { gapiSaga } from "./saga/gapiSaga";
 import { taskListsSaga } from "./saga/taskListsSaga";
@@ -12,6 +13,7 @@ function* allSagas() {
     ...authSaga,
     ...taskSaga,
     ...themeSaga,
+    ...appSaga,
   ]);
 }
 
