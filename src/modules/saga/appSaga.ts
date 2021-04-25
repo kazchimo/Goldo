@@ -20,8 +20,24 @@ function* restoreSidebarState() {
   }
 }
 
+function* saveDefaultListId(a: Action<string | undefined>) {
+  if (a.payload) {
+    localStorage.setItem("defaultListId", a.payload);
+  }
+}
+
+function* restoreDefaultListId() {
+  const id = localStorage.getItem("defaultListId");
+
+  if (id) {
+    yield put(appActions.setDefaultListId(id));
+  }
+}
+
 export const appSaga = [
   fork(restoreSidebarState),
+  fork(restoreDefaultListId),
   takeEvery(appActions.openSidebar, saveSidebarState),
   takeEvery(appActions.closeSidebar, saveSidebarState),
+  takeEvery(appActions.setDefaultListId, saveDefaultListId),
 ];
