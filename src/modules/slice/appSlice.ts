@@ -1,14 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Lens } from "monocle-ts";
+import { Task } from "../../lib/gapi";
 import { taskListActions } from "./taskListSlice";
 import { tasksActions } from "./taskSlice";
 
 type State = {
   fetchTaskListsCount?: number;
   fetchTasksCount?: number;
+  openTasks: {
+    [listId: string]: string[];
+  };
 };
 
-const initialState: State = {};
+const initialState: State = {
+  openTasks: {},
+};
 
 const fetchTaskListsCountLens = Lens.fromPath<State>()(["fetchTaskListsCount"]);
 
@@ -23,6 +29,18 @@ const slice = createSlice({
       fetchTaskListsCount: undefined,
       fetchTasksCount: undefined,
     }),
+    invertOpenTask: (s, { payload: { id, listId } }: PayloadAction<Task>) => {
+      const ids = s.openTasks[listId] || [];
+      const opened = ids.includes(id);
+
+      return {
+        ...s,
+        openTasks: {
+          ...s.openTasks,
+          [listId]: opened ? ids.filter((idd) => idd !== id) : [...ids, id],
+        },
+      };
+    },
   },
   extraReducers: {
     [tasksActions.addTasks.type]: (s) =>

@@ -16,7 +16,11 @@ import _ from "lodash";
 import React, { memo } from "react";
 import { TaskList } from "../../lib/gapi";
 import { useBool } from "../../lib/hooks/useBool";
+import { useBoundActions } from "../../lib/hooks/useBoundActions";
+import { useSelectors } from "../../lib/hooks/useSelectors";
 import { TaskView } from "../../lib/taskView/TaskView";
+import { appSelector } from "../../modules/selector/appSelector";
+import { appActions } from "../../modules/slice/appSlice";
 import { TaskCompleteButton } from "../atoms/TaskCompleteButton";
 import { TaskListItemText } from "../atoms/TaskListItemText";
 import { TaskEditModal } from "../organisms/TaskEditModal";
@@ -51,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const TaskListItem: React.FC<Props> = memo(
   ({ task, taskList, showListName, invertColor, hoverComplete }) => {
-    const [openSubtask, , , invertOpenSubtask] = useBool();
     const [openEditModal, openModal, closeModal] = useBool();
     const [mouseEnter, onMouseEnter, onMouseLeave] = useBool();
     const [
@@ -59,7 +62,11 @@ export const TaskListItem: React.FC<Props> = memo(
       isCompleteHoverToTrue,
       isCompleteHoverToFalse,
     ] = useBool();
+    const { openTasks } = useSelectors(appSelector, "openTasks");
+    const { invertOpenTask } = useBoundActions(appActions);
     const classes = useStyles({ onMouseOver: mouseEnter, invertColor });
+
+    const open = (openTasks[taskList.id] || []).includes(task.id);
 
     const hasChildren = task.children.length > 0;
 
@@ -105,14 +112,14 @@ export const TaskListItem: React.FC<Props> = memo(
             </Grid>
           </Grid>
           {hasChildren && (
-            <IconButton size={"small"} onClick={invertOpenSubtask}>
-              {openSubtask ? <ExpandLess /> : <ExpandMore />}
+            <IconButton size={"small"} onClick={() => invertOpenTask(task)}>
+              {open ? <ExpandLess /> : <ExpandMore />}
             </IconButton>
           )}
         </ListItem>
         {hasChildren && (
-          <Collapse in={openSubtask}>
-            {openSubtask && (
+          <Collapse in={open}>
+            {open && (
               <List dense className={classes.nested}>
                 {task.children.map((child) => (
                   <TaskListItem
