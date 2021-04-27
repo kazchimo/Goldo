@@ -23,7 +23,6 @@ import { useSelectors } from "../../lib/hooks/useSelectors";
 import { appSelector } from "../../modules/selector/appSelector";
 import { loadingSelectors } from "../../modules/selector/loadingSelector";
 import { appActions } from "../../modules/slice/appSlice";
-import { ThemeSwitchButton } from "../atoms/ThemeSwitchButton";
 import { SidebarLinks } from "../organisms/SidebarLinks";
 
 const drawerWidth = 240;

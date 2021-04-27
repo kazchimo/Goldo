@@ -7,9 +7,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import CalendarViewDayIcon from "@material-ui/icons/CalendarViewDay";
 import TodayIcon from "@material-ui/icons/Today";
 import ViewColumnIcon from "@material-ui/icons/ViewColumn";
+import _ from "lodash";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { useSelectors } from "../../lib/hooks/useSelectors";
+import { appSelector } from "../../modules/selector/appSelector";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
 import SettingsIcon from "@material-ui/icons/Settings";
 
@@ -28,8 +30,16 @@ const useStyles = makeStyles((theme) => ({
 
 export const SidebarLinks: React.FC = () => {
   const history = useHistory();
-  const { taskLists } = useSelectors(taskListsSelector, "taskLists");
+  const { taskLists, defaultListId } = useSelectors(
+    { ...taskListsSelector, ...appSelector },
+    "taskLists",
+    "defaultListId"
+  );
   const classes = useStyles();
+  const [[defaultList], nonDefaultLists] = _.partition(
+    taskLists,
+    (l) => l.id === defaultListId
+  );
 
   return (
     <>
@@ -59,7 +69,19 @@ export const SidebarLinks: React.FC = () => {
         dense
         subheader={<ListSubheader>Task Lists</ListSubheader>}
       >
-        {taskLists.map((list) => (
+        {defaultList && (
+          <ListItem
+            button
+            key={defaultList.id}
+            onClick={() => history.push("/taskList/" + defaultList.id)}
+          >
+            <ListItemText
+              className={classes.taskListItemText}
+              primary={defaultList.title}
+            />
+          </ListItem>
+        )}
+        {nonDefaultLists.map((list) => (
           <ListItem
             button
             key={list.id}
