@@ -126,7 +126,6 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
           <Grid container>
             <img src={logo} alt={"logo"} style={{ height: 30 }} />
           </Grid>
-          <ThemeSwitchButton />
         </Toolbar>
       </AppBar>
       <Drawer
