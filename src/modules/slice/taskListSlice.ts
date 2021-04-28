@@ -21,14 +21,18 @@ const taskListSlice = createSlice({
     deleteTaskList: taskListAdapter.removeOne,
     updateList: (s, a: PayloadAction<TaskList>) =>
       taskListAdapter.updateOne(s, { id: a.payload.id, changes: a.payload }),
+    successCreateTaskList: (s, a: PayloadAction<TaskList>) =>
+      taskListAdapter.addOne(s, a.payload),
   },
 });
 
 const fetchTaskLists = createAction("fetchTaskLists");
+const createTaskList = createAction<string>("createTaskList");
 
 export const taskListActions = {
   ...taskListSlice.actions,
   fetchTaskLists,
+  createTaskList,
 };
 
 export const taskListReducer = taskListSlice.reducer;

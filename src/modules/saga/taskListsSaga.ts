@@ -29,8 +29,21 @@ function* updateTaskList(a: Action<TaskList>) {
   );
 }
 
+function* createTaskList(a: Action<string>) {
+  const res: GResponse<gapi.client.tasks.TaskList> = yield call(
+    gapi.client.tasks.tasklists.insert,
+    {},
+    { title: a.payload }
+  );
+
+  if (isTaskList(res.result)) {
+    yield put(taskListActions.successCreateTaskList(res.result));
+  }
+}
+
 export const taskListsSaga = [
   takeLatest(taskListActions.fetchTaskLists, fetchTaskLists),
   takeEvery(taskListActions.deleteTaskList, deleteTaskList),
   takeEvery(taskListActions.updateList, updateTaskList),
+  takeEvery(taskListActions.createTaskList, createTaskList),
 ];

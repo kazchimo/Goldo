@@ -14,6 +14,7 @@ import { useSelectors } from "../../lib/hooks/useSelectors";
 import { appSelector } from "../../modules/selector/appSelector";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
 import SettingsIcon from "@material-ui/icons/Settings";
+import { AddTaskListButton } from "../atoms/AddTaskListButton";
 
 const useStyles = makeStyles((theme) => ({
   taskListItemText: {
@@ -93,6 +94,9 @@ export const SidebarLinks: React.FC = () => {
             />
           </ListItem>
         ))}
+        <ListItem key={"add-new-task-list"}>
+          <AddTaskListButton />
+        </ListItem>
       </List>
       <div className={classes.settingsContainer}>
         <Divider className={classes.bottomDivider} />
