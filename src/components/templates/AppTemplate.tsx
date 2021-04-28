@@ -16,7 +16,6 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MenuIcon from "@material-ui/icons/Menu";
 import clsx from "clsx";
 import React, { ReactNode } from "react";
-import { useSelector } from "react-redux";
 import logo from "../../assets/logo.png";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSelectors } from "../../lib/hooks/useSelectors";
@@ -98,9 +97,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export const AppTemplate: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { sideBarOpen } = useSelectors(appSelector, "sideBarOpen");
+  const { sideBarOpen, loading } = useSelectors(
+    { ...appSelector, ...loadingSelectors },
+    "sideBarOpen",
+    "loading"
+  );
   const { openSidebar, closeSidebar } = useBoundActions(appActions);
-  const loading = useSelector(loadingSelectors.loading);
 
   return (
     <div className={classes.root}>

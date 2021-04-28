@@ -16,6 +16,7 @@ function* fetchTasks(p: Action<string>) {
   let tasks: Task[] = [];
   let nextToken: string | undefined = undefined;
 
+  yield put(loadingActions.onLoading());
   while (true) {
     const res: GResponse<Tasks> = yield call(gapi.client.tasks.tasks.list, {
       tasklist: p.payload,
@@ -37,6 +38,7 @@ function* fetchTasks(p: Action<string>) {
       nextToken = res.result.nextPageToken;
     }
   }
+  yield put(loadingActions.offLoading());
 
   yield put(tasksActions.addTasks(tasks));
 }

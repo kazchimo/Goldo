@@ -1,12 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Lens } from "monocle-ts";
 import { Task } from "../../lib/gapi";
-import { taskListActions } from "./taskListSlice";
-import { tasksActions } from "./taskSlice";
 
 type State = {
-  fetchTaskListsCount?: number;
-  fetchTasksCount?: number;
   openTasks: {
     [listId: string]: string[];
   };
@@ -19,10 +14,6 @@ const initialState: State = {
   sideBarOpen: false,
 };
 
-const fetchTaskListsCountLens = Lens.fromPath<State>()(["fetchTaskListsCount"]);
-
-const fetchTasksCountLens = Lens.fromPath<State>()(["fetchTasksCount"]);
-
 const slice = createSlice({
   name: "app",
   initialState,
@@ -33,11 +24,6 @@ const slice = createSlice({
     }),
     openSidebar: (s) => ({ ...s, sideBarOpen: true }),
     closeSidebar: (s) => ({ ...s, sideBarOpen: false }),
-    resetInitialLoading: (s) => ({
-      ...s,
-      fetchTaskListsCount: undefined,
-      fetchTasksCount: undefined,
-    }),
     invertOpenTask: (s, { payload: { id, listId } }: PayloadAction<Task>) => {
       const ids = s.openTasks[listId] || [];
       const opened = ids.includes(id);
@@ -50,12 +36,6 @@ const slice = createSlice({
         },
       };
     },
-  },
-  extraReducers: {
-    [tasksActions.addTasks.type]: (s) =>
-      fetchTasksCountLens.modify((s) => (s || 0) + 1)(s),
-    [taskListActions.successFetchTaskLists.type]: (s, a) =>
-      fetchTaskListsCountLens.modify((s) => (s || 0) + a.payload.length)(s),
   },
 });
 

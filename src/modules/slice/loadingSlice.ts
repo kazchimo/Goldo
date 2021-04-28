@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const slice = createSlice({
   name: "loading",
-  initialState: false,
+  initialState: {
+    loadingTaskCount: 0,
+  },
   reducers: {
-    onLoading: () => true,
-    offLoading: () => false,
+    onLoading: (s) => ({ ...s, loadingTaskCount: s.loadingTaskCount + 1 }),
+    offLoading: (s) => ({ ...s, loadingTaskCount: s.loadingTaskCount - 1 }),
   },
 });
 

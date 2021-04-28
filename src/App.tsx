@@ -16,7 +16,6 @@ import { taskListsSelector } from "./modules/selector/taskListsSelector";
 import { appActions } from "./modules/slice/appSlice";
 import { authActions } from "./modules/slice/authSlice";
 import { gapiActions } from "./modules/slice/gapiSlice";
-import { loadingActions } from "./modules/slice/loadingSlice";
 import { taskListActions } from "./modules/slice/taskListSlice";
 import { tasksActions } from "./modules/slice/taskSlice";
 import { themeActions } from "./modules/slice/themeSlice";
@@ -32,14 +31,11 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const {
-    resetInitialLoading,
     initGapi,
     signIn,
     restoreTheme,
     fetchTasks,
     fetchTaskLists,
-    offLoading,
-    onLoading,
   } = useBoundActions({
     ...appActions,
     ...authActions,
@@ -47,17 +43,16 @@ function App() {
     ...themeActions,
     ...tasksActions,
     ...taskListActions,
-    ...loadingActions,
   });
-  const { gapiIsInit, login, finishInitialLoading, taskLists } = useSelectors(
+  const { gapiIsInit, login, taskLists } = useSelectors(
     { ...gapiSelector, ...authSelector, ...appSelector, ...taskListsSelector },
     "gapiIsInit",
     "login",
-    "finishInitialLoading",
     "taskLists"
   );
   const classes = useStyles();
   const [shouldReload, toShouldReload, toShouldNotReload] = useBool(true);
+  const [taskListsInitialized, toTaskListInitialized] = useBool();
 
   useEffect(() => {
     initGapi();
@@ -71,30 +66,19 @@ function App() {
   }, [gapiIsInit, login]);
 
   useEffect(() => {
-    if (gapiIsInit && login && shouldReload) {
-      resetInitialLoading();
-      onLoading();
-      fetchTaskLists();
-    }
-  }, [gapiIsInit, login, shouldReload]);
+    if (gapiIsInit && login) {
+      if (!taskListsInitialized) {
+        fetchTaskLists();
+        toTaskListInitialized();
+      }
 
-  useEffect(() => {
-    if (finishInitialLoading) {
-      offLoading();
+      if (taskListsInitialized) {
+        taskLists.forEach((t) => fetchTasks(t.id));
+      }
+
       toShouldNotReload();
-      resetInitialLoading();
     }
-  }, [finishInitialLoading]);
-
-  useEffect(() => {
-    if (shouldReload) {
-      taskLists.forEach((t) => {
-        if (t.id) {
-          fetchTasks(t.id);
-        }
-      });
-    }
-  }, [taskLists, shouldReload]);
+  }, [gapiIsInit, login, taskLists, shouldReload]);
 
   useEffect(() => {
     window.addEventListener("focus", () => {
