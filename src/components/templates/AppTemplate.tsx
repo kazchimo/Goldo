@@ -22,6 +22,7 @@ import { useSelectors } from "../../lib/hooks/useSelectors";
 import { appSelector } from "../../modules/selector/appSelector";
 import { loadingSelectors } from "../../modules/selector/loadingSelector";
 import { appActions } from "../../modules/slice/appSlice";
+import { TaskSearchForm } from "../molecules/TaskSearchForm";
 import { SidebarLinks } from "../organisms/SidebarLinks";
 
 const drawerWidth = 240;
@@ -124,8 +125,13 @@ export const AppTemplate: React.FC<Props> = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Grid container>
-            <img src={logo} alt={"logo"} style={{ height: 30 }} />
+          <Grid container alignItems={"center"} justify={"space-between"}>
+            <Grid item>
+              <img src={logo} alt={"logo"} style={{ height: 30 }} />
+            </Grid>
+            <Grid item>
+              <TaskSearchForm />
+            </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
