@@ -13,11 +13,4 @@ export const appSelector = {
   openTasks,
   sideBarOpen,
   defaultListId,
-  finishInitialLoading: createSelector(
-    selector,
-    ({ fetchTaskListsCount, fetchTasksCount }) =>
-      fetchTaskListsCount &&
-      fetchTasksCount &&
-      fetchTaskListsCount === fetchTasksCount
-  ),
 };
