@@ -74,22 +74,26 @@ const taskSlice = createSlice({
     moveTask: (
       s,
       {
-        payload: { task, previous },
-      }: PayloadAction<{ task: Task; previous?: string }>
+        payload: { task, previous, parent },
+      }: PayloadAction<{ task: Task; previous?: string; parent?: string }>
     ) => {
-      const position = previous && s.entities[previous]?.position;
-      const minPos = findMinPosition(s.entities);
+      if (previous) {
+        const position = previous && s.entities[previous]?.position;
+        const minPos = findMinPosition(s.entities);
 
-      tasksAdaptor.updateOne(s, {
-        id: task.id,
-        changes: {
-          position: position
-            ? (Number(position) + 0.1 - moveCount * 0.001).toString()
-            : ((notUndef(minPos) ? Number(minPos) : 0) - 1).toString(),
-        },
-      });
+        tasksAdaptor.updateOne(s, {
+          id: task.id,
+          changes: {
+            position: position
+              ? (Number(position) + 0.1 - moveCount * 0.001).toString()
+              : ((notUndef(minPos) ? Number(minPos) : 0) - 1).toString(),
+          },
+        });
 
-      moveCount = moveCount + 1;
+        moveCount = moveCount + 1;
+      } else if (parent) {
+        tasksAdaptor.updateOne(s, { id: task.id, changes: { parent } });
+      }
     },
   },
 });

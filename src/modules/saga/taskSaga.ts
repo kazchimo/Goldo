@@ -118,12 +118,13 @@ function* deleteTask({ payload: task }: Action<Task>) {
 }
 
 function* move({
-  payload: { task, previous },
-}: Action<{ task: Task; previous?: string }>) {
+  payload: { task, previous, parent },
+}: Action<{ task: Task; previous?: string; parent?: string }>) {
   yield call(gapi.client.tasks.tasks.move, {
     task: task.id,
     tasklist: task.listId,
     previous,
+    parent,
   });
 }
 

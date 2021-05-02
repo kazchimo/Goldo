@@ -49,13 +49,17 @@ export const TaskListPage: React.FC = () => {
     <DragDropContext
       onDragEnd={(v) => {
         const task = tasks[v.source.index];
-        const destinationId =
-          v.destination && v.destination.index > 0
-            ? v.source.index < v.destination.index
-              ? tasks[v.destination.index].id
-              : tasks[v.destination.index - 1].id
-            : undefined;
-        v.destination && moveTask({ task: task, previous: destinationId });
+        if (v.combine) {
+          moveTask({ task: task, parent: v.combine.draggableId });
+        } else {
+          const destinationId =
+            v.destination && v.destination.index > 0
+              ? v.source.index < v.destination.index
+                ? tasks[v.destination.index].id
+                : tasks[v.destination.index - 1].id
+              : undefined;
+          v.destination && moveTask({ task: task, previous: destinationId });
+        }
       }}
     >
       {taskList && (
@@ -69,7 +73,7 @@ export const TaskListPage: React.FC = () => {
                 </ListSubheader>
               }
             >
-              <Droppable droppableId={"taskList"}>
+              <Droppable droppableId={"taskList"} isCombineEnabled>
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
                     {tasks.map((task, i) => (
