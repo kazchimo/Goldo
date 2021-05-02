@@ -1,11 +1,12 @@
 import { Dialog } from "@material-ui/core";
-import { DatePicker } from "@material-ui/pickers";
 import "date-fns";
 import { parseISO } from "date-fns";
-import React, { useState } from "react";
+import { Formik } from "formik";
+import React from "react";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { TaskView } from "../../lib/taskView/TaskView";
 import { tasksActions } from "../../modules/slice/taskSlice";
+import { TaskModalDueField } from "../atoms/TaskModalDueField";
 
 type Props = {
   task: TaskView;
@@ -18,26 +19,32 @@ export const TaskDatePickerDialog: React.FC<Props> = ({
   open,
   close,
 }) => {
-  const [due, setDue] = useState<Date | null>(
-    task.due ? parseISO(task.due) : null
-  );
   const { updateTask } = useBoundActions(tasksActions);
 
   return (
-    <Dialog
-      open={open}
-      onBackdropClick={() => {
-        close();
-        if (due?.toISOString() !== task.due) {
-          updateTask({
-            task: { ...task, due: due?.toISOString() },
-            taskId: task.id,
-            listId: task.listId,
-          });
-        }
+    <Formik
+      initialValues={{ due: task.due ? parseISO(task.due) : undefined }}
+      onSubmit={(v) => {
+        updateTask({
+          task: { ...task, due: v.due?.toISOString() },
+          taskId: task.id,
+          listId: task.listId,
+        });
       }}
     >
-      <DatePicker onChange={(d) => setDue(d)} value={due} variant={"static"} />
-    </Dialog>
+      {({ setFieldValue, dirty, submitForm }) => (
+        <Dialog
+          open={open}
+          onBackdropClick={() => {
+            close();
+            if (dirty) {
+              submitForm().catch((v) => console.error(v));
+            }
+          }}
+        >
+          <TaskModalDueField setFieldValue={setFieldValue} />
+        </Dialog>
+      )}
+    </Formik>
   );
 };
