@@ -7,17 +7,24 @@ type State = {
   };
   sideBarOpen: boolean;
   defaultListId?: string;
+  searchWord: string;
 };
 
 const initialState: State = {
   openTasks: {},
   sideBarOpen: false,
+  searchWord: "",
 };
 
 const slice = createSlice({
   name: "app",
   initialState,
   reducers: {
+    updateSearchWord: (s, a: PayloadAction<string>) => ({
+      ...s,
+      searchWord: a.payload,
+    }),
+    resetSearchWord: (s) => ({ ...s, searchWord: "" }),
     setDefaultListId: (s, a: PayloadAction<string | undefined>) => ({
       ...s,
       defaultListId: a.payload,

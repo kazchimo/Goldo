@@ -1,8 +1,13 @@
 import { IconButton, InputBase } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useState, VFC } from "react";
-import SearchIcon from "@material-ui/icons/Search";
 import ClearIcon from "@material-ui/icons/Clear";
+import SearchIcon from "@material-ui/icons/Search";
+import React, { useRef, VFC } from "react";
+import { useBoundActions } from "../../lib/hooks/useBoundActions";
+import { useSelectors } from "../../lib/hooks/useSelectors";
+import { appSelector } from "../../modules/selector/appSelector";
+import { appActions } from "../../modules/slice/appSlice";
+import { SearchResult } from "../organisms/SearchResult";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -13,31 +18,41 @@ const useStyles = makeStyles((theme) => ({
   startAdornment: {
     marginLeft: theme.spacing(1),
   },
+  popover: {
+    maxHeight: 400,
+  },
 }));
 
 export const TaskSearchForm: VFC = () => {
   const classes = useStyles();
-  const [word, setWord] = useState("");
+  const { searchWord } = useSelectors(appSelector, "searchWord");
+  const { updateSearchWord, resetSearchWord } = useBoundActions(appActions);
+  const ref = useRef<Element>(null);
 
   return (
-    <InputBase
-      startAdornment={<SearchIcon />}
-      endAdornment={
-        word !== "" ? (
-          <IconButton size={"small"}>
-            <ClearIcon />
-          </IconButton>
-        ) : (
-          <></>
-        )
-      }
-      className={classes.input}
-      value={word}
-      onChange={(v) => setWord(v.target.value)}
-      classes={{
-        inputAdornedStart: classes.startAdornment,
-      }}
-      placeholder="Search Tasks"
-    />
+    <>
+      <InputBase
+        ref={ref}
+        onBlur={() => resetSearchWord()}
+        startAdornment={<SearchIcon />}
+        endAdornment={
+          searchWord !== "" ? (
+            <IconButton size={"small"}>
+              <ClearIcon />
+            </IconButton>
+          ) : (
+            <></>
+          )
+        }
+        className={classes.input}
+        value={searchWord}
+        onChange={(v) => updateSearchWord(v.target.value)}
+        classes={{
+          inputAdornedStart: classes.startAdornment,
+        }}
+        placeholder="Search Tasks"
+      />
+      <SearchResult />
+    </>
   );
 };

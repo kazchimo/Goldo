@@ -62,6 +62,7 @@ const dueTasksByDate = createSelector(selector.selectAll, (tasks) =>
 
 export const tasksSelector = {
   taskEntities: createSelector(selectSelf, selector.selectEntities),
+  tasks: createSelector(selectSelf, selector.selectAll),
   tasksByListId,
   tasksViewByListId,
   todayTaskViewByListId,

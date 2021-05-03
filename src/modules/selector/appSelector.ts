@@ -9,8 +9,11 @@ const sideBarOpen = createSelector(selector, (s) => s.sideBarOpen);
 
 const defaultListId = createSelector(selector, (s) => s.defaultListId);
 
+const searchWord = createSelector(selector, (s) => s.searchWord);
+
 export const appSelector = {
   openTasks,
   sideBarOpen,
   defaultListId,
+  searchWord,
 };
