@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import ClearIcon from "@material-ui/icons/Clear";
 import SearchIcon from "@material-ui/icons/Search";
 import React, { useRef, VFC } from "react";
+import { useBool } from "../../lib/hooks/useBool";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { appSelector } from "../../modules/selector/appSelector";
@@ -28,12 +29,14 @@ export const TaskSearchForm: VFC = () => {
   const { searchWord } = useSelectors(appSelector, "searchWord");
   const { updateSearchWord, resetSearchWord } = useBoundActions(appActions);
   const ref = useRef<Element>(null);
+  const [shouldShow, setShouldShowTrue, setShouldShowFalse] = useBool();
 
   return (
     <>
       <InputBase
         ref={ref}
-        onBlur={() => resetSearchWord()}
+        onBlur={setShouldShowFalse}
+        onFocus={setShouldShowTrue}
         startAdornment={<SearchIcon />}
         endAdornment={
           searchWord !== "" ? (
@@ -52,7 +55,7 @@ export const TaskSearchForm: VFC = () => {
         }}
         placeholder="Search Tasks"
       />
-      <SearchResult />
+      {shouldShow && <SearchResult />}
     </>
   );
 };
