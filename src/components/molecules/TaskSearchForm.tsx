@@ -19,8 +19,9 @@ const useStyles = makeStyles((theme) => ({
   startAdornment: {
     marginLeft: theme.spacing(1),
   },
-  popover: {
-    maxHeight: 400,
+  resultContainer: {
+    position: "absolute",
+    right: 410,
   },
 }));
 
@@ -55,7 +56,11 @@ export const TaskSearchForm: VFC = () => {
         }}
         placeholder="Search Tasks"
       />
-      {shouldShow && <SearchResult />}
+      {shouldShow && (
+        <div className={classes.resultContainer}>
+          <SearchResult />
+        </div>
+      )}
     </>
   );
 };

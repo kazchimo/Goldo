@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     maxHeight: 400,
     overflow: "auto",
+    width: 400,
   },
   subHeader: {
     backgroundColor: theme.palette.background.paper,
