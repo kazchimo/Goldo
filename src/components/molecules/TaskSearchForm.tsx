@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 export const TaskSearchForm: VFC = () => {
   const classes = useStyles();
   const { searchWord } = useSelectors(appSelector, "searchWord");
-  const { updateSearchWord, resetSearchWord } = useBoundActions(appActions);
+  const { updateSearchWord } = useBoundActions(appActions);
   const ref = useRef<Element>(null);
   const [shouldShow, setShouldShowTrue, setShouldShowFalse] = useBool();
 
