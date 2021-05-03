@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 export const TaskSearchForm: VFC = () => {
   const classes = useStyles();
   const { searchWord } = useSelectors(appSelector, "searchWord");
-  const { updateSearchWord } = useBoundActions(appActions);
+  const { updateSearchWord, resetSearchWord } = useBoundActions(appActions);
   const ref = useRef<Element>(null);
   const [shouldShow, setShouldShowTrue, setShouldShowFalse] = useBool();
 
@@ -41,7 +41,7 @@ export const TaskSearchForm: VFC = () => {
         startAdornment={<SearchIcon />}
         endAdornment={
           searchWord !== "" ? (
-            <IconButton size={"small"}>
+            <IconButton size={"small"} onClick={resetSearchWord}>
               <ClearIcon />
             </IconButton>
           ) : (
