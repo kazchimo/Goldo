@@ -1,7 +1,7 @@
 import { List, ListSubheader, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
-import React, { VFC } from "react";
+import React, { useMemo, VFC } from "react";
 import { useSelectors } from "../../lib/hooks/useSelectors";
 import { appSelector } from "../../modules/selector/appSelector";
 import { taskListsSelector } from "../../modules/selector/taskListsSelector";
@@ -26,13 +26,18 @@ export const SearchResult: VFC = () => {
     "taskLists"
   );
 
-  const filteredTasks = _.omitBy(
-    _.mapValues(tasksByListId, (tasks) =>
-      tasks.filter(
-        (t) => t.title?.includes(searchWord) || t.notes?.includes(searchWord)
-      )
-    ),
-    (ts) => ts.length === 0
+  const filteredTasks = useMemo(
+    () =>
+      _.omitBy(
+        _.mapValues(tasksByListId, (tasks) =>
+          tasks.filter(
+            (t) =>
+              t.title?.includes(searchWord) || t.notes?.includes(searchWord)
+          )
+        ),
+        (ts) => ts.length === 0
+      ),
+    [tasksByListId, searchWord]
   );
 
   return (
