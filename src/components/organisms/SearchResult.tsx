@@ -46,9 +46,9 @@ export const SearchResult: VFC = () => {
 
   return (
     <Paper className={classes.paper}>
-      <List>
-        {searchWord &&
-          Object.keys(filteredTasks).map((listId) => {
+      {searchWord && (
+        <List>
+          {Object.keys(filteredTasks).map((listId) => {
             const list = taskLists.filter((list) => list.id === listId)[0];
             return (
               <>
@@ -65,7 +65,8 @@ export const SearchResult: VFC = () => {
               </>
             );
           })}
-      </List>
+        </List>
+      )}
     </Paper>
   );
 };

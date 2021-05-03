@@ -30,13 +30,12 @@ export const TaskSearchForm: VFC = () => {
   const { searchWord } = useSelectors(appSelector, "searchWord");
   const { updateSearchWord, resetSearchWord } = useBoundActions(appActions);
   const ref = useRef<Element>(null);
-  const [shouldShow, setShouldShowTrue, setShouldShowFalse] = useBool();
+  const [shouldShow, setShouldShowTrue] = useBool();
 
   return (
     <>
       <InputBase
         ref={ref}
-        onBlur={setShouldShowFalse}
         onFocus={setShouldShowTrue}
         startAdornment={<SearchIcon />}
         endAdornment={
