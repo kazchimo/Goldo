@@ -1,4 +1,4 @@
-import { List, ListSubheader, Paper } from "@material-ui/core";
+import { List, ListSubheader, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import React, { useMemo, VFC } from "react";
@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
   },
   subHeader: {
     backgroundColor: theme.palette.background.paper,
+  },
+  noResultsContainer: {
+    padding: theme.spacing(2),
   },
 }));
 
@@ -46,27 +49,32 @@ export const SearchResult: VFC = () => {
 
   return (
     <Paper className={classes.paper}>
-      {searchWord && (
-        <List>
-          {Object.keys(filteredTasks).map((listId) => {
-            const list = taskLists.filter((list) => list.id === listId)[0];
-            return (
-              <>
-                <ListSubheader className={classes.subHeader}>
-                  {list.title}
-                </ListSubheader>
-                {filteredTasks[listId].map((task) => (
-                  <TaskListItem
-                    key={task.id}
-                    task={{ ...task, children: [] }}
-                    taskList={list}
-                  />
-                ))}
-              </>
-            );
-          })}
-        </List>
-      )}
+      {searchWord &&
+        (Object.keys(filteredTasks).length > 0 ? (
+          <List>
+            {Object.keys(filteredTasks).map((listId) => {
+              const list = taskLists.filter((list) => list.id === listId)[0];
+              return (
+                <>
+                  <ListSubheader className={classes.subHeader}>
+                    {list.title}
+                  </ListSubheader>
+                  {filteredTasks[listId].map((task) => (
+                    <TaskListItem
+                      key={task.id}
+                      task={{ ...task, children: [] }}
+                      taskList={list}
+                    />
+                  ))}
+                </>
+              );
+            })}
+          </List>
+        ) : (
+          <div className={classes.noResultsContainer}>
+            <Typography>No Results</Typography>
+          </div>
+        ))}
     </Paper>
   );
 };
