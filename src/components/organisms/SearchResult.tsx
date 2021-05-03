@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 400,
     overflow: "auto",
   },
+  subHeader: {
+    backgroundColor: theme.palette.background.paper,
+  },
 }));
 
 export const SearchResult: VFC = () => {
@@ -48,7 +51,9 @@ export const SearchResult: VFC = () => {
             const list = taskLists.filter((list) => list.id === listId)[0];
             return (
               <>
-                <ListSubheader>{list.title}</ListSubheader>
+                <ListSubheader className={classes.subHeader}>
+                  {list.title}
+                </ListSubheader>
                 {filteredTasks[listId].map((task) => (
                   <TaskListItem
                     key={task.id}
