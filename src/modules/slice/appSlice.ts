@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Task } from "../../lib/gapi";
 
 type State = {
@@ -24,6 +24,8 @@ const slice = createSlice({
       ...s,
       searchWord: a.payload,
     }),
+    enqueueUpdateSearchWord: (s, a: PayloadAction<string>) =>
+      a.payload !== "" ? s : { ...s, searchWord: "" },
     resetSearchWord: (s) => ({ ...s, searchWord: "" }),
     setDefaultListId: (s, a: PayloadAction<string | undefined>) => ({
       ...s,

@@ -1,4 +1,4 @@
-import { fork, put, takeEvery } from "redux-saga/effects";
+import { fork, put, takeEvery, delay, takeLatest } from "redux-saga/effects";
 import { Action } from "typescript-fsa";
 import { appActions } from "../slice/appSlice";
 
@@ -34,9 +34,17 @@ function* restoreDefaultListId() {
   }
 }
 
+function* enqueueUpdateSearchWord(a: Action<string>) {
+  if (a.payload !== "") {
+    yield delay(1000);
+  }
+  yield put(appActions.updateSearchWord(a.payload));
+}
+
 export const appSaga = [
   fork(restoreSidebarState),
   fork(restoreDefaultListId),
+  takeLatest(appActions.enqueueUpdateSearchWord, enqueueUpdateSearchWord),
   takeEvery(appActions.openSidebar, saveSidebarState),
   takeEvery(appActions.closeSidebar, saveSidebarState),
   takeEvery(appActions.setDefaultListId, saveDefaultListId),

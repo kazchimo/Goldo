@@ -2,7 +2,7 @@ import { IconButton, InputBase } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ClearIcon from "@material-ui/icons/Clear";
 import SearchIcon from "@material-ui/icons/Search";
-import React, { useRef, VFC } from "react";
+import React, { useRef, useState, VFC } from "react";
 import { useBool } from "../../lib/hooks/useBool";
 import { useBoundActions } from "../../lib/hooks/useBoundActions";
 import { useSelectors } from "../../lib/hooks/useSelectors";
@@ -28,9 +28,12 @@ const useStyles = makeStyles((theme) => ({
 export const TaskSearchForm: VFC = () => {
   const classes = useStyles();
   const { searchWord } = useSelectors(appSelector, "searchWord");
-  const { updateSearchWord, resetSearchWord } = useBoundActions(appActions);
+  const { enqueueUpdateSearchWord, resetSearchWord } = useBoundActions(
+    appActions
+  );
   const ref = useRef<Element>(null);
   const [shouldShow, setShouldShowTrue] = useBool();
+  const [word, setWord] = useState("");
 
   return (
     <>
@@ -48,8 +51,11 @@ export const TaskSearchForm: VFC = () => {
           )
         }
         className={classes.input}
-        value={searchWord}
-        onChange={(v) => updateSearchWord(v.target.value)}
+        value={word}
+        onChange={(v) => {
+          setWord(v.target.value);
+          enqueueUpdateSearchWord(v.target.value);
+        }}
         classes={{
           inputAdornedStart: classes.startAdornment,
         }}
